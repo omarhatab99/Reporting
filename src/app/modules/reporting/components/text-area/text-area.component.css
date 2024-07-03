@@ -1,0 +1,130 @@
+
+ .text-box {
+    background-color: transparent;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    min-width: fit-content;
+    z-index: 10;
+}
+
+
+.icon-container {
+    position: absolute;
+    opacity: 0;
+    transition: all 0.4s linear;
+    padding: 5px;
+    background-color: antiquewhite;
+    border-radius: 5px;
+    bottom: -30px;
+    right: 0px;
+}
+
+.element-remove-icon,.element-edit-icon , .element-move-icon {
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border: 1px dashed #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    z-index: 100000;
+    transition: all 0.3s linear;
+}
+
+.element-edit-icon {
+    background-color: #ecfc7369;
+}
+
+.element-remove-icon {
+    background-color: #fe7a7a70;
+}
+
+.element-move-icon:hover{
+    background-color: #dcffd0;
+    display: block;
+}
+
+.left-move-icon{
+    width: 25px;
+    height: 25px;
+    background-color: antiquewhite;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: absolute;
+    left: -5px;
+    top: 0;
+    transform: translateX(-100%);
+    border-radius: 5px 0px 0px 5px;
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+}
+
+.text-box:hover .left-move-icon{
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+}
+
+.text-box:hover .icon-container {
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+    
+}
+
+.text-editable {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 10px;
+    box-shadow: transparent 0px 0px 0px 1px;
+    transition: background 0.3s linear ;
+    resize: none;
+    direction: ltr;
+    overflow: auto;
+    overflow-y: hidden;  
+    border-radius: 3px;
+    min-width: 100px;
+    text-align: right;
+    position: relative;
+}
+
+.text-editable:focus{
+    resize: both;
+}
+
+.text-editable:hover:not(:focus) {
+    background-color: #ebecf0;
+}
+
+.text-editable:focus {
+    background-color: #fff;
+    border: 1px dashed #54585d;
+    outline: none;
+}
+
+.input-bootstrap-settings{
+    padding: 5px;
+    width: 90px;
+    border: none;
+    outline: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.movement-line {
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 999999999;
+}
+/* .overlay-movement{
+    position: absolute;
+    background-color: #e8e8e894;
+    width: 100%;
+    height: 100%;
+    z-index: 1000000000000;
+} */

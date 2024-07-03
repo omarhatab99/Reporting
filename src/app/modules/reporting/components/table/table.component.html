@@ -1,0 +1,67 @@
+<div class="data-source-table bg-danger" #dataSourceTable cdkDragBoundary=".mat-card-content-report" cdkDrag  [style.width]="width+'%'">
+    <div class="movement-line" cdkDragHandle></div>  
+    <span class="mx-1 left-move-icon" cdkDragHandle>
+        <i class="fa-solid fa-up-down-left-right"></i>
+      </span>
+    <div class="icon-container">
+        <div class="d-flex align-items-center">
+          <!-- delete element icon -->
+          <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox($event)">
+            <i class="fa-solid fa-xmark"></i>
+          </span>
+          <!-- edit element icon -->
+          <span class="mx-1 element-edit-icon" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <i class="fa-solid fa-pencil"></i>
+          </span>
+          <!-- edit element icon -->
+          <span class="mx-1 element-move-icon" cdkDragHandle>
+            <i class="fa-solid fa-up-down-left-right"></i>
+          </span>
+        </div>
+    </div>
+    <p-table class="h-100" [columns]="cols" [value]="reports" [resizableColumns]="true" columnResizeMode="expand"
+      [reorderableColumns]="true" [responsive]="true" 
+      selectionMode="single" [(selection)]="selectedReport" (onRowSelect)="onRowSelect($event)"
+      [(contextMenuSelection)]="selectedReport" [contextMenu]="cm" >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" class="text-center" [pSortableColumn]="col.field" pResizableColumn
+            pReorderableColumn [style.padding]="cellPadding+'px'">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
+        <tr [pReorderableRow]="index" [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
+            <td  *ngFor="let col of columns" class="text-center" pReorderableRowHandle  [style.padding]="cellPadding+'px'">
+                {{rowData[col.field]}}
+
+            </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  
+<p-dialog header="تعديل الصف" [(visible)]="displayDialog"  [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '550px',zIndex:999900000000000}">
+    <div class="p-grid ui-fluid p-4" *ngIf="report" dir="rtl" style="height: 300px;">
+        <div  *ngFor="let col of cols">
+
+              <div class="form-group">
+                <input type="text" placeholder=" " [id]="col.field+'-id'" [(ngModel)]="report[col.field]">
+                <label [for]="col.field+'-id'">{{col.field}}</label>
+              </div>
+
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" (click)="delete()" class="btn btn-danger btn-sm">حذف</button>
+            <button type="button"  (click)="save()" class="btn btn-warning btn-sm">تعديل</button>
+        </div>
+    </p-footer>
+</p-dialog>
+<p-contextMenu #cm [model]="items"></p-contextMenu>

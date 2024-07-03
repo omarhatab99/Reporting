@@ -1,0 +1,169 @@
+/* start reporting container */
+.reporting-container {
+    width: 100%;
+    height: calc(100vh - 70px);
+}
+
+/* content of sidenav --- body container */
+.reporting-container .sidenav-container {
+    position: relative;
+    height: 100%;
+    padding: 10px 50px;
+}
+
+
+.reporting-container .reporting-sidenav {
+    padding: 10px;
+    width: 400px;
+}
+
+.reporting-container .toggle-reporting-drawer {
+    position: absolute;
+    right: 0%;
+    top: 5%;
+    border-radius: 4px 0px 0px 4px !important;
+}
+
+.reporting-container .mat-card-header-report {
+    padding: 10px 15px;
+    border: 1px dashed #a0a0a0;
+    border-radius: 10px;
+    direction: ltr;
+    min-height: 80px;
+    position: relative;
+}
+
+.reporting-container .mat-card-content-report {
+    border: 1px dashed #a0a0a0;
+    border-radius: 10px;
+    min-height: 500px;
+    direction: ltr;
+    position: relative;
+    padding: 20px;
+    padding-bottom: 50px !important;
+
+}
+
+.text-editable {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 10px;
+    box-shadow: transparent 0px 0px 0px 1px;
+    transition: background 0.3s linear ;
+    resize: none;
+    direction: rtl;
+    overflow: auto;
+    overflow-y: hidden;  
+    border-radius: 3px;
+    min-width: 50px;
+    width: fit-content;
+    text-align: right;
+    position: relative;
+
+}
+
+
+.text-editable:focus{
+    resize: horizontal;
+}
+
+.text-editable:hover:not(:focus) {
+    background-color: #ebecf0;
+}
+
+.text-editable:focus {
+    background-color: #fff;
+    border: 1px dashed #54585d;
+    outline: none;
+}
+
+.input-bootstrap-settings{
+    padding: 5px;
+    width: 90px;
+    border: none;
+    outline: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.add-text-box {
+    padding: 5px 10px;
+    border: 1px dashed #555;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+:host::ng-deep app-text-area {position: relative;}
+
+
+
+.headings-content {
+    width: 100%;
+    position: relative;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.mat-card-header-text {
+    display: none !important;
+}
+/* .report-container .overlay-movement {
+    background-color: #d2d2d299;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    font-size: 20px;
+    color: #0000009c;
+} */
+
+
+/* textarea::-webkit-resizer {
+    border:none;
+    
+  } */
+
+/* end reporting container */
+::ng-deep .ui-multiselect.ui-widget{
+    border: none;
+    outline: none;
+    width: 100% !important;
+    padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+::ng-deep .ui-multiselect-item {
+    padding: 10px !important;
+    direction: ltr !important;
+}
+
+::ng-deep .ui-widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+::ng-deep .ui-multiselect-panel .ui-multiselect-item span {
+    float: inline-end;
+}
+
+::ng-deep .ui-dropdown {
+    width: 100% !important;
+    padding: 5px !important;
+}
+
+
+.collabse-btn {
+    border: none;
+    outline: none;
+    width: 95%;
+    padding: 12px;
+    background-color: #FFF;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin: 10px auto;
+    border-radius: 5px;
+    text-align: right;
+}

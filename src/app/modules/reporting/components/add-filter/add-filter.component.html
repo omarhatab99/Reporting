@@ -1,0 +1,44 @@
+
+
+
+<a class="collabse-anchor animate__animated animate__fadeInRight my-2" #filterElement  data-toggle="collapse" [href]="'#'+filterId" role="button" aria-expanded="false" aria-controls="collapseExample">
+
+
+    <div class="d-flex justify-content-between align-items-center">
+        <span>
+            تنقيه 
+            <i class="fa-solid fa-filter"></i>
+        </span>
+        <span class="mr-2" (click)="confirmationDeleteFilter($event)">
+            <i class="fa-regular fa-square-minus text-danger" style="font-size: 15px;"></i>
+        </span>
+    </div>
+</a>
+
+<div class="collapse" [id]="filterId" #filterCollabse>
+    <div class="filter-dynamic">
+        <div class="filter-columns-select">
+            <label for="filterColumn" class="text-right w-100">اختر الاعمدة المراد عرضها</label>
+            <p-dropdown id="filterColumn" [options]="selectedColumn" [(ngModel)]="filterSelectedColumn" (onClick)="changeSelectedColumn()"></p-dropdown>
+        </div>
+    
+        <div class="operation-select text-right my-2" *ngIf="filterOperationShow">
+            <div class="dropdown-operations">
+                <p-dropdown [options]="operations" [(ngModel)]="selectedOperation"></p-dropdown>
+            </div>
+            <div class="form-group my-2" *ngIf="selectedOperation != null && inputType == 0">
+                <input type="text" #inputFilter placeholder=" " id="filterInput" (keyup)="filter()">
+                <label for="filterInput">اكتب هنا</label>
+            </div>
+            <div class="form-group my-2" *ngIf="selectedOperation != null && inputType == 1">
+                <input type="number" #inputFilter placeholder=" " id="filterInput" (keyup)="filter()">
+                <label for="filterInput">اكتب هنا</label>
+            </div>
+            <div class="form-group my-2" *ngIf="selectedOperation != null && inputType == 2">
+                <input type="date" #inputFilter placeholder=" " id="filterInput" (change)="filter()">
+                <label for="filterInput">اكتب هنا</label>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,266 @@
+<!-- start sidenav -->
+<mat-drawer-container class="reporting-container" autosize>
+  <mat-drawer #reportingDrawer class="reporting-sidenav" mode="over" position="end">
+    <!-- start accordion -->
+    <mat-accordion>
+      <!-- expansion one -->
+      <mat-expansion-panel class="my-3">
+        <mat-expansion-panel-header>
+          <mat-panel-title> تخطيط التقرير </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <!-- paddings -->
+          <div class="header-content-paddings">
+            <div class="row">
+              <div class="col-12">
+                <!-- header padding -->
+                <div class="form-group" dir="ltr">
+                  <label for="paddingHeaderChanger" class="d-block text-right">حواف العنوان</label>
+                  <input dir="rtl" type="range" class="form-control-range" id="paddingHeaderChanger"
+                    [(ngModel)]="header.padding" min="1" max="100" step="1">
+                </div>
+              </div>
+              <div class="col-12">
+                <!-- content padding -->
+                <div class="form-group">
+                  <label for="paddingContentChanger" class="d-block text-right">حواف المحتوى</label>
+                  <input type="range" class="form-control-range" id="paddingContentChanger"
+                    [(ngModel)]="content.padding" min="5" max="100" step="1">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- border settings -->
+          <div class="border-settings">
+            <div class="row">
+              <div class="col-12">
+                <!-- border radius -->
+                <div class="form-group">
+                  <label for="borderRadiusChanger" class="d-block text-right">منحنى الحدود</label>
+                  <input type="range" class="form-control-range" id="borderRadiusChanger" [(ngModel)]="border.radius"
+                    min="1" max="50" step="1">
+                </div>
+              </div>
+              <!-- border color -->
+              <div class="col-6">
+                <div class="form-group text-right">
+                  <label for="borderColorChanger" class="d-block text-right">لون الحدود</label>
+                  <input type="color" id="borderColorChanger" [(ngModel)]="border.color">
+                </div>
+              </div>
+              <!-- border width -->
+              <div class="col-6">
+                <div class="form-group text-right pt-3">
+                  <select class="form-select input-bootstrap-settings" id="borderWidthChanger"
+                    [(ngModel)]="border.size">
+                    <option value="1" selected>1px</option>
+                    <option value="2">2px</option>
+                    <option value="3">3px</option>
+                    <option value="4">4px</option>
+                    <option value="5">5px</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- dimensions -->
+          <div class="header-content-dimensions">
+            <div class="row">
+              <!-- header height -->
+              <div class="col-6">
+                <div class="form-group text-right">
+                  <label for="headerHeightChanger" class="d-block text-right">طول العنوان</label>
+                  <input type="number" id="headerHeightChanger" class="input-bootstrap-settings" min="80"
+                    [(ngModel)]="header.height">
+                </div>
+              </div>
+              <!-- content height -->
+              <div class="col-6">
+                <div class="form-group text-right">
+                  <label for="headerHeightChanger" class="d-block text-right">طول المحتوى</label>
+                  <input type="number" id="headerHeightChanger" class="input-bootstrap-settings" min="500"
+                    [(ngModel)]="content.height">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!-- expansion two -->
+      <mat-expansion-panel class="my-3">
+        <mat-expansion-panel-header>
+          <mat-panel-title> اضافه ادوات </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="report-tools text-right p-3">
+          <span class="add-text-box mx-2" (click)="createElement()">
+            اضافه نص
+            <i class="fa-solid fa-plus mr-2"></i>
+          </span>
+        </div>
+      </mat-expansion-panel>
+      <div class="table-settings w-100">
+        <div class="collabse-btn" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+          aria-controls="collapseExample">
+          اعدادات الجدول
+        </div>
+
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <div class="row">
+              <!-- header height -->
+              <div class="col-12">
+                <div class="form-group text-right">
+                  <input type="number" id="tableWidthChanger" placeholder=" " min="50%" max="100"
+                    [(ngModel)]="table.width" >
+                    <label for="tableWidthChanger">عرص الجدول</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <!-- border radius -->
+                <div class="form-group">
+                  <input type="range" class="form-control-range" id="tablePaddingChanger" [(ngModel)]="table.padding"
+                    min="1" max="30" step="1">
+                    <label for="tablePaddingChanger">حواف خلاياالجدول</label>
+
+                </div>
+              </div>
+              <!-- determine show columns -->
+              <div class="col-12">
+                <div class="table-collabse-determine my-2">
+                  <label for="showColumns" class="text-right w-100">اختر الاعمدة المراد عرضها</label>
+                  <p-multiSelect id="showColumns" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                    selectedItemsLabel="{0} عدد الاعمدة" [style]="{minWidth: '200px'}"
+                    defaultLabel="اختر الاعمدة"></p-multiSelect>
+                </div>
+              </div>
+              <div class="col-12">
+                <!-- filter columm -->
+                <div class=" animate__animated animate__headShake table-collabse-filter my-2 ui-rtl text-right"
+                  dir="rtl">
+                  <button class="btn btn-primary btn-sm" (click)="createNewFilter()">Add Filter</button>
+                  <div class="filter-container-template">
+                    <ng-template #filterContainer class="filter-container">
+
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+
+    </mat-accordion>
+
+    <!-- end accordion -->
+  </mat-drawer>
+
+  <!-- content of sidenav -- body container -->
+  <div class="sidenav-container w-100">
+    <!-- sidenav expanding icon -->
+    <button mat-mini-fab class="toggle-reporting-drawer" (click)="reportingDrawer.toggle()" color="light"
+      title="تعديل الريبور">
+      <mat-icon>settings</mat-icon>
+    </button>
+
+    <!-- report content -->
+    <!-- report container -->
+    <div class="container-fluid report-container p-3 w-100">
+      <div class="ss">
+        <!-- report card -->
+        <mat-card appearance="outlined w-100">
+          <!-- card header -->
+          <mat-card-header class="mat-card-header-report ui-rtl w-100" [style.padding]="header.padding+'px'"
+            [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+            [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
+            <div class="div-header-container d-flex align-items-center justify-content-between w-100 ui-rtl" dir="rtl">
+
+              <!-- egypt icon -->
+              <div class="icon-egypt">
+                <img src="/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png" width="40" alt="icon-egypt">
+              </div>
+              <div class="header-content-container w-50 d-flex justify-content-between align-items-center">
+                <!-- default header reporting name -->
+                <app-text-area>
+                  <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif"
+                    data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
+                    data-align="right" style="width: 100%;">
+                    عنوان التقرير
+                  </div>
+                </app-text-area>
+                <!-- default header reporting date -->
+                <app-text-area>
+                  <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif"
+                    data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
+                    data-align="right">
+                    تاريخ التقرير
+                  </div>
+                </app-text-area>
+              </div>
+            </div>
+
+          </mat-card-header>
+          <mat-card-content class="mat-card-content-report w-100 my-2 overflow-hidden"
+            [style.padding]="content.padding+'px'" [style.borderRadius]="border.radius+'px'"
+            [style.borderColor]="border.color" [style.borderWidth]="border.size+'px'"
+            [style.minHeight]="content.height+'px'">
+
+
+            <div class="headings-content d-flex justify-content-ends ui-rtl" dir="rtl">
+              <app-text-area>
+                <div #textArea contenteditable="true" class="text-editable" data-fontFamily="Cairo, sans-serif"
+                  data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
+                  data-align="right" style="width: 350px;">
+                  اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة مهارة
+                  الكلام.
+                  المقابلة هي نوع منها التي يستدعها الدا
+                </div>
+              </app-text-area>
+              <app-text-area>
+                <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif"
+                  data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
+                  data-align="right" style="width: 350px;">
+                  اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة مهارة
+                  الكلام.
+                  المقابلة هي نوع منها التي يستدعها الدا
+                </div>
+              </app-text-area>
+              <div class="charts">
+
+              </div>
+            </div>
+
+            <ng-template #componentContainer>
+
+            </ng-template>
+
+            <app-table [cols]="selectedColumns" [reports]="reports" [width]="table.width" [cellPadding]="table.padding"></app-table>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+</mat-drawer-container>
+
+<p-confirmDialog #cd dir="rtl" header="تاكيد الحذف" [transitionOptions]="'150ms'">
+  <p-footer>
+    <button type="button" class="btn btn-success btn-sm" (click)="cd.accept()">نعم</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="cd.reject()">تجاهل</button>
+</p-footer>
+</p-confirmDialog>
+<div style="padding: 50px;">
+  <app-chartComponent [width]="20" [height]="100" [chartsConfig]="chartConfig"></app-chartComponent>
+</div>
+
+
+
+
+
+
+
+<!-- end sidenav -->

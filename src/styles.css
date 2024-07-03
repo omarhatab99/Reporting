@@ -1,0 +1,67 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+*:not(i , mat-icon){
+    font-family: "Cairo", sans-serif;
+}
+
+
+body{
+    font-family: "Cairo", sans-serif;
+    direction: rtl;
+}
+
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+    direction: rtl;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    direction: rtl;
+  }
+  .form-group label {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 14px;
+    color: #777;
+    transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+  }
+  .form-group input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  .form-group input:focus + label,
+  .form-group input:not(:placeholder-shown) + label {
+    top: -6px;
+    font-size: 12px;
+    color: #007bff;
+    background-color: #ffffff;
+    padding: 0 4px;
+    border-radius: 4px;
+    right: 8px;
+  }
+  .submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
