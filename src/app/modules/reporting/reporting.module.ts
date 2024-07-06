@@ -16,9 +16,17 @@ import { AngularElementsResizerModule } from 'angular-elements-resizer';
 import { TableComponent } from './components/table/table.component';
 import { AddFilterComponent } from './components/add-filter/add-filter.component';
 import { chartsComponent } from '../../shared/components/chart/chart.Component';
+import { AddImageComponent } from './components/add-image/add-image.component';
+import { ImageComponent } from './components/image/image.component';
+import { AggregateComponent } from './components/aggregate/aggregate.component';
+import { FunctionComponent } from './components/function/function.component';
+import { GetObsDataPipe } from './pipes/get-obs-data.pipe';
 
 @NgModule({
-  declarations: [ReportComponent, EditableTextComponent, TextAreaComponent, AddTextAreaComponent, TextEditorDialogComponent, TableComponent, AddFilterComponent, chartsComponent],
+  declarations: [ReportComponent, 
+    EditableTextComponent, TextAreaComponent,
+     AddTextAreaComponent, TextEditorDialogComponent, TableComponent, AddFilterComponent,
+      chartsComponent, AddImageComponent, ImageComponent, AggregateComponent, FunctionComponent, GetObsDataPipe],
   imports: [
     CommonModule,
     ReportingRoutingModule,

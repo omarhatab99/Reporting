@@ -17,6 +17,8 @@ import { TextEditorDialogComponent } from 'src/app/dialogs/text-editor-dialog/te
 import {ChartModule} from 'primeng-lts/chart';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api'
+import {RadioButtonModule} from 'primeng-lts/radiobutton';
+
 @NgModule({
   exports: [
     TableModule,
@@ -35,7 +37,7 @@ import {ConfirmationService} from 'primeng-lts/api'
     TooltipModule,
     ChartModule,
     ConfirmDialogModule,
-    
+    RadioButtonModule
   ],
   entryComponents: [
     TextEditorDialogComponent

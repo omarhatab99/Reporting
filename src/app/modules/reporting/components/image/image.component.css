@@ -1,11 +1,17 @@
 
- .text-box {
+.image-box {
     background-color: transparent;
     cursor: pointer;
     display: inline-block;
     position: relative;
-    min-width: fit-content;
     z-index: 10;
+    transition: background 0.3s linear ;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.image-box:hover:not(:focus) {
+    background-color: #ebecf0;
 }
 
 
@@ -66,53 +72,15 @@
     cursor: pointer;
 }
 
-.text-box:hover .left-move-icon{
+.image-box:hover .left-move-icon{
     opacity: 1;
     transition: all 0.4s ease-in-out;
 }
 
-.text-box:hover .icon-container {
+.image-box:hover .icon-container {
     opacity: 1;
     transition: all 0.4s ease-in-out;
     
-}
-
-.text-editable {
-    background-color: transparent;
-    border-color: transparent;
-    padding: 10px;
-    box-shadow: transparent 0px 0px 0px 1px;
-    transition: background 0.3s linear ;
-    resize: none;
-    direction: ltr;
-    overflow: auto;
-    overflow-y: hidden;  
-    border-radius: 3px;
-    min-width: 100px;
-    text-align: right;
-    position: relative;
-}
-
-.text-editable:focus{
-    resize: both;
-}
-
-.text-editable:hover:not(:focus) {
-    background-color: #ebecf0;
-}
-
-.text-editable:focus {
-    background-color: #fff;
-    border: 1px dashed #54585d;
-    outline: none;
-}
-
-.input-bootstrap-settings{
-    padding: 5px;
-    width: 90px;
-    border: none;
-    outline: none;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .movement-line {
@@ -122,6 +90,24 @@
     right: 0;
     top: 0;
     z-index: 999999999;
+}
+
+.image-box .dynamic-image {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.image-box .image-container {
+    width: 100%;
+    height: 100%;
+}
+
+.preiview-container {
+    padding: 20px;
+    background-color: antiquewhite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 /* .overlay-movement{
     position: absolute;

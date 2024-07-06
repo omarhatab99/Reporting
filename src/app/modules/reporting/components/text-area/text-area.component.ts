@@ -60,10 +60,6 @@ export class TextAreaComponent implements OnInit {
       })
   }
 
-  stop(){
-    console.log("resized")
-  }
-
   //delete text box element
   confirmationDeleteTextBox(event: any) {
     this.confirmationService.confirm({

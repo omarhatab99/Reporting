@@ -1,0 +1,28 @@
+<!-- <div class="btn-group">
+    <button type="button" class="export-dropdown" data-toggle="dropdown" aria-expanded="false">
+        Exports
+        <i class="fa-solid fa-caret-down"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-center" style="z-index: 9999999999000000;">
+        <button class="dropdown-item" type="button">Export PDF</button>
+        <button class="dropdown-item" type="button">Export EXCEL</button>
+    </div>
+</div>
+<span>المعدل الكلى</span> -->
+
+<div class="text-right">
+
+    <table class="aggregate-table" *ngFor="let function of functions">
+        <caption class="text-right" style="caption-side:top">خصائص {{function.column}}:</caption>
+        <thead>
+            <tr>
+                <th *ngFor="let data of function.functions">{{data.label}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td *ngFor="let data of function.functions">{{data.value}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

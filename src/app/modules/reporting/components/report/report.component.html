@@ -92,67 +92,30 @@
           <mat-panel-title> اضافه ادوات </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="report-tools text-right p-3">
-          <span class="add-text-box mx-2" (click)="createElement()">
+          <span class="add-text-box mx-2" (click)="createTextBox()">
             اضافه نص
+            <i class="fa-solid fa-plus mr-2"></i>
+          </span>
+
+          <span class="add-text-box mx-2" (click)="showDialogAddImage()">
+            اضافه صورة
+            <i class="fa-solid fa-plus mr-2"></i>
+          </span>
+
+          <span class="add-text-box mx-2" (click)="createTable()">
+            اضافه جدول
             <i class="fa-solid fa-plus mr-2"></i>
           </span>
         </div>
       </mat-expansion-panel>
-      <div class="table-settings w-100">
-        <div class="collabse-btn" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
-          aria-controls="collapseExample">
-          اعدادات الجدول
-        </div>
-
-        <div class="collapse" id="collapseExample">
-          <div class="card card-body">
-            <div class="row">
-              <!-- header height -->
-              <div class="col-12">
-                <div class="form-group text-right">
-                  <input type="number" id="tableWidthChanger" placeholder=" " min="50%" max="100"
-                    [(ngModel)]="table.width" >
-                    <label for="tableWidthChanger">عرص الجدول</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <!-- border radius -->
-                <div class="form-group">
-                  <input type="range" class="form-control-range" id="tablePaddingChanger" [(ngModel)]="table.padding"
-                    min="1" max="30" step="1">
-                    <label for="tablePaddingChanger">حواف خلاياالجدول</label>
-
-                </div>
-              </div>
-              <!-- determine show columns -->
-              <div class="col-12">
-                <div class="table-collabse-determine my-2">
-                  <label for="showColumns" class="text-right w-100">اختر الاعمدة المراد عرضها</label>
-                  <p-multiSelect id="showColumns" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
-                    selectedItemsLabel="{0} عدد الاعمدة" [style]="{minWidth: '200px'}"
-                    defaultLabel="اختر الاعمدة"></p-multiSelect>
-                </div>
-              </div>
-              <div class="col-12">
-                <!-- filter columm -->
-                <div class=" animate__animated animate__headShake table-collabse-filter my-2 ui-rtl text-right"
-                  dir="rtl">
-                  <button class="btn btn-primary btn-sm" (click)="createNewFilter()">Add Filter</button>
-                  <div class="filter-container-template">
-                    <ng-template #filterContainer class="filter-container">
-
-                    </ng-template>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-          </div>
-        </div>
+      <div class="tables-settings">
 
       </div>
+      <div *ngFor="let template of headerTemplate; let i = index" >
+        <div *ngTemplateOutlet="headerTemplate[i]">
 
+        </div>
+      </div>
     </mat-accordion>
 
     <!-- end accordion -->
@@ -180,7 +143,7 @@
 
               <!-- egypt icon -->
               <div class="icon-egypt">
-                <img src="/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png" width="40" alt="icon-egypt">
+                <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'" [imageWidth]="40"></app-image>
               </div>
               <div class="header-content-container w-50 d-flex justify-content-between align-items-center">
                 <!-- default header reporting name -->
@@ -208,8 +171,7 @@
             [style.borderColor]="border.color" [style.borderWidth]="border.size+'px'"
             [style.minHeight]="content.height+'px'">
 
-
-            <div class="headings-content d-flex justify-content-ends ui-rtl" dir="rtl">
+            <div class="headings-content d-flex justify-content-between ui-rtl" dir="rtl">
               <app-text-area>
                 <div #textArea contenteditable="true" class="text-editable" data-fontFamily="Cairo, sans-serif"
                   data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
@@ -229,17 +191,26 @@
                 </div>
               </app-text-area>
               <div class="charts">
-
+                <app-chartComponent [width]="20" [height]="100" [chartsConfig]="chartConfig"></app-chartComponent>
               </div>
             </div>
+            <app-table></app-table>
 
             <ng-template #componentContainer>
 
             </ng-template>
 
-            <app-table [cols]="selectedColumns" [reports]="reports" [width]="table.width" [cellPadding]="table.padding"></app-table>
 
           </mat-card-content>
+          <mat-card-footer class="mat-card-footer-report  ui-rtl w-100 m-0" [style.padding]="header.padding+'px'"
+          [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+          [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
+          <div class="div-footer-container d-flex align-items-center justify-content-between w-100 h-100 ui-rtl" dir="rtl">
+            <div class="print-date">
+              تاريخ الطباعه: <span>{{dateNow}}</span>
+            </div>
+          </div>
+          </mat-card-footer>
         </mat-card>
       </div>
     </div>
@@ -253,14 +224,30 @@
     <button type="button" class="btn btn-danger btn-sm" (click)="cd.reject()">تجاهل</button>
 </p-footer>
 </p-confirmDialog>
-<div style="padding: 50px;">
-  <app-chartComponent [width]="20" [height]="100" [chartsConfig]="chartConfig"></app-chartComponent>
-</div>
 
 
 
-
-
-
+<!-- add new image dialog -->
+<p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '500px' , zIndex:999999999999999999999}" (onHide)="dialogAddImageHide()">
+  <p-header>
+      تغيير الصورة
+  </p-header>
+  <div class="dialog-content">
+      <div class="preiview-container">
+          <img [src]="imageSrc" #priview alt="preview image" width="160px" height="120px">
+      </div>
+      <div class="input-group my-3" dir="rtl">
+          <div class="custom-file">
+              <input type="file" #selectedImageInput class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" 
+              (change)="selectedImage($event)">
+              <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
+          </div>
+      </div>
+  </div>
+  <p-footer>
+      <button type="button" class="btn btn-success btn-sm" (click)="createImage()">نعم</button>
+      <button type="button" class="btn btn-danger btn-sm" (click)="close()">تجاهل</button>
+  </p-footer>
+</p-dialog>
 
 <!-- end sidenav -->

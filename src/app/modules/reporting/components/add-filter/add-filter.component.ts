@@ -3,6 +3,7 @@ import { ConfirmationService } from 'primeng-lts/api';
 import Swal from 'sweetalert2';
 import { ReportComponent } from '../report/report.component';
 import { DatePipe } from '@angular/common';
+import { TableComponent } from '../table/table.component';
 
 
 export enum operationsFilter {
@@ -41,12 +42,11 @@ export class AddFilterComponent implements OnInit {
   _selectedOperation: any = null;
   operations: any[] = [];
   filterId: any;
-  dataTarget: any;
 
-  constructor(private confirmationService: ConfirmationService, private _ComponentFactoryResolver: ComponentFactoryResolver, private reportComponent: ReportComponent, private datePipe: DatePipe) { }
+  constructor(private confirmationService: ConfirmationService, private _ComponentFactoryResolver: ComponentFactoryResolver, private tableComponent: TableComponent, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
-    this.selectedColumn = this.reportComponent._selectedColumns
+    this.selectedColumn = this.tableComponent._selectedColumns
       .map((element) => { return { label: element.field, value: element.field } });
     const headerOption = { label: "اختر عامود", value: null };
     this.selectedColumn.unshift(headerOption);
@@ -81,7 +81,7 @@ export class AddFilterComponent implements OnInit {
 
   //to update selected column in case open multi select.
   changeSelectedColumn() {
-    this.selectedColumn = this.reportComponent._selectedColumns
+    this.selectedColumn = this.tableComponent._selectedColumns
       .map((element) => { return { label: element.field, value: element.field } });
     const headerOption = { label: "اختر عامود", value: null };
     this.selectedColumn.unshift(headerOption);
@@ -156,9 +156,8 @@ export class AddFilterComponent implements OnInit {
     }
 
 
-    this.reportComponent.reports = allFilterArray;
-
-
+    this.tableComponent.reports = allFilterArray;
+    this.tableComponent.isReportsChanged.next(true);
   }
 
 
@@ -168,7 +167,8 @@ export class AddFilterComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'هل تريد حذف التنقيه؟',
       accept: () => {
-        this.reportComponent.reports = this.reports;
+        this.tableComponent.reports = this.reports;
+        this.tableComponent.isReportsChanged.next(true);
         //Actual logic to perform a confirmation
         this.filterElement.nativeElement.remove();
         this.filterCollabse.nativeElement.remove();

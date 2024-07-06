@@ -1,10 +1,10 @@
-<div *ngIf="chartsConfig.direction=='vertical'" dir="ltr" #container style="overflow: auto; height: 100%; width: 100%; " class="shadow">
+<div *ngIf="chartsConfig.direction=='vertical'" dir="ltr" #container style="overflow: auto; width: 300;">
     <div  #containerBox style="height: 100%; width: 100%;" >
         <canvas [height]="height"  #canvas></canvas>
     </div>
 </div>
 
-<div *ngIf="chartsConfig.direction=='horizontal'" dir="ltr" #container style="overflow: auto; height: 100%; width: 100%; " class="shadow">
+<div *ngIf="chartsConfig.direction=='horizontal'" dir="ltr" #container style="overflow: auto;  width: 300;">
     <div  #containerBox style="height: 100%; width: 100%;" >
         <canvas [height]="height"  #canvas></canvas>
     </div>

@@ -1,0 +1,14 @@
+.aggregate-table {
+    display: block;
+    width: 100%;
+    direction: rtl;
+}
+
+.aggregate-table th , td {
+    padding: 10px;
+    border: 1px dashed #555;
+}
+
+.aggregate-table caption {
+    display: block;
+}
