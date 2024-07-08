@@ -1,26 +1,14 @@
-import { Component, ComponentFactory, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng-lts/api';
-import Swal from 'sweetalert2';
-import { ReportComponent } from '../report/report.component';
 import { DatePipe } from '@angular/common';
 import { TableComponent } from '../table/table.component';
+import { IInputType } from '../../enums/iinput-type.enum';
+import { operationsFilter } from '../../enums/ioperations-filter.enum';
 
 
-export enum operationsFilter {
-  CONTAIN,
-  NOTCONTAIN,
-  EQUAL,
-  NOTEQUAL,
-  MORETHAN,
-  LESSTHAN,
-  DATE
-};
 
-export enum inputType {
-  TEXT,
-  NUMBER,
-  DATE
-}
+
+
 
 @Component({
   selector: 'app-add-filter',
@@ -29,29 +17,40 @@ export enum inputType {
   providers: [DatePipe]
 })
 export class AddFilterComponent implements OnInit {
+  //select elements from dom
   @ViewChild('filterElement') filterElement: ElementRef;
   @ViewChild('filterCollabse') filterCollabse: ElementRef;
   @ViewChild('inputFilter') inputFilter: ElementRef;
 
-  reports: any[];
-  inputType: inputType;
+  reports: any[] = [];
+  inputType: IInputType = {} as IInputType;
+
+  //selected column get from table component
   selectedColumn: any[] = [];
-  selectedColumnOptions: any[] = [];
   _filterSelectedColumn: any;
+
+  //used to show input of filter operation
   filterOperationShow: boolean = false;
+
+  //used to select operation
   _selectedOperation: any = null;
+  //operations
   operations: any[] = [];
+  //used for random filter id
   filterId: any;
 
-  constructor(private confirmationService: ConfirmationService, private _ComponentFactoryResolver: ComponentFactoryResolver, private tableComponent: TableComponent, private datePipe: DatePipe) { }
+  constructor(private confirmationService: ConfirmationService, private tableComponent: TableComponent, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
+    //defaults values
+    this.filterId = this.getRandomId();
+
+    //handle selected columns
     this.selectedColumn = this.tableComponent._selectedColumns
       .map((element) => { return { label: element.field, value: element.field } });
     const headerOption = { label: "اختر عامود", value: null };
     this.selectedColumn.unshift(headerOption);
 
-    this.filterId = this.getRandomId();
     this.operations = [
       { label: 'اختر عمليه', value: null },
       { label: 'تحتوى', value: operationsFilter.CONTAIN },
@@ -64,15 +63,13 @@ export class AddFilterComponent implements OnInit {
     ]
   }
 
-  getRandomId(): string {
-    const random = Math.floor(Math.random() * (999999 - 100000)) + 100000;
-    return `filter-${random}`;
-  }
+
 
   get filterSelectedColumn(): any {
     return this._filterSelectedColumn;
   }
 
+  //filter selected columns
   set filterSelectedColumn(val: any) {
     this.filterOperationShow = (val) ? true : false;
     this._filterSelectedColumn = val;
@@ -100,14 +97,14 @@ export class AddFilterComponent implements OnInit {
       case operationsFilter.NOTCONTAIN:
       case operationsFilter.EQUAL:
       case operationsFilter.NOTEQUAL:
-        this.inputType = inputType.TEXT;
+        this.inputType = IInputType.TEXT;
         break;
       case operationsFilter.LESSTHAN:
       case operationsFilter.MORETHAN:
-        this.inputType = inputType.NUMBER;
+        this.inputType = IInputType.NUMBER;
         break;
       default:
-        this.inputType = inputType.DATE;
+        this.inputType = IInputType.DATE;
 
     }
 
@@ -174,5 +171,11 @@ export class AddFilterComponent implements OnInit {
         this.filterCollabse.nativeElement.remove();
       }
     });
+  }
+
+
+  getRandomId(): string {
+    const random = Math.floor(Math.random() * (999999 - 100000)) + 100000;
+    return `filter-${random}`;
   }
 }

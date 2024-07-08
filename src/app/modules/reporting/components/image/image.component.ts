@@ -24,7 +24,7 @@ export class ImageComponent implements OnInit {
   }
 
 
-  showDialog(){
+  showImageDialog(){
     this.displayDialogImage = true;
     this.selectedImageInput.nativeElement.value = "";
     this.previewSrc = this.imageSrc;
@@ -47,12 +47,13 @@ export class ImageComponent implements OnInit {
 
   }
 
-  close(){
+  closeImageDialog(){
     //this.priview.nativeElement.src = this.imageSrc;
     this.selectedImageInput.nativeElement.value = "";
     this.previewSrc = this.imageSrc;
     this.displayDialogImage = false;
   }
+
 
   dialogAddImageHide() {
     this.selectedImageInput.nativeElement.value = "";
@@ -60,8 +61,8 @@ export class ImageComponent implements OnInit {
   }
 
 
-
-  confirmationDeleteTextBox(){
+//delete image 
+  confirmationDeleteImage(){
     this.confirmationService.confirm({
       message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
       accept: () => {

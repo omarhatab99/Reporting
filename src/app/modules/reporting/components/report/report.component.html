@@ -106,7 +106,7 @@
             اضافه جدول
             <i class="fa-solid fa-plus mr-2"></i>
           </span>
-          <span class="add-text-box mx-2" (click)="showDialogAddChart()">
+          <span class="add-text-box mx-2" (click)="showAddChartDialog()">
             اضافه رسم بيان
             <i class="fa-solid fa-plus mr-2"></i>
           </span>
@@ -136,7 +136,7 @@
     <!-- report content -->
     <!-- report container -->
     <div class="container-fluid report-container p-3 w-100">
-      <div class="ss">
+      <div class="">
         <!-- report card -->
         <mat-card appearance="outlined w-100">
           <!-- card header -->
@@ -196,7 +196,7 @@
                 </div>
               </app-text-area>
               <div class="charts" style="z-index: 20;">
-                 <app-chartComponent [chartsConfig]="chartConfig"></app-chartComponent> 
+                <app-chartComponent [chartsConfig]="chartConfig"></app-chartComponent>
               </div>
             </div>
             <div #componentContainer>
@@ -225,6 +225,7 @@
 
 </mat-drawer-container>
 
+<!-- confirm dialog (primeng) -->
 <p-confirmDialog #cd dir="rtl" header="تاكيد الحذف" [transitionOptions]="'150ms'">
   <p-footer>
     <button type="button" class="btn btn-success btn-sm" (click)="cd.accept()">نعم</button>
@@ -234,7 +235,7 @@
 
 
 
-<!-- add new image dialog -->
+<!-- change image dialog -->
 <p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '500px' , zIndex:999999999999999999999}"
   (onHide)="dialogAddImageHide()">
   <p-header>
@@ -259,41 +260,114 @@
 </p-dialog>
 
 
-<!-- add new image dialog -->
+<!-- add new charts dialog -->
 <p-dialog [(visible)]="displayDialogAddCharts" [style]="{width: '600px' , zIndex:999999999999999999999}">
   <p-header>
     اضافه رسم ريانات
   </p-header>
+  <!-- dialog content have shape of charts to select one from it -->
   <div class="dialog-content">
-    <div class="charts-container text-right">
-      <a class="chart-selector mx-2" title="dounout" (click)="selectedCharts('dounout')"
+    <div class="charts-container-dialog text-right">
+      <a class="chart-selector mx-2" title="dounout" (click)="selectedCharts('doughnut')"
         [class.activeChart]="isActiveChart == 'dounout'">
         <img src="../../../../../assets/pie-chart.png" style="width: 100%;">
       </a>
-      <a class="chart-selector mx-2" title="linear" (click)="selectedCharts('linear')"
-        [class.activeChart]="isActiveChart == 'linear'">
+      <a class="chart-selector mx-2" title="bar" (click)="selectedCharts('bar')"
+        [class.activeChart]="isActiveChart == 'bar'">
         <img src="../../../../../assets/bar-chart2.png" style="width: 100%;">
       </a>
     </div>
-    <div class="charts-settings text-right" *ngIf="isActiveChart == 'dounout'">
+    <!-- chart is doughnut settings -->
+    <div class="charts-settings text-right" *ngIf="isActiveChart == 'doughnut'">
       <div class="row">
+        <div class="col-12">
+          <!-- description settings -->
+          <p class="par-describtion-way">سيتم عرض البينات طبقا لعامود معين وسيتم تقسيم البيانات على حسب هذا العامود من
+            حيث العدد ويمكنك ايضا ان تطبق بعض العمليات</p>
+          <div class="row">
+            <div class="col-7">
+              <!-- column to handle chart by it -->
+              <div class="filter-columns-select">
+                <label for="chartColumn" class="text-right w-100"> يتم رسم البيانات طبقا لعامود معين </label>
+                <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations"
+                  [(ngModel)]="selectedLabelChartColumn"></p-dropdown>
+              </div>
+            </div>
+            <div class="col-5">
+              <!-- operation to perform on chart by another column -->
+              <div class="filter-columns-select">
+                <label for="chartColumn" class="text-right w-100">هل تريد عمليه معينه</label>
+                <p-dropdown id="chartColumn" appendTo="body" [options]="operations"
+                  [(ngModel)]="selectedOperationChartColumn"></p-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-7" *ngIf="selectedOperationChartColumn != null && selectedOperationChartColumn != 2">
+          <!-- column will be displayed based on operation -->
+          <div class="filter-columns-select my-2">
+            <label for="chartColumn" class="text-right w-100"> اختر العامود المطلوب للعمليه </label>
+            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations"
+              [(ngModel)]="selectedLabelChartColumnForOperation"></p-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- chart is bar settings -->
+    <div class="charts-settings text-right" *ngIf="isActiveChart == 'bar'">
+      <div class="row">
+        <!-- way of displaying -->
         <div class="col-7">
           <div class="filter-columns-select">
-            <label for="chartColumn" class="text-right w-100"> يتم رسم البيانات طبقا لعامود معين </label>
-            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations" [(ngModel)]="selectedLabelChartColumn"></p-dropdown>
+            <label for="chartColumn" class="text-right w-100">اختر طريقه يتم عرض الرسم بها</label>
+            <p-dropdown id="chartColumn" appendTo="body" [options]="barChartsDisplayWayOptions"
+              [(ngModel)]="barChartsDisplayWay"></p-dropdown>
           </div>
         </div>
-        <div class="col-5">
-          <div class="filter-columns-select">
-            <label for="chartColumn" class="text-right w-100">هل تريد عمليه معينه</label>
-            <p-dropdown id="chartColumn" appendTo="body" [options]="operations" [(ngModel)]="selectedOperationChartColumn"></p-dropdown>
+        <!-- way 1 -->
+        <div class="col-12" *ngIf="barChartsDisplayWay == 0">
+          <!-- description settings -->
+          <p class="par-describtion-way">سيتم عرض البينات طبقا لعامود معين وسيتم تقسيم البيانات على حسب هذا العامود من
+            حيث العدد ويمكنك ايضا ان تطبق بعض العمليات</p>
+          <div class="row">
+            <div class="col-7">
+              <!-- column to handle chart by it -->
+              <div class="filter-columns-select">
+                <label for="chartColumn" class="text-right w-100"> يتم رسم البيانات طبقا لعامود معين </label>
+                <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations"
+                  [(ngModel)]="selectedLabelChartColumn"></p-dropdown>
+              </div>
+            </div>
+            <div class="col-5">
+              <!-- operation to perform on chart by another column -->
+
+              <div class="filter-columns-select">
+                <label for="chartColumn" class="text-right w-100">هل تريد عمليه معينه</label>
+                <p-dropdown id="chartColumn" appendTo="body" [options]="operations"
+                  [(ngModel)]="selectedOperationChartColumn"></p-dropdown>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="selectedOperationChartColumn != null && selectedOperationChartColumn != 2">
+              <!-- description settings -->
+
+              <p class="par-describtion-way">سيتم تطبيق العمليه على العامود المختار بحيث يصنف البيانات على حسب العامود
+                الاول ويعرضها طبقا للعمليه</p>
+              <div class="row">
+                <div class="col-7">
+                  <!-- column will be displayed based on operation -->
+                  <div class="filter-columns-select my-1">
+                    <label for="chartColumn" class="text-right w-100"> اختر العامود المطلوب للعمليه </label>
+                    <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations"
+                      [(ngModel)]="selectedLabelChartColumnForOperation"></p-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-7" *ngIf="selectedOperationChartColumn != null">
-          <div class="filter-columns-select my-2">
-            <label for="chartColumn" class="text-right w-100"> اختر الصف المطلوب للعمليه </label>
-            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations" [(ngModel)]="selectedLabelChartColumnForOperation"></p-dropdown>
-          </div>
+        <!-- way 2 -->
+        <div class="col-12" *ngIf="barChartsDisplayWay == 1">
+
         </div>
       </div>
     </div>

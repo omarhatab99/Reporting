@@ -1,8 +1,7 @@
-import { Component, ContentChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ContentChild, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng-lts/api';
 import { DialogService } from 'primeng-lts/dynamicdialog';
 import { TextEditorDialogComponent } from 'src/app/dialogs/text-editor-dialog/text-editor-dialog.component';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-text-area',
@@ -12,6 +11,10 @@ import Swal from 'sweetalert2';
 })
 export class TextAreaComponent implements OnInit {
   @ContentChild("textArea") textArea: ElementRef;
+  @ViewChild("textArea") textAreaAdding: ElementRef;
+
+  value:string = "Add Text Here";
+  addingMode:boolean = false;
 
   constructor(private _DialogService: DialogService , private confirmationService: ConfirmationService) { }
 
@@ -22,7 +25,7 @@ export class TextAreaComponent implements OnInit {
   openEditTextDialog() {
     
     //get target element 
-    const targetElement = this.textArea.nativeElement;
+    const targetElement = this.addingMode ? this.textAreaAdding.nativeElement : this.textArea.nativeElement;
     //get all data attributes from element.
     const family = targetElement.getAttribute("data-fontFamily");
     const size = targetElement.getAttribute("data-fontSize");

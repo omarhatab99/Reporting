@@ -8,20 +8,23 @@ import { ConfirmationService } from 'primeng-lts/api';
   styleUrls: ['./add-image.component.css']
 })
 export class AddImageComponent implements OnInit {
-  @Input() imageSrc:any = "";
-  @Input() previewSrc:any = "";
-  @Input() imageWidth:any = 100;
+  //selected elements in dom
   @ViewChild("priview") priview:ElementRef;
   @ViewChild("imageContainer") imageContainer:ElementRef;
   @ViewChild("imageDialog") imageDialog:ElementRef;
   @ViewChild("selectedImageInput") selectedImageInput:ElementRef;
+  //inputs
+  @Input() imageSrc:any = "";
+  @Input() previewSrc:any = "";
+  @Input() imageWidth:any = 100;
+
   displayDialogImage:boolean = false;
   constructor(private sanitizer:DomSanitizer , private confirmationService: ConfirmationService) { }
 
 
   ngOnInit(): void {}
 
-  showDialog(){
+  showAddImageDialog(){
     this.displayDialogImage = true;
     this.selectedImageInput.nativeElement.value = "";
     this.previewSrc = this.imageSrc;
@@ -44,7 +47,7 @@ export class AddImageComponent implements OnInit {
 
   }
 
-  close(){
+  closeAddImageDialog(){
     //this.priview.nativeElement.src = this.imageSrc;
     this.selectedImageInput.nativeElement.value = "";
     this.previewSrc = this.imageSrc;

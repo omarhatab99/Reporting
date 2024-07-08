@@ -93,9 +93,6 @@
     position: relative;
 }
 
-.text-editable:focus{
-    resize: both;
-}
 
 .text-editable:hover:not(:focus) {
     background-color: #ebecf0;

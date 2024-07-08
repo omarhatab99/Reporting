@@ -18,6 +18,7 @@ import {ChartModule} from 'primeng-lts/chart';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api'
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
+import {SidebarModule} from 'primeng-lts/sidebar';
 
 @NgModule({
   exports: [
@@ -37,7 +38,8 @@ import {RadioButtonModule} from 'primeng-lts/radiobutton';
     TooltipModule,
     ChartModule,
     ConfirmDialogModule,
-    RadioButtonModule
+    RadioButtonModule,
+    SidebarModule
   ],
   entryComponents: [
     TextEditorDialogComponent

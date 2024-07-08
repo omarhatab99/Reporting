@@ -9,11 +9,11 @@
         <div class="icon-container">
             <div class="d-flex align-items-center">
                 <!-- delete element icon -->
-                <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox()">
+                <span class="mx-1 element-remove-icon" (click)="confirmationDeleteImage()">
                     <i class="fa-solid fa-xmark"></i>
                 </span>
                 <!-- edit element icon -->
-                <span class="mx-1 element-edit-icon" (click)="showDialog()">
+                <span class="mx-1 element-edit-icon" (click)="showImageDialog()">
                     <i class="fa-solid fa-pencil"></i>
                 </span>
                 <!-- edit element icon -->
@@ -50,7 +50,7 @@
         </div>
         <p-footer>
             <button type="button" class="btn btn-success btn-sm" (click)="changeImage()">نعم</button>
-            <button type="button" class="btn btn-danger btn-sm" (click)="close()">تجاهل</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="closeImageDialog()">تجاهل</button>
         </p-footer>
     </p-dialog>
 </div>

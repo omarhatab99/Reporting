@@ -4,17 +4,13 @@
   <span class="mx-1 left-move-icon" cdkDragHandle>
     <i class="fa-solid fa-up-down-left-right"></i>
   </span>
-  <h3 class="table-title" *ngIf="table.title">{{table.title}}</h3>
+  <p class="table-title" *ngIf="table.title">{{table.title}}</p>
   <span class="table-number">{{tableNumber}}</span>
   <div class="icon-container">
     <div class="d-flex align-items-center">
       <!-- delete element icon -->
-      <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox($event)">
+      <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTable($event)">
         <i class="fa-solid fa-xmark"></i>
-      </span>
-      <!-- edit element icon -->
-      <span class="mx-1 element-add-icon" (click)="showDialogToAdd()">
-        <i class="fa-solid fa-plus"></i>
       </span>
       <!-- edit element icon -->
       <span class="mx-1 element-move-icon" cdkDragHandle>
@@ -23,12 +19,11 @@
     </div>
   </div>
   <p-table #dt class="h-100" [columns]="selectedColumns" [value]="reports" [resizableColumns]="true"
-    [reorderableColumns]="true" [responsive]="true" selectionMode="single" [(selection)]="selectedReport"
-    (onRowSelect)="onRowSelect($event)">
+    [reorderableColumns]="true" [responsive]="true" selectionMode="single" [(selection)]="selectedReport">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns" class="text-center" [pSortableColumn]="col.field" pResizableColumn
-          pReorderableColumn [style.padding]="cellPadding+'px'" [style.fontSize]="table.thFontSize+'px'">
+          pReorderableColumn [style.padding]="table.cellPadding+'px'" [style.fontSize]="table.thFontSize+'px'">
           {{col.header}}
           <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
             ariaLabelDesc="Activate to sort in descending order"
@@ -58,6 +53,7 @@
   </div>
 </div>
 
+<!-- this template will be rendered at report component in spicific place -->
 <ng-template #settings>
   <div class="table-settings w-100 animate__animated  animate__flipInX">
     <a class="collabse-btn" data-toggle="collapse" [href]="'#'+settingsId" role="button" aria-expanded="false"
@@ -74,7 +70,7 @@
               <label for="tableWidthChanger">عنوان الجدول</label>
             </div>
           </div>
-          <!-- header height -->
+          <!-- table width -->
           <div class="col-6">
             <div class="form-group text-right">
               <input type="number" id="tableWidthChanger" placeholder=" " min="50%" max="100" [(ngModel)]="table.width">
@@ -82,6 +78,7 @@
             </div>
           </div>
           <div class="col-6">
+            <!-- export table -->
             <div class="btn-group">
               <button type="button" class="export-dropdown" data-toggle="dropdown" aria-expanded="false">
                 Exports
@@ -94,7 +91,7 @@
             </div>
           </div>
           <div class="col-12">
-            <!-- border radius -->
+            <!-- table padding -->
             <div class="form-group">
               <input type="range" class="form-control-range" id="tablePaddingChanger" [(ngModel)]="table.padding"
                 min="1" max="30" step="1">
@@ -103,7 +100,7 @@
             </div>
           </div>
           <div class="col-12">
-            <!-- border radius -->
+            <!-- table header font size -->
             <div class="form-group">
               <input type="range" class="form-control-range" id="thFontChanger" [(ngModel)]="table.thFontSize" min="10"
                 max="30" step="1">
@@ -111,7 +108,7 @@
             </div>
           </div>
           <div class="col-12">
-            <!-- border radius -->
+            <!-- table data font size -->
             <div class="form-group">
               <input type="range" class="form-control-range" id="tdFontChanger" [(ngModel)]="table.tdFontSize" min="10"
                 max="30" step="1">

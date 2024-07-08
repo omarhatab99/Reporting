@@ -1,12 +1,10 @@
-
-
-
-<a class="collabse-anchor animate__animated animate__fadeInRight my-2" #filterElement  data-toggle="collapse" [href]="'#'+filterId" role="button" aria-expanded="false" aria-controls="collapseExample">
-
+<!-- filter collapse -->
+<a class="collabse-anchor animate__animated animate__fadeInRight my-2" #filterElement data-toggle="collapse"
+    [href]="'#'+filterId" role="button" aria-expanded="false" aria-controls="collapseExample">
 
     <div class="d-flex justify-content-between align-items-center">
         <span>
-            تنقيه 
+            تنقيه
             <i class="fa-solid fa-filter"></i>
         </span>
         <span class="mr-2" (click)="confirmationDeleteFilter($event)">
@@ -14,14 +12,15 @@
         </span>
     </div>
 </a>
-
+<!-- filter content collapse -->
 <div class="collapse" [id]="filterId" #filterCollabse>
     <div class="filter-dynamic">
         <div class="filter-columns-select">
             <label for="filterColumn" class="text-right w-100">اختر الاعمدة المراد عرضها</label>
-            <p-dropdown id="filterColumn" [options]="selectedColumn" [(ngModel)]="filterSelectedColumn" (onClick)="changeSelectedColumn()"></p-dropdown>
+            <p-dropdown id="filterColumn" [options]="selectedColumn" [(ngModel)]="filterSelectedColumn"
+                (onClick)="changeSelectedColumn()"></p-dropdown>
         </div>
-    
+
         <div class="operation-select text-right my-2" *ngIf="filterOperationShow">
             <div class="dropdown-operations">
                 <p-dropdown [options]="operations" [(ngModel)]="selectedOperation"></p-dropdown>
@@ -41,4 +40,3 @@
         </div>
     </div>
 </div>
-

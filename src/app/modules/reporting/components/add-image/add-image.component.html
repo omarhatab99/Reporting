@@ -13,7 +13,7 @@
                     <i class="fa-solid fa-xmark"></i>
                 </span>
                 <!-- edit element icon -->
-                <span class="mx-1 element-edit-icon" (click)="showDialog()">
+                <span class="mx-1 element-edit-icon" (click)="showAddImageDialog()">
                     <i class="fa-solid fa-pencil"></i>
                 </span>
                 <!-- edit element icon -->
@@ -50,7 +50,7 @@
         </div>
         <p-footer dir="rtl">
             <button type="button" class="btn btn-success btn-sm" (click)="changeImage()">نعم</button>
-            <button type="button" class="btn btn-danger btn-sm" (click)="close()">تجاهل</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="closeAddImageDialog()">تجاهل</button>
         </p-footer>
     </p-dialog>
 </div>
