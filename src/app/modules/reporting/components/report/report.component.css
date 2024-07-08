@@ -148,3 +148,55 @@
     justify-content: center;
     align-items: center;
 }
+
+.charts-container{
+    background-color: antiquewhite;
+    height: auto;
+    overflow: auto;
+    display: flex;
+    justify-content: start;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.chart-selector {
+    padding: 10px;
+    width: 115px;
+    height: 110px;
+    border: 1px dashed #555;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-selector:hover {
+    background-color: #ffffffa6;
+    border: 2px solid #080;
+}
+
+.chart-name {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    background-color: aliceblue;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.activeChart {
+    background-color: #ffffffa6 !important;
+    border: 2px solid #080 !important;
+}
+
+.dialog-content .charts-settings {
+    background-color: antiquewhite;
+     padding: 20px; 
+}
+
+::ng-deep .ui-dropdown {
+    width: 100% !important;
+    padding: 5px !important;
+}

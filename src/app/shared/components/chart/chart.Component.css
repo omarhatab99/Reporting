@@ -1,0 +1,124 @@
+.charts-container-component {
+    display: inline-block;
+}
+.charts-box {
+    background-color: transparent;
+    cursor: pointer;
+    min-width: fit-content;
+    transition: background 0.3s linear ;
+    position: relative;
+}
+
+.charts-container {
+    z-index: 9999;
+    display: inline-block;
+    min-width: 200px !important;
+    min-height: 200px !important;
+    width: 200px;
+    height: 100% !important;
+}
+
+.charts-box:hover:not(:focus) {
+    background-color: #ebecf0;
+}
+
+
+.icon-container {
+    position: absolute;
+    opacity: 0;
+    transition: all 0.4s linear;
+    padding: 5px;
+    background-color: antiquewhite;
+    border-radius: 5px;
+    bottom: -30px;
+    right: 0px;
+}
+
+.element-remove-icon,.element-edit-icon , .element-move-icon {
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border: 1px dashed #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    z-index: 100000;
+    transition: all 0.3s linear;
+    cursor: pointer;
+}
+
+.element-edit-icon {
+    background-color: #ecfc7369;
+}
+
+.element-remove-icon {
+    background-color: #fe7a7a70;
+}
+
+.element-move-icon:hover{
+    background-color: #dcffd0;
+    display: block;
+}
+
+.left-move-icon{
+    width: 25px;
+    height: 25px;
+    background-color: antiquewhite;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: absolute;
+    left: -5px;
+    top: 0;
+    transform: translateX(-100%);
+    border-radius: 5px 0px 0px 5px;
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+.charts-box:hover .left-move-icon{
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+}
+
+.charts-box:hover .icon-container {
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+    
+}
+
+.movement-line {
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 999999999;
+}
+
+
+
+/* .image-box .image-container {
+    width: 100%;
+    height: 100%;
+}
+
+
+.preiview-container {
+    padding: 20px;
+    background-color: antiquewhite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+/* .overlay-movement{
+    position: absolute;
+    background-color: #e8e8e894;
+    width: 100%;
+    height: 100%;
+    z-index: 1000000000000;
+} */

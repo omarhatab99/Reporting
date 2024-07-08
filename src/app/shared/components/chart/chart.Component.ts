@@ -1,15 +1,18 @@
 import { Chart, ChartType, registerables } from 'chart.js'
 import { chartsConfiguration } from "./chartsConfiguration";
 import { AfterContentChecked, AfterViewInit, Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { ConfirmationService } from 'primeng-lts/api';
 
 @Component({
     selector: 'app-chartComponent',
     templateUrl: './chart.Component.html',
-    styleUrls: ['./chart.Component.css']
+    styleUrls: ['./chart.Component.css'],
+    
 })
 export class chartsComponent implements AfterContentChecked, AfterViewInit {
     @ViewChild('canvas', { static: false }) canvas: ElementRef;
     @ViewChild('container', { static: false }) container: ElementRef;
+    @ViewChild("chartContainer") chartContainer:ElementRef;
     @Input() height: number = 30;
     @Input() width: number = 70;
     @Input() typeSelect: ChartType = null;
@@ -18,6 +21,9 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit {
     @ViewChild('containerBox', { static: false }) containerBox: ElementRef;
     @Input() chartsConfig: any = new chartsConfiguration();
     listChartDynamic: Array<chartsConfiguration> = [];
+
+    constructor(private confirmationService:ConfirmationService){}
+
     ngAfterContentChecked(): void {
         if (typeof this.chartsConfig == "string") {
             this.listChartDynamic = [];
@@ -86,5 +92,15 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit {
         }
     }
 
+
+    confirmationDeleteTextBox(){
+        this.confirmationService.confirm({
+            message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
+            accept: () => {
+                //Actual logic to perform a confirmation
+                this.chartContainer.nativeElement.remove();
+            }
+          });
+    }
 
 }

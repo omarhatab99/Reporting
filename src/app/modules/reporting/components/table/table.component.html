@@ -58,27 +58,6 @@
   </div>
 </div>
 
-
-<p-dialog header="تعديل الصف" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
-  [style]="{width: '550px',zIndex:999900000000000}">
-  <div class="p-grid ui-fluid p-4" *ngIf="report" dir="rtl" style="height: 300px;">
-    <div *ngFor="let col of cols">
-
-      <div class="form-group">
-        <input type="text" placeholder=" " [id]="col.field+'-id'" [(ngModel)]="report[col.field]">
-        <label [for]="col.field+'-id'">{{col.field}}</label>
-      </div>
-
-    </div>
-  </div>
-  <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" (click)="delete()" *ngIf="!AddDialog" class="btn btn-danger btn-sm">حذف</button>
-      <button type="button" (click)="save()" class="btn btn-warning btn-sm">حفظ</button>
-    </div>
-  </p-footer>
-</p-dialog>
-
 <ng-template #settings>
   <div class="table-settings w-100 animate__animated  animate__flipInX">
     <a class="collabse-btn" data-toggle="collapse" [href]="'#'+settingsId" role="button" aria-expanded="false"

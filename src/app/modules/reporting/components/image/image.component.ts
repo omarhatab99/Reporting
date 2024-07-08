@@ -14,6 +14,8 @@ export class ImageComponent implements OnInit {
   @ViewChild("priview") priview:ElementRef;
   @ViewChild("imageComponent") imageComponent:ElementRef;
   @ViewChild("selectedImageInput") selectedImageInput:ElementRef;
+  @ViewChild("imageContainer") imageContainer:ElementRef;
+  @ViewChild("imageDialog") imageDialog:ElementRef;
 
   displayDialogImage:boolean = false;
   constructor(private sanitizer:DomSanitizer , private confirmationService: ConfirmationService) { }
@@ -64,7 +66,8 @@ export class ImageComponent implements OnInit {
       message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
       accept: () => {
           //Actual logic to perform a confirmation
-          this.imageComponent.nativeElement.remove();
+          this.imageContainer.nativeElement.remove();
+          this.imageDialog.nativeElement.remove();
       }
     });
   }

@@ -1,6 +1,5 @@
-<div class="image-container-component" #imageComponent>
-    <div class="image-box" resizable cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDragHandle
-    cdkDrag [style.width]="imageWidth+'px'">
+<div class="image-box" resizable cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDrag
+    [style.width]="imageWidth+'px'" #imageContainer>
     <div class="movement-line" cdkDragHandle></div>
     <span class="mx-1 left-move-icon" cdkDragHandle>
         <i class="fa-solid fa-up-down-left-right"></i>
@@ -10,7 +9,7 @@
         <div class="icon-container">
             <div class="d-flex align-items-center">
                 <!-- delete element icon -->
-                <span class="mx-1 element-remove-icon"  (click)="confirmationDeleteTextBox()">
+                <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox()">
                     <i class="fa-solid fa-xmark"></i>
                 </span>
                 <!-- edit element icon -->
@@ -31,25 +30,27 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="displayDialogImage" [style]="{width: '500px' , zIndex:999999999999999999999}" (onHide)="dialogAddImageHide()">
-    <p-header>
-        تغيير الصورة
-    </p-header>
-    <div class="dialog-content">
-        <div class="preiview-container">
-            <img [src]="previewSrc" #priview alt="preview image" width="160px" height="120px">
-        </div>
-        <div class="input-group my-3" dir="rtl">
-            <div class="custom-file">
-                <input #selectedImageInput type="file" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" 
-                (change)="selectedImage($event)">
-                <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
+<div class="dialog-container" #imageDialog>
+    <p-dialog [(visible)]="displayDialogImage" [style]="{width: '500px' , zIndex:999999999999999999999}"
+        (onHide)="dialogAddImageHide()">
+        <p-header>
+            تغيير الصورة
+        </p-header>
+        <div class="dialog-content">
+            <div class="preiview-container">
+                <img [src]="previewSrc" #priview alt="preview image" width="160px" height="120px">
+            </div>
+            <div class="input-group my-3" dir="rtl">
+                <div class="custom-file">
+                    <input #selectedImageInput type="file" class="custom-file-input" id="inputGroupFile03"
+                        aria-describedby="inputGroupFileAddon03" (change)="selectedImage($event)">
+                    <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
+                </div>
             </div>
         </div>
-    </div>
-    <p-footer>
-        <button type="button" class="btn btn-success btn-sm" (click)="changeImage()">نعم</button>
-        <button type="button" class="btn btn-danger btn-sm" (click)="close()">تجاهل</button>
-    </p-footer>
-</p-dialog>
+        <p-footer>
+            <button type="button" class="btn btn-success btn-sm" (click)="changeImage()">نعم</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="close()">تجاهل</button>
+        </p-footer>
+    </p-dialog>
 </div>

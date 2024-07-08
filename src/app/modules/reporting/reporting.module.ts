@@ -21,6 +21,7 @@ import { ImageComponent } from './components/image/image.component';
 import { AggregateComponent } from './components/aggregate/aggregate.component';
 import { FunctionComponent } from './components/function/function.component';
 import { GetObsDataPipe } from './pipes/get-obs-data.pipe';
+import {NgxPrinterModule} from 'ngx-printer'
 
 @NgModule({
   declarations: [ReportComponent, 
@@ -37,7 +38,7 @@ import { GetObsDataPipe } from './pipes/get-obs-data.pipe';
     DragDropModule,
     ReactiveFormsModule,
     AngularElementsResizerModule,
-
+    NgxPrinterModule.forRoot({printOpenWindow: true})
   ]
 })
 export class ReportingModule { }

@@ -12,7 +12,8 @@ export class AddImageComponent implements OnInit {
   @Input() previewSrc:any = "";
   @Input() imageWidth:any = 100;
   @ViewChild("priview") priview:ElementRef;
-  @ViewChild("imageComponent") imageComponent:ElementRef;
+  @ViewChild("imageContainer") imageContainer:ElementRef;
+  @ViewChild("imageDialog") imageDialog:ElementRef;
   @ViewChild("selectedImageInput") selectedImageInput:ElementRef;
   displayDialogImage:boolean = false;
   constructor(private sanitizer:DomSanitizer , private confirmationService: ConfirmationService) { }
@@ -62,7 +63,8 @@ export class AddImageComponent implements OnInit {
       message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
       accept: () => {
           //Actual logic to perform a confirmation
-          this.imageComponent.nativeElement.remove();
+          this.imageContainer.nativeElement.remove();
+          this.imageDialog.nativeElement.remove();
       }
     });
   }

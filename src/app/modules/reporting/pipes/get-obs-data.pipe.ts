@@ -7,7 +7,10 @@ import { Observable } from 'rxjs';
 export class GetObsDataPipe implements PipeTransform {
 
   transform(value: Observable<any>): any {
+    let data:any;
     value.subscribe((observer) => {return observer});
+    
+    return data;
   }
 
 }

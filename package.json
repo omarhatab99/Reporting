@@ -45,6 +45,7 @@
     "ngx-bootstrap": "^12.0.0",
     "ngx-echarts": "^18.0.0",
     "ngx-editor": "^9.0.2",
+    "ngx-printer": "^0.3.2",
     "primeicons": "^7.0.0",
     "primeng-lts": "^9.2.8",
     "quill": "^1.3.7",

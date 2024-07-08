@@ -1,17 +1,46 @@
-<div *ngIf="chartsConfig.direction=='vertical'" dir="ltr" #container style="overflow: auto; width: 300;">
-    <div  #containerBox style="height: 100%; width: 100%;" >
-        <canvas [height]="height"  #canvas></canvas>
-    </div>
-</div>
-
-<div *ngIf="chartsConfig.direction=='horizontal'" dir="ltr" #container style="overflow: auto;  width: 300;">
-    <div  #containerBox style="height: 100%; width: 100%;" >
-        <canvas [height]="height"  #canvas></canvas>
-    </div>
-</div>
-
-<div dir="rtl" *ngIf="this.StringType" style="width: 100%; height: 100%; overflow: auto;" class="row d-flex justify-content-center">
-    <div *ngFor="let configChart of listChartDynamic" [class]="configChart.type==='pie' || configChart.type==='doughnut'?'col-5 py-2':'col-11 py-2'">
-            <app-chartComponent [chartsConfig]="configChart" [width]="configChart._ColumnWidth" [height]="configChart._Height" ></app-chartComponent>    
+<div class="charts-container-component" cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDrag #chartContainer>
+    <div class="charts-box">
+        <div class="movement-line" cdkDragHandle></div>
+        <span class="mx-1 left-move-icon" cdkDragHandle>
+            <i class="fa-solid fa-up-down-left-right"></i> 
+        </span>
+        <div class="d-flex align-items-center parentNodeText">
+            <!-- reporting settings -->
+            <div class="icon-container">
+                <div class="d-flex align-items-center">
+                    <!-- delete element icon -->
+                    <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+                    <!-- edit element icon -->
+                    <span class="mx-1 element-edit-icon">
+                        <i class="fa-solid fa-pencil"></i>
+                    </span>
+                    <!-- edit element icon -->
+                    <span class="mx-1 element-move-icon" cdkDragHandle>
+                        <i class="fa-solid fa-up-down-left-right"></i>
+                    </span>
+                </div>
+            </div>
+            <!-- element content text -->
+            <div class="charts-container m-0" resizable>
+                <div *ngIf="chartsConfig.direction=='vertical'" dir="ltr" #container style="overflow: hidden;">
+                    <div  #containerBox style="height: 100%; width: 100%;" >
+                        <canvas [height]="height"  #canvas></canvas>
+                    </div>
+                </div>
+                
+                <div *ngIf="chartsConfig.direction=='horizontal'" dir="ltr" #container style="overflow: hidden;">
+                    <div  #containerBox style="height: 100%; width: 100%;" >
+                        <canvas [height]="height"  #canvas></canvas>
+                    </div>
+                </div>
+                <div dir="rtl" *ngIf="this.StringType" style="width: 100%; height: 100%; overflow: auto;" class="row d-flex justify-content-center">
+                    <div *ngFor="let configChart of listChartDynamic" [class]="configChart.type==='pie' || configChart.type==='doughnut'?'col-5 py-2':'col-11 py-2'">
+                            <app-chartComponent [chartsConfig]="configChart" [width]="configChart._ColumnWidth"></app-chartComponent>    
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

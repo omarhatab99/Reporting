@@ -106,12 +106,16 @@
             اضافه جدول
             <i class="fa-solid fa-plus mr-2"></i>
           </span>
+          <span class="add-text-box mx-2" (click)="showDialogAddChart()">
+            اضافه رسم بيان
+            <i class="fa-solid fa-plus mr-2"></i>
+          </span>
         </div>
       </mat-expansion-panel>
       <div class="tables-settings">
 
       </div>
-      <div *ngFor="let template of headerTemplate; let i = index" >
+      <div *ngFor="let template of headerTemplate; let i = index">
         <div *ngTemplateOutlet="headerTemplate[i]">
 
         </div>
@@ -143,7 +147,8 @@
 
               <!-- egypt icon -->
               <div class="icon-egypt">
-                <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'" [imageWidth]="40"></app-image>
+                <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'"
+                  [imageWidth]="40"></app-image>
               </div>
               <div class="header-content-container w-50 d-flex justify-content-between align-items-center">
                 <!-- default header reporting name -->
@@ -190,26 +195,28 @@
                   المقابلة هي نوع منها التي يستدعها الدا
                 </div>
               </app-text-area>
-              <div class="charts">
-                <app-chartComponent [width]="20" [height]="100" [chartsConfig]="chartConfig"></app-chartComponent>
+              <div class="charts" style="z-index: 20;">
+                 <app-chartComponent [chartsConfig]="chartConfig"></app-chartComponent> 
               </div>
             </div>
-            <app-table></app-table>
+            <div #componentContainer>
 
-            <ng-template #componentContainer>
+            </div>
+            <app-table [reports]="reports" [cols]="cols"></app-table>
 
-            </ng-template>
+
 
 
           </mat-card-content>
           <mat-card-footer class="mat-card-footer-report  ui-rtl w-100 m-0" [style.padding]="header.padding+'px'"
-          [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
-          [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
-          <div class="div-footer-container d-flex align-items-center justify-content-between w-100 h-100 ui-rtl" dir="rtl">
-            <div class="print-date">
-              تاريخ الطباعه: <span>{{dateNow}}</span>
+            [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+            [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
+            <div class="div-footer-container d-flex align-items-center justify-content-between w-100 h-100 ui-rtl"
+              dir="rtl">
+              <div class="print-date">
+                تاريخ الطباعه: <span>{{dateNow}}</span>
+              </div>
             </div>
-          </div>
           </mat-card-footer>
         </mat-card>
       </div>
@@ -222,32 +229,80 @@
   <p-footer>
     <button type="button" class="btn btn-success btn-sm" (click)="cd.accept()">نعم</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="cd.reject()">تجاهل</button>
-</p-footer>
+  </p-footer>
 </p-confirmDialog>
 
 
 
 <!-- add new image dialog -->
-<p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '500px' , zIndex:999999999999999999999}" (onHide)="dialogAddImageHide()">
+<p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '500px' , zIndex:999999999999999999999}"
+  (onHide)="dialogAddImageHide()">
   <p-header>
-      تغيير الصورة
+    تغيير الصورة
   </p-header>
   <div class="dialog-content">
-      <div class="preiview-container">
-          <img [src]="imageSrc" #priview alt="preview image" width="160px" height="120px">
+    <div class="preiview-container">
+      <img [src]="imageSrc" #priview alt="preview image" width="160px" height="120px">
+    </div>
+    <div class="input-group my-3" dir="rtl">
+      <div class="custom-file">
+        <input type="file" #selectedImageInput class="custom-file-input" id="inputGroupFile03"
+          aria-describedby="inputGroupFileAddon03" (change)="selectedImage($event)">
+        <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
       </div>
-      <div class="input-group my-3" dir="rtl">
-          <div class="custom-file">
-              <input type="file" #selectedImageInput class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" 
-              (change)="selectedImage($event)">
-              <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
-          </div>
-      </div>
+    </div>
   </div>
   <p-footer>
-      <button type="button" class="btn btn-success btn-sm" (click)="createImage()">نعم</button>
-      <button type="button" class="btn btn-danger btn-sm" (click)="close()">تجاهل</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="createImage()">نعم</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeImageDialog()">تجاهل</button>
   </p-footer>
 </p-dialog>
+
+
+<!-- add new image dialog -->
+<p-dialog [(visible)]="displayDialogAddCharts" [style]="{width: '600px' , zIndex:999999999999999999999}">
+  <p-header>
+    اضافه رسم ريانات
+  </p-header>
+  <div class="dialog-content">
+    <div class="charts-container text-right">
+      <a class="chart-selector mx-2" title="dounout" (click)="selectedCharts('dounout')"
+        [class.activeChart]="isActiveChart == 'dounout'">
+        <img src="../../../../../assets/pie-chart.png" style="width: 100%;">
+      </a>
+      <a class="chart-selector mx-2" title="linear" (click)="selectedCharts('linear')"
+        [class.activeChart]="isActiveChart == 'linear'">
+        <img src="../../../../../assets/bar-chart2.png" style="width: 100%;">
+      </a>
+    </div>
+    <div class="charts-settings text-right" *ngIf="isActiveChart == 'dounout'">
+      <div class="row">
+        <div class="col-7">
+          <div class="filter-columns-select">
+            <label for="chartColumn" class="text-right w-100"> يتم رسم البيانات طبقا لعامود معين </label>
+            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations" [(ngModel)]="selectedLabelChartColumn"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-5">
+          <div class="filter-columns-select">
+            <label for="chartColumn" class="text-right w-100">هل تريد عمليه معينه</label>
+            <p-dropdown id="chartColumn" appendTo="body" [options]="operations" [(ngModel)]="selectedOperationChartColumn"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-7" *ngIf="selectedOperationChartColumn != null">
+          <div class="filter-columns-select my-2">
+            <label for="chartColumn" class="text-right w-100"> اختر الصف المطلوب للعمليه </label>
+            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations" [(ngModel)]="selectedLabelChartColumnForOperation"></p-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" class="btn btn-success btn-sm" (click)="createChart()">اضافه</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeChartDialog()">تجاهل</button>
+  </p-footer>
+</p-dialog>
+
 
 <!-- end sidenav -->

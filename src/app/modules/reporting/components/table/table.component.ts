@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, DoCheck, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, DoCheck, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import Swal from 'sweetalert2';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -24,10 +24,9 @@ export interface ITable {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit , DoCheck {
-reports:any[];
-myReports:BehaviorSubject<any[]> = new BehaviorSubject([]); 
-cols:any[]; 
+export class TableComponent implements OnInit , DoCheck , AfterViewInit{
+@Input() reports:any[];
+@Input() cols:any[]; 
 width:any;
 cellPadding:any;
 table: ITable = {} as ITable;
@@ -54,6 +53,10 @@ isReportsChanged:BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private reportComponent:ReportComponent , private _ComponentFactoryResolver: ComponentFactoryResolver, private confirmationService:ConfirmationService , private _ReportService:ReportService) { }
   
+  ngOnChanges(changes: SimpleChanges): void {
+    this._selectedColumns =this.cols;
+  }
+  
   ngDoCheck(): void {
     this.tableNumber = TableComponent.tableStatic.findIndex((component) => component == this) + 1;
   }
@@ -69,16 +72,16 @@ isReportsChanged:BehaviorSubject<boolean> = new BehaviorSubject(false);
     TableComponent.tableStatic.push(this);
     this.tableNumber = TableComponent.tableStatic.findIndex((component) => component == this) + 1;
 
-      this._ReportService.GetAllReports().subscribe((observer) => {
-      this.myReports.next(observer);
-      this.reports = observer;
-      const keys = Object.keys(this.reports[0]);
-      this.cols = keys.map((element) => { return { field: element, header: element } });
-      this.cols.reverse();
-      this._selectedColumns = this.cols;
-    })
+    //   this._ReportService.GetAllReports().subscribe((observer) => {
+    //   this.myReports.next(observer);
+    //   this.reports = observer;
+    //   const keys = Object.keys(this.reports[0]);
+    //   this.cols = keys.map((element) => { return { field: element, header: element } });
+    //   this.cols.reverse();
+    //   this._selectedColumns = this.cols;
+    // })
 
-
+    
 
   }
 
