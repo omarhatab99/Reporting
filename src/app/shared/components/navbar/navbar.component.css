@@ -1,3 +1,8 @@
+div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , option , ul , li ::ng-deep .ui-dropdown-item ,
+ ::ng-deep .ui-dropdown-items , ::ng-deep .ui-dropdown-label , ::ng-deep .ui-multiselect-label , ::ng-deep .ng-star-inserted{
+    font-family: "Cairo", sans-serif;
+}
+
 .navbar{
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     z-index: 1000;

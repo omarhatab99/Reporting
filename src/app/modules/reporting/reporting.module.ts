@@ -21,23 +21,33 @@ import { AggregateComponent } from './components/aggregate/aggregate.component';
 import { FunctionComponent } from './components/function/function.component';
 import { GetObsDataPipe } from './pipes/get-obs-data.pipe';
 import {NgxPrinterModule} from 'ngx-printer'
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [ReportComponent, 
     EditableTextComponent, TextAreaComponent,
      TextEditorDialogComponent, TableComponent, AddFilterComponent,
-      chartsComponent, AddImageComponent, ImageComponent, AggregateComponent, FunctionComponent, GetObsDataPipe],
+      chartsComponent, AddImageComponent, ImageComponent, AggregateComponent, FunctionComponent, GetObsDataPipe
+    ],
   imports: [
     CommonModule,
     ReportingRoutingModule,
     HttpClientModule,
+    AngularEditorModule,
     FormsModule,
     PrimengModule,
     MaterialModule,
     DragDropModule,
     ReactiveFormsModule,
     AngularElementsResizerModule,
-    NgxPrinterModule.forRoot({printOpenWindow: true})
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
+    NgxPrinterModule.forRoot({printOpenWindow: true}),
+    
   ]
 })
 export class ReportingModule { }

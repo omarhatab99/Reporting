@@ -1,3 +1,8 @@
+div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , option , ul , li ::ng-deep .ui-dropdown-item ,
+ ::ng-deep .ui-dropdown-items , ::ng-deep .ui-dropdown-label , ::ng-deep .ui-multiselect-label , ::ng-deep .ng-star-inserted{
+    font-family: "Cairo", sans-serif;
+}
+
 .charts-container-component {
     display: inline-block;
 }
@@ -10,7 +15,7 @@
 }
 
 .charts-container {
-    z-index: 9999;
+    z-index: 1000;
     display: inline-block;
     min-width: 200px !important;
     min-height: 200px !important;
@@ -32,6 +37,7 @@
     border-radius: 5px;
     bottom: -30px;
     right: 0px;
+    z-index: 1001;
 }
 
 .element-remove-icon,.element-edit-icon , .element-move-icon {
@@ -180,4 +186,8 @@
     width: 460px;
     color: #8e8e8e;
     font-size: 13px;
+}
+
+::ng-deep .ui-dialog-titlebar {
+    text-align: right;
 }

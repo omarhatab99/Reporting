@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng-lts/api';
 
 @Component({
@@ -17,15 +18,15 @@ export class ImageComponent implements OnInit {
   @ViewChild("imageContainer") imageContainer:ElementRef;
   @ViewChild("imageDialog") imageDialog:ElementRef;
 
-  displayDialogImage:boolean = false;
-  constructor(private sanitizer:DomSanitizer , private confirmationService: ConfirmationService) { }
+  displayDialogChangeImage:boolean = false;
+  constructor(private sanitizer:DomSanitizer , private confirmationService: ConfirmationService  , private toasterService: ToastrService) { }
 
   ngOnInit(): void {
   }
 
 
   showImageDialog(){
-    this.displayDialogImage = true;
+    this.displayDialogChangeImage = true;
     this.selectedImageInput.nativeElement.value = "";
     this.previewSrc = this.imageSrc;
   }
@@ -41,17 +42,17 @@ export class ImageComponent implements OnInit {
 
       let sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.priview.nativeElement.src);
       this.imageSrc = sanitizedUrl;
-      this.displayDialogImage = false;
+      this.displayDialogChangeImage = false;
 
     }
 
   }
 
-  closeImageDialog(){
+  closeChangeImageDialog(){
     //this.priview.nativeElement.src = this.imageSrc;
     this.selectedImageInput.nativeElement.value = "";
     this.previewSrc = this.imageSrc;
-    this.displayDialogImage = false;
+    this.displayDialogChangeImage = false;
   }
 
 
@@ -69,6 +70,7 @@ export class ImageComponent implements OnInit {
           //Actual logic to perform a confirmation
           this.imageContainer.nativeElement.remove();
           this.imageDialog.nativeElement.remove();
+          this.toasterService.success('تم حذف الصورة بنجاح', 'نجح');
       }
     });
   }

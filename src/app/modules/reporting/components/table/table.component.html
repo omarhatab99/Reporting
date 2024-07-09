@@ -1,4 +1,4 @@
-<div class="data-source-table" #dataSourceTable cdkDragBoundary=".mat-card-content-report" cdkDrag
+<div class="data-source-table" #dataSourceTable cdkDragBoundary=".card-content-report" cdkDrag
   [style.width]="table.width+'%'">
   <div class="movement-line" cdkDragHandle></div>
   <span class="mx-1 left-move-icon" cdkDragHandle>
@@ -56,9 +56,17 @@
 <!-- this template will be rendered at report component in spicific place -->
 <ng-template #settings>
   <div class="table-settings w-100 animate__animated  animate__flipInX">
-    <a class="collabse-btn" data-toggle="collapse" [href]="'#'+settingsId" role="button" aria-expanded="false"
-      aria-controls="collapseExample">
-      اعدادات الجدول {{this.tableNumber}}
+    <a class="collabse-btn w-100 d-flex justify-content-between align-items-center" data-toggle="collapse" [href]="'#'+settingsId" role="button" aria-expanded="false"
+      aria-controls="collapseExample" style="background-color: aliceblue;">
+      <span class="d-inline-block">
+        <span class="table-icon-settings ml-2">
+          <i class="fa-solid fa-table" style="color: #8a8a8a;"></i>
+        </span>
+        اعدادات الجدول {{this.tableNumber}}
+      </span>
+      <span>
+        <button class="btn btn-outline-danger btn-sm" style="padding: 0px 10px;" (click)="confirmationDeleteTable($event)">حذف</button>
+      </span>
     </a>
 
     <div class="collapse" [id]="settingsId">

@@ -1,8 +1,68 @@
+
+
+::ng-deep .ui-sidebar{
+    overflow: auto !important;
+}
+
+div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , option , ul , li ::ng-deep .ui-dropdown-item ,
+ ::ng-deep .ui-dropdown-items , ::ng-deep .ui-dropdown-label , ::ng-deep .ui-multiselect-label , ::ng-deep .ng-star-inserted , ::ng-deep .ui-confirmdialog-message{
+    font-family: "Cairo", sans-serif;
+}
+
+.toggle-reporting-drawer {
+    position: fixed;
+    right: 0%;
+    top: 20%;
+    border-radius: 4px 0px 0px 4px !important;
+    z-index: 999;
+    padding: 7px 10px;
+    border: none;
+    outline: none;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.reporting-sidenav .collabse-btn {
+    display: block;
+    border: none;
+    outline: none;
+    width: 98%;
+    padding: 12px;
+    background-color: #FFF;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin: 10px auto;
+    border-radius: 5px;
+    text-align: right;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+  }
+
+  .reporting-sidenav .collapse-content {
+    border: 1px solid #e7e7e7;
+  }
+
+
+  .reporting-sidenav .report-tools .add-text-box {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px dashed #555;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    transition: all 0.2s ease;
+}
+
+.reporting-sidenav .report-tools .add-text-box:active {
+    background-color: #d0d0d0;
+}
+
 /* start reporting container */
 .reporting-container {
     width: 100%;
     height: calc(100vh - 70px);
 }
+
 
 /* content of sidenav --- body container */
 .reporting-container .sidenav-container {
@@ -17,14 +77,8 @@
     width: 400px;
 }
 
-.reporting-container .toggle-reporting-drawer {
-    position: fixed;
-    right: 0%;
-    top: 15%;
-    border-radius: 4px 0px 0px 4px !important;
-}
 
-.reporting-container .mat-card-header-report , .mat-card-footer-report {
+.reporting-container .card-header-report , .card-footer-report {
     padding: 10px 15px;
     border: 1px dashed #a0a0a0;
     border-radius: 10px;
@@ -33,7 +87,7 @@
     position: relative;
 }
 
-.reporting-container .mat-card-content-report {
+.reporting-container .card-content-report {
     border: 1px dashed #a0a0a0;
     border-radius: 10px;
     min-height: 500px;
@@ -50,7 +104,7 @@
 .reporting-container .text-editable {
     background-color: transparent;
     border-color: transparent;
-    padding: 10px;
+    padding: 5px;
     box-shadow: transparent 0px 0px 0px 1px;
     transition: background 0.3s linear ;
     resize: none;
@@ -76,19 +130,11 @@
 }
 
 
-
-.reporting-container .add-text-box {
-    padding: 5px 10px;
-    border: 1px dashed #555;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .reporting-container .headings-content {
     width: 100%;
     position: relative;
     gap: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 
@@ -99,26 +145,31 @@
 
 /*start image box*/
 
-.reporting-container .image-box .dynamic-image {
+.image-box .dynamic-image {
     width: 100% !important;
     height: 100% !important;
 }
 
-.reporting-container .image-box .image-container {
+.image-box .image-container {
     width: 100%;
     height: 100%;
 }
 
-.reporting-container .preiview-container {
-    padding: 20px;
-    background-color: antiquewhite;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.preiview-container {
+    padding: 2px 0px;
 }
 
+.preiview-container .preiview-image {
+    border: 2px dashed #bcbcbc;
+    margin-top: 1px;
+    padding: 10px;
+}
 /*end image box*/
 
+/*dialog*/
+::ng-deep .ui-dialog-footer	 {
+    direction: rtl;
+}
 /* start charts dialog */
 .charts-container-dialog{
     background-color: antiquewhite;
@@ -128,6 +179,7 @@
     justify-content: start;
     margin-bottom: 15px;
     padding: 15px;
+    border: 1px solid #c5c5c5;
 }
 
 .chart-selector {
@@ -177,6 +229,152 @@
     width: 460px;
     color: #8e8e8e;
     font-size: 13px;
+    text-align: right;
 }
 
+
 /* end charts dialog */
+
+/*start editor*/
+
+.editor-container {
+    background-color: #FFF;
+}
+
+::ng-deep .angular-editor-toolbar .select-font {
+    width: 150px !important;
+}
+
+::ng-deep .angular-editor-wrapper .angular-editor-textarea{
+    min-height: 200px !important;
+    resize: none !important;
+    outline: none !important;
+    border: 1px dashed #d0d0d0 !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+::ng-deep .angular-editor-toolbar {
+    text-align: right !important;
+    direction: rtl !important;
+}
+
+
+/*Dialog styles*/
+::ng-deep .ui-dialog-titlebar {
+    text-align: right;
+}
+
+::ng-deep .ui-dialog-content{
+    background-color: antiquewhite !important;
+    overflow: hidden !important;
+    text-align: right;
+}
+
+::ng-deep .ui-dialog-footer	 {
+    direction: rtl;
+}
+
+/*end editor*/
+
+.upload-image {
+    width: 100%;
+    height: 200px;
+    background-color: #FFF;
+    border: 1px dashed #d2d2d2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-image .input-upload-image-label {
+    cursor: pointer;
+}
+
+/*toaster container*/
+
+::ng-deep .toast-container {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.details-report-table table , th , td {
+    border: 1px solid #999;
+    padding: 15px 20px;
+}
+
+.details-table {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    min-width: fit-content;
+    z-index: 5;
+}
+
+
+.icon-container {
+    position: absolute;
+    opacity: 0;
+    transition: all 0.4s linear;
+    padding: 5px;
+    background-color: antiquewhite;
+    border-radius: 5px;
+    bottom: -30px;
+    right: 0px;
+}
+
+.element-remove-icon,.element-edit-icon , .element-move-icon {
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border: 1px dashed #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    z-index: 100000;
+    transition: all 0.3s linear;
+    cursor: pointer;
+}
+
+.element-edit-icon {
+    background-color: #ecfc7369;
+}
+
+.element-remove-icon {
+    background-color: #fe7a7a70;
+}
+
+.element-move-icon:hover{
+    background-color: #dcffd0;
+    display: block;
+}
+
+.left-move-icon{
+    width: 25px;
+    height: 25px;
+    background-color: antiquewhite;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: absolute;
+    left: -5px;
+    top: 0;
+    transform: translateX(-100%);
+    border-radius: 5px 0px 0px 5px;
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+.details-table:hover .left-move-icon{
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+}
+
+.details-table:hover .icon-container {
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+    
+}

@@ -13,6 +13,9 @@ import { IBorder } from '../../iterfaces/iborder';
 import { operationsFunction } from '../../enums/operation-function.enum';
 import { barDisplayedWay } from '../../enums/bar-displayed-wau.enum';
 import { TextAreaComponent } from '../text-area/text-area.component';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { IFooter } from '../../iterfaces/ifooter';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -22,31 +25,37 @@ import { TextAreaComponent } from '../text-area/text-area.component';
   selector: 'app-report',
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.css'],
-  providers: [DialogService],
+  providers: [DialogService, ToastrService],
 })
 export class ReportComponent implements OnInit {
   //containerRef to add dynamic component in report.
   @ViewChild('componentContainer', { read: ViewContainerRef }) elementsContainer!: ViewContainerRef;
+  @ViewChild('componentHeader', { read: ViewContainerRef }) componentHeader!: ViewContainerRef;
+  @ViewChild('componentFooter', { read: ViewContainerRef }) componentFooter!: ViewContainerRef;
+
   //selected image preview in dialog
   @ViewChild("priview") priview: ElementRef;
   //selected image input in dialog
   @ViewChild("selectedImageInput") selectedImageInput: ElementRef;
   //sidenav expanded toggle
-
+  //textbox
+  value: string = "";
+  displayDialogAddText: boolean = false;
   //prepare default configuration for chart which will be default in report
   chartConfig: chartsConfiguration = new chartsConfiguration(false, "doughnut");
   //used for sidenav toggle
-  showFiller = false;
+  _displaySidebar = false;
   //objects from report content
   header: IHeader = {} as IHeader;
   content: IContent = {} as IContent;
   border: IBorder = {} as IBorder;
-
+  footer: IFooter = {} as IFooter;
   //array of data used for reports
   reports: any[];
   cols: any[];
   //all columns in table but handling to used for p dropdown
   columnsOperations: any;
+  columnsOperationsNumbers: any;
   displayDialogAddImage: boolean = false;
   imageSrc: any = "assets/placeholder_image.png";
 
@@ -58,15 +67,19 @@ export class ReportComponent implements OnInit {
 
   //charts dialog
   displayDialogAddCharts: boolean = false;
-  isActiveChart: string = "";
+  isActiveChart: string = "doughnut";
   _selectedLabelChartColumn: any = null;
   operations: any;
   selectedOperationChartColumn: any = null;
   selectedLabelChartColumnForOperation: any = null;
   barChartsDisplayWayOptions: any;
   barChartsDisplayWay: any = null;
+
+  borderSizeOptions: any;
+  postionOptions: any;
+  postionSelected: any = "content";
   //constructor
-  constructor(private _ComponentFactoryResolver: ComponentFactoryResolver, private sanitizer: DomSanitizer, private printerService: NgxPrinterService, private _ReportService: ReportService) { }
+  constructor(private _ComponentFactoryResolver: ComponentFactoryResolver, private sanitizer: DomSanitizer, private printerService: NgxPrinterService, private _ReportService: ReportService, private toasterService: ToastrService) { }
 
 
 
@@ -75,7 +88,8 @@ export class ReportComponent implements OnInit {
 
     //defaults value 
     this.content.padding = 20;
-    this.header.height = 80;
+    this.header.height = 130;
+    this.footer.height = 80;
     this.content.height = 500;
     this.border.size = "1";
     //dateNow -- default date for report
@@ -96,8 +110,26 @@ export class ReportComponent implements OnInit {
         return { label: column.field, value: column.field }
       });
       this.columnsOperations.unshift({ label: 'اختر عامود', value: null });
+
+      //numbers columns
+      this.columnsOperationsNumbers = this.cols.filter((numberColumn) => {
+        if (!Number.isNaN(parseFloat(this.reports[0][numberColumn.field]))) {
+          return numberColumn
+        }
+      }).map((column) => {
+        return { label: column.field, value: column.field }
+      });
+      this.columnsOperationsNumbers.unshift({ label: 'اختر عامود', value: null }); 2
+      console.log(this.columnsOperationsNumbers);
     });
 
+    this.borderSizeOptions = [
+      { label: '1px', value: 1 },
+      { label: '2px', value: 2 },
+      { label: '3px', value: 3 },
+      { label: '4px', value: 4 },
+      { label: '5px', value: 5 },
+    ];
 
     //charts operation dropdown options
     this.operations = [
@@ -111,6 +143,12 @@ export class ReportComponent implements OnInit {
       { label: "اختار طريقه", value: null },
       { label: "الطريقه الولى", value: barDisplayedWay.WAY1 },
       { label: "الطريقه الثانيه", value: barDisplayedWay.WAY2 }
+    ];
+
+    this.postionOptions = [
+      { label: "العنوان", value: "header" },
+      { label: "المحتوى", value: "content" },
+      { label: "النهايه", value: "footer" },
     ]
 
   }
@@ -123,11 +161,42 @@ export class ReportComponent implements OnInit {
   }
 
 
+  //open edit dialog for text box
+  showAddTextDialog() {
+    this.displayDialogAddText = true;
+  }
+
   //create text box
   createTextBox() {
-    const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(TextAreaComponent);
-    const textComponent =  this.elementsContainer.createComponent(componentFactory);
-    textComponent.instance.addingMode = true;
+
+    if (this.value != "") {
+      const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(TextAreaComponent);
+      let textComponent: any;
+      switch (this.postionSelected) {
+        case "header":
+          textComponent = this.componentHeader.createComponent(componentFactory);
+          break;
+        case "content":
+          textComponent = this.elementsContainer.createComponent(componentFactory);
+          break;
+        default:
+          textComponent = this.componentFooter.createComponent(componentFactory);
+          break;
+      }
+
+
+      textComponent.instance.addingMode = true;
+      textComponent.instance.value = this.value;
+      this.value = "";
+      this.closeTextBoxDialog();
+      this.toasterService.success('تم انشاء النص بنجاح', 'نجح');
+    }
+
+  }
+
+
+  closeTextBoxDialog() {
+    this.displayDialogAddText = false;
   }
 
   //create table
@@ -139,6 +208,7 @@ export class ReportComponent implements OnInit {
     table.instance.reports = this.reports;
     table.instance.cols = this.cols;
     table.instance._selectedColumns = this.cols;
+    this.toasterService.success('تم انشاء الجدول بنجاح', 'نجح');
   }
 
 
@@ -180,6 +250,8 @@ export class ReportComponent implements OnInit {
       const addImageComponent = this.elementsContainer.createComponent(componentFactory);
       addImageComponent.instance.imageSrc = this.imageSrc;
       this.displayDialogAddImage = false;
+      this.toasterService.success('تم انشاء الصورة بنجاح', 'نجح');
+
     }
 
 
@@ -222,7 +294,6 @@ export class ReportComponent implements OnInit {
         this.addBarChart();
         break;
     }
-
   }
 
   //add doughnut chart
@@ -287,6 +358,7 @@ export class ReportComponent implements OnInit {
         chartComponent.instance.chartSettings = chartSettings;
 
         this.displayDialogAddCharts = false;
+        this.toasterService.success('تم انشاء الرسم بنجاح', 'نجح');
       }
     }
   }
@@ -354,6 +426,8 @@ export class ReportComponent implements OnInit {
         chartComponent.instance.chartsConfig = chartConfig;
         chartComponent.instance.chartSettings = chartSettings;
         this.displayDialogAddCharts = false;
+        this.toasterService.success('تم انشاء الرسم بنجاح', 'نجح');
+
       }
 
 
@@ -405,4 +479,56 @@ export class ReportComponent implements OnInit {
     return countArray;
   }
 
+
+  displaySidebar() {
+    this._displaySidebar = !this._displaySidebar;
+  }
+
+
+
+  //configuration of angular Editor
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'اكتب ما تريد هنا...',
+    defaultParagraphSeparator: '',
+    defaultFontName: 'Cairo, sans-serif',
+    defaultFontSize: '',
+    fonts: [
+      { class: "Cairo, sans-serif", name: 'Cairo, sans-serif' },
+      { class: "'IBM Plex Sans Arabic', sans-serif", name: 'IBM Plex Sans Arabic' },
+      { class: "arial", name: 'Arial' },
+      { class: "times-new-roman", name: 'Times New Roman' },
+      { class: "'Rubik', sans-serif", name: 'Rubik' },
+      { class: '"Amiri", serif', name: '"Amiri", serif' },
+
+
+    ],
+    uploadUrl: '',
+    uploadWithCredentials: false,
+    sanitize: false,
+    toolbarPosition: 'top',
+    toolbarHiddenButtons: [
+      [
+
+        // 'customClasses',
+        'insertVideo',
+        'insertHorizontalRule',
+        'toggleEditorMode'
+      ]
+    ]
+  };
+
+
+  confirmationDeleteDetailsTable(detailsTable:ElementRef) {
+    detailsTable.nativeElement.remove();
+  }
 }

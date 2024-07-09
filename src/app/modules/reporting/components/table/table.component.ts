@@ -5,6 +5,7 @@ import { ConfirmationService } from 'primeng-lts/api';
 import { FunctionComponent } from '../function/function.component';
 import { BehaviorSubject } from 'rxjs';
 import { ITable } from '../../iterfaces/itable';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -43,7 +44,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
   functionSelected: any[] = [];
   isReportsChanged: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private reportComponent: ReportComponent, private _ComponentFactoryResolver: ComponentFactoryResolver, private confirmationService: ConfirmationService ) { }
+  constructor(private reportComponent: ReportComponent, private _ComponentFactoryResolver: ComponentFactoryResolver, private confirmationService: ConfirmationService , private toasterService: ToastrService ) { }
 
   //fire when inputs is changed
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +79,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
   //delete text box element
   confirmationDeleteTable(event: any) {
+    event.stopPropagation();
     this.confirmationService.confirm({
       message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
       accept: () => {
@@ -87,6 +89,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
         const tableIndex = TableComponent.tableStatic.findIndex((compnent) => compnent == this);
         TableComponent.tableStatic.splice(tableIndex, 1);
         this.reportComponent.headerTemplate.splice(tableIndex, 1);
+        this.toasterService.success('تم حذف الجدول بنجاح', 'نجح');
       }
     });
   }

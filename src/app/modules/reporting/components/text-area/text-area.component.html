@@ -1,35 +1,58 @@
-<div class="text-box" cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDrag>
-  <div class="movement-line" cdkDragHandle></div>
-  <span class="mx-1 left-move-icon" cdkDragHandle>
-    <i class="fa-solid fa-up-down-left-right"></i>
-  </span>
-  <div class="d-flex align-items-center parentNodeText">
-    <!-- reporting settings -->
-    <div class="icon-container">
-      <div class="d-flex align-items-center">
-        <!-- delete element icon -->
-        <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox($event)">
-          <i class="fa-solid fa-xmark"></i>
-        </span>
-        <!-- edit element icon -->
-        <span class="mx-1 element-edit-icon" (click)="openEditTextDialog()">
-          <i class="fa-solid fa-pencil"></i>
-        </span>
-        <!-- edit element icon -->
-        <span class="mx-1 element-move-icon" cdkDragHandle>
-          <i class="fa-solid fa-up-down-left-right"></i>
-        </span>
+<div class="text-box-container" #textBoxContainer>
+  <div class="text-box" cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag>
+    <div class="movement-line" cdkDragHandle></div>
+    <span class="mx-1 left-move-icon" cdkDragHandle>
+      <i class="fa-solid fa-up-down-left-right"></i>
+    </span>
+    <div class="d-flex align-items-center parentNodeText">
+      <!-- reporting settings -->
+      <div class="icon-container">
+        <div class="d-flex align-items-center">
+          <!-- delete element icon -->
+          <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox($event)">
+            <i class="fa-solid fa-xmark"></i>
+          </span>
+          <!-- edit element icon -->
+          <span class="mx-1 element-edit-icon" (click)="showEditTextDialog()">
+            <i class="fa-solid fa-pencil"></i>
+          </span>
+          <!-- edit element icon -->
+          <span class="mx-1 element-move-icon" cdkDragHandle>
+            <i class="fa-solid fa-up-down-left-right"></i>
+          </span>
+        </div>
+      </div>
+      <!-- element content text -->
+      <ng-content select=".text-editable" class="textarea" *ngIf="!addingMode">
+  
+      </ng-content>
+  
+      <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif" data-fontSize="14"
+        data-color="#000" data-style="false" data-decoration="false" data-weight="false" data-align="right" *ngIf="addingMode">
+        
+      </div>
+  
+    </div>
+  </div>
+  
+  <!-- text box dialog -->
+  <p-dialog [(visible)]="displayDialogAddText" [rtl]="true" closeIcon="" [style]="{width: '700px' , zIndex:999999999999999999999}">
+    <p-header>
+      التعديل على الخط
+    </p-header>
+    <div class="dialog-content overflow-hidden">
+      <div class="row">
+        <div class="col-12">
+          <div class="editor-container p-2">
+            <angular-editor [placeholder]="'اكتب هنا ماتريد...'" [(ngModel)]="value"
+            [config]="editorConfig"></angular-editor>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- element content text -->
-    <ng-content select=".text-editable" class="textarea" *ngIf="!addingMode">
-
-    </ng-content>
-
-    <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif" data-fontSize="14"
-      data-color="#000" data-style="false" data-decoration="false" data-weight="false" data-align="right" *ngIf="addingMode">
-      {{value}}
-    </div>
-
-  </div>
+    <p-footer>
+      <button type="button" class="btn btn-success btn-sm" [disabled]="value == ''" (click)="createTextBox()">نعم</button>
+      <button type="button" class="btn btn-danger btn-sm" (click)="closeTextBoxDialog()">تجاهل</button>
+    </p-footer>
+  </p-dialog>
 </div>

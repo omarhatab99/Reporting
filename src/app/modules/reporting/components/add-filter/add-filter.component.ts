@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { TableComponent } from '../table/table.component';
 import { IInputType } from '../../enums/iinput-type.enum';
 import { operationsFilter } from '../../enums/ioperations-filter.enum';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -39,7 +40,7 @@ export class AddFilterComponent implements OnInit {
   //used for random filter id
   filterId: any;
 
-  constructor(private confirmationService: ConfirmationService, private tableComponent: TableComponent, private datePipe: DatePipe) { }
+  constructor(private confirmationService: ConfirmationService, private tableComponent: TableComponent, private datePipe: DatePipe , private toasterService: ToastrService) { }
 
   ngOnInit(): void {
     //defaults values
@@ -169,6 +170,7 @@ export class AddFilterComponent implements OnInit {
         //Actual logic to perform a confirmation
         this.filterElement.nativeElement.remove();
         this.filterCollabse.nativeElement.remove();
+        this.toasterService.success('تم حذف التنقيه بنجاح', 'نجح');
       }
     });
   }

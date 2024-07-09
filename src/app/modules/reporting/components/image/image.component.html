@@ -1,4 +1,4 @@
-<div class="image-box" resizable cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDrag
+<div class="image-box" resizable cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag
     [style.width]="imageWidth+'px'" #imageContainer>
     <div class="movement-line" cdkDragHandle></div>
     <span class="mx-1 left-move-icon" cdkDragHandle>
@@ -31,26 +31,36 @@
 </div>
 
 <div class="dialog-container" #imageDialog>
-    <p-dialog [(visible)]="displayDialogImage" [style]="{width: '500px' , zIndex:999999999999999999999}"
+
+    <p-dialog [(visible)]="displayDialogChangeImage" [style]="{width: '600px' , zIndex:999999999999999999999}"
         (onHide)="dialogAddImageHide()">
         <p-header>
             تغيير الصورة
         </p-header>
         <div class="dialog-content">
-            <div class="preiview-container">
-                <img [src]="previewSrc" #priview alt="preview image" width="160px" height="120px">
-            </div>
-            <div class="input-group my-3" dir="rtl">
-                <div class="custom-file">
-                    <input #selectedImageInput type="file" class="custom-file-input" id="inputGroupFile03"
-                        aria-describedby="inputGroupFileAddon03" (change)="selectedImage($event)">
-                    <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
+            <div class="row">
+                <div class="col-12">
+                    <div class="upload-image">
+                        <input type="file" #selectedImageInput class="input-upload d-none" id="uploadImage"
+                            (change)="selectedImage($event)">
+                        <label class="input-upload-image-label" for="uploadImage">
+                            اختر صورة من هنا
+                            <span>
+                                <i class="fa-solid fa-cloud-arrow-up" style="color: #a2bed7;"></i>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="preiview-container">
+                        <img [src]="previewSrc" #priview class="preiview-image" alt="preview image" width="160px" height="120px">
+                    </div>
                 </div>
             </div>
         </div>
         <p-footer>
             <button type="button" class="btn btn-success btn-sm" (click)="changeImage()">نعم</button>
-            <button type="button" class="btn btn-danger btn-sm" (click)="closeImageDialog()">تجاهل</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="closeChangeImageDialog()">تجاهل</button>
         </p-footer>
     </p-dialog>
 </div>

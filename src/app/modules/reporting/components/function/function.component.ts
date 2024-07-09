@@ -3,6 +3,7 @@ import { ConfirmationService } from 'primeng-lts/api';
 import { DatePipe } from '@angular/common';
 import { TableComponent } from '../table/table.component';
 import { operationsFunction, operationsFunctionV2 } from '../../enums/operation-function.enum';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class FunctionComponent implements OnInit{
   //random function id
   functionId: any;
 
-  constructor(private confirmationService: ConfirmationService, private tableComponent: TableComponent) { }
+  constructor(private confirmationService: ConfirmationService, private tableComponent: TableComponent , private toasterService: ToastrService) { }
   
   ngOnInit(): void {
 
@@ -142,6 +143,8 @@ export class FunctionComponent implements OnInit{
 
         this.functionElement.nativeElement.remove();
         this.functionCollabse.nativeElement.remove();
+        this.toasterService.success('تم حذف الداله بنجاح', 'نجح');
+
       }
     });
   }
@@ -205,3 +208,5 @@ export class FunctionComponent implements OnInit{
     return `filter-${random}`;
   }
 }
+export { operationsFunction };
+

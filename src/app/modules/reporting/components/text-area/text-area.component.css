@@ -1,4 +1,9 @@
 
+div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , option , ul , li ::ng-deep .ui-dropdown-item ,
+ ::ng-deep .ui-dropdown-items , ::ng-deep .ui-dropdown-label , ::ng-deep .ui-multiselect-label , ::ng-deep .ng-star-inserted{
+    font-family: "Cairo", sans-serif;
+}
+
  .text-box {
     background-color: transparent;
     cursor: pointer;
@@ -127,3 +132,41 @@
     height: 100%;
     z-index: 1000000000000;
 } */
+
+/*angular editor style*/
+.editor-container {
+    background-color: #FFF;
+}
+
+::ng-deep .angular-editor-wrapper .angular-editor-textarea{
+    min-height: 200px !important;
+    resize: none !important;
+    outline: none !important;
+    border: 1px dashed #d0d0d0 !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+::ng-deep .angular-editor-wrapper {
+    direction: rtl !important;
+}
+
+::ng-deep .angular-editor-toolbar {
+    text-align: right !important;
+    direction: rtl !important;
+}
+
+
+/*Dialog styles*/
+::ng-deep .ui-dialog-titlebar {
+    text-align: right;
+}
+
+::ng-deep .ui-dialog-content{
+    background-color: antiquewhite !important;
+}
+
+
+::ng-deep .ui-dialog-footer	 {
+    direction: rtl;
+}

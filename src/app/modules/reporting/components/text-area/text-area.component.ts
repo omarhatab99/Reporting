@@ -1,7 +1,8 @@
-import { Component, ContentChild, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChild, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng-lts/api';
 import { DialogService } from 'primeng-lts/dynamicdialog';
-import { TextEditorDialogComponent } from 'src/app/dialogs/text-editor-dialog/text-editor-dialog.component';
 
 @Component({
   selector: 'app-text-area',
@@ -9,58 +10,40 @@ import { TextEditorDialogComponent } from 'src/app/dialogs/text-editor-dialog/te
   styleUrls: ['./text-area.component.css'],
   providers: [DialogService],
 })
-export class TextAreaComponent implements OnInit {
+export class TextAreaComponent implements OnInit, AfterViewInit {
+  @ViewChild("textBoxContainer") textBoxContainer: ElementRef;
   @ContentChild("textArea") textArea: ElementRef;
   @ViewChild("textArea") textAreaAdding: ElementRef;
 
-  value:string = "Add Text Here";
-  addingMode:boolean = false;
+  /*textEditor dialog */
+  displayDialogAddText: boolean = false;
 
-  constructor(private _DialogService: DialogService , private confirmationService: ConfirmationService) { }
+  /*adding text dialog */
+  value: string = "";
+  addingMode: boolean = false;
+
+  constructor(private _DialogService: DialogService, private confirmationService: ConfirmationService , private toasterService: ToastrService) { }
+
+
 
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+    if (this.addingMode == true) { //incase adding text
+      console.log(this.value);
+      console.log(this.addingMode);
+      console.log(this.textAreaAdding.nativeElement)
+      this.textAreaAdding.nativeElement.innerHTML = this.value;
+    }
+  }
+
+
+
   //open edit dialog for text box
-  openEditTextDialog() {
-    
-    //get target element 
-    const targetElement = this.addingMode ? this.textAreaAdding.nativeElement : this.textArea.nativeElement;
-    //get all data attributes from element.
-    const family = targetElement.getAttribute("data-fontFamily");
-    const size = targetElement.getAttribute("data-fontSize");
-    const decoration = targetElement.getAttribute("data-decoration");
-    const style = targetElement.getAttribute("data-style");
-    const weight = targetElement.getAttribute("data-weight");
-    const color = targetElement.getAttribute("data-color");
-    const align = targetElement.getAttribute("data-align");
-    //open dialog and send data
-    this._DialogService.open(TextEditorDialogComponent, { width: "500px", data: { family, size, decoration, style, weight, color, align } , header:"تعديل النص" })
-      .onClose.subscribe((observer) => {
-
-        if (observer != undefined && observer != "") {
-
-          //change element style 
-          targetElement.style.fontFamily = observer.family;
-          targetElement.style.fontSize = `${observer.size}px`;
-          targetElement.style.color = observer.color;
-          targetElement.style.textDecoration = observer.decoration == "true" ? 'underline' : 'none';
-          targetElement.style.fontStyle = observer.style == "true" ? 'italic' : 'normal';
-          targetElement.style.fontWeight = observer.weight == "true" ? 'bold' : 'normal';
-          targetElement.style.textAlign = observer.align;
-
-          //change element attributes
-          targetElement.setAttribute("data-fontFamily", observer.family);
-          targetElement.setAttribute("data-fontSize", observer.size);
-          targetElement.setAttribute("data-decoration", observer.decoration);
-          targetElement.setAttribute("data-style", observer.style);
-          targetElement.setAttribute("data-weight", observer.weight);
-          targetElement.setAttribute("data-color", observer.color);
-          targetElement.setAttribute("data-align", observer.align);
-        }
-
-
-      })
+  showEditTextDialog() {
+    this.displayDialogAddText = true;
+    this.value = (this.addingMode) ? this.textAreaAdding.nativeElement.innerHTML : this.textArea.nativeElement.innerHTML;
   }
 
   //delete text box element
@@ -68,11 +51,72 @@ export class TextAreaComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
       accept: () => {
-          //Actual logic to perform a confirmation
-          this.textArea.nativeElement.remove();
+        //Actual logic to perform a confirmation
+        this.textBoxContainer.nativeElement.remove();
+        this.toasterService.success('تم حذف النص بنجاح', 'نجح');
       }
     });
   }
+
+
+
+  createTextBox() {
+    if (this.value != "") {
+      if (this.addingMode == true) {
+        this.textAreaAdding.nativeElement.innerHTML = this.value;
+      }
+      else {
+        this.textArea.nativeElement.innerHTML = this.value;
+      }
+
+      this.closeTextBoxDialog();
+    }
+
+  }
+
+  closeTextBoxDialog() {
+    this.displayDialogAddText = false;
+  }
+
+
+  //configuration of angular Editor
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Enter text here...',
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+    fonts: [
+      { class: "Cairo, sans-serif", name: 'Cairo, sans-serif' },
+      { class: "'IBM Plex Sans Arabic', sans-serif", name: 'IBM Plex Sans Arabic' },
+      { class: "arial", name: 'Arial' },
+      { class: "times-new-roman", name: 'Times New Roman' },
+      { class: "'Rubik', sans-serif", name: 'Rubik' },
+      { class: '"Amiri", serif', name: '"Amiri", serif' },
+    ],
+    uploadUrl: '',
+    uploadWithCredentials: false,
+    sanitize: false,
+    toolbarPosition: 'top',
+    toolbarHiddenButtons: [
+      [
+
+        // 'customClasses',
+        'insertVideo',
+        'insertHorizontalRule',
+        'toggleEditorMode'
+      ]
+    ]
+  };
 
 
 

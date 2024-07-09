@@ -31,12 +31,14 @@
               "node_modules/primeng-lts/resources/themes/nova-light/theme.css",
               "node_modules/primeng-lts/resources/primeng.min.css",
               "node_modules/angular-resize-element/bundles/styleconverter.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "./node_modules/chart.js/dist/Chart.js",
+              "node_modules/quill/dist/quill.js"
 
             ]
           },

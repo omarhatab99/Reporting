@@ -1,3 +1,7 @@
+div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , option , ul , li ::ng-deep .ui-dropdown-item ,
+ ::ng-deep .ui-dropdown-items , ::ng-deep .ui-dropdown-label , ::ng-deep .ui-multiselect-label , ::ng-deep .ng-star-inserted{
+    font-family: "Cairo", sans-serif;
+}
 
 .image-box {
     background-color: transparent;
@@ -24,6 +28,7 @@
     border-radius: 5px;
     bottom: -30px;
     right: 0px;
+    z-index: 1001;
 }
 
 .element-remove-icon,.element-edit-icon , .element-move-icon {
@@ -35,7 +40,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    z-index: 100000;
+    z-index: 1001;
     transition: all 0.3s linear;
     cursor: pointer;
 }
@@ -103,16 +108,25 @@
 }
 
 .preiview-container {
-    padding: 20px;
-    background-color: antiquewhite;
+    padding: 2px 0px;
+}
+
+.preiview-container .preiview-image {
+    border: 2px dashed #bcbcbc;
+    margin-top: 1px;
+    padding: 10px;
+}
+
+.upload-image {
+    width: 100%;
+    height: 200px;
+    background-color: #FFF;
+    border: 1px dashed #d2d2d2;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-/* .overlay-movement{
-    position: absolute;
-    background-color: #e8e8e894;
-    width: 100%;
-    height: 100%;
-    z-index: 1000000000000;
-} */
+
+.upload-image .input-upload-image-label {
+    cursor: pointer;
+}

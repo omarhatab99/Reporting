@@ -19,7 +19,8 @@ import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api'
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {SidebarModule} from 'primeng-lts/sidebar';
-
+import {AccordionModule} from 'primeng-lts/accordion';
+import {EditorModule} from 'primeng-lts/editor';
 @NgModule({
   exports: [
     TableModule,
@@ -39,7 +40,9 @@ import {SidebarModule} from 'primeng-lts/sidebar';
     ChartModule,
     ConfirmDialogModule,
     RadioButtonModule,
-    SidebarModule
+    SidebarModule,
+    AccordionModule,
+    EditorModule
   ],
   entryComponents: [
     TextEditorDialogComponent

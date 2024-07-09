@@ -1,229 +1,329 @@
 <!-- start sidenav -->
-<mat-drawer-container class="reporting-container" autosize>
-  <mat-drawer #reportingDrawer class="reporting-sidenav" mode="over" position="end">
-    <!-- start accordion -->
-    <mat-accordion>
-      <!-- expansion one -->
-      <mat-expansion-panel class="my-3">
-        <mat-expansion-panel-header>
-          <mat-panel-title> تخطيط التقرير </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div>
-          <!-- paddings -->
-          <div class="header-content-paddings">
-            <div class="row">
-              <div class="col-12">
-                <!-- header padding -->
-                <div class="form-group" dir="ltr">
-                  <label for="paddingHeaderChanger" class="d-block text-right">حواف العنوان</label>
-                  <input dir="rtl" type="range" class="form-control-range" id="paddingHeaderChanger"
-                    [(ngModel)]="header.padding" min="1" max="100" step="1">
-                </div>
-              </div>
-              <div class="col-12">
-                <!-- content padding -->
-                <div class="form-group">
-                  <label for="paddingContentChanger" class="d-block text-right">حواف المحتوى</label>
-                  <input type="range" class="form-control-range" id="paddingContentChanger"
-                    [(ngModel)]="content.padding" min="5" max="100" step="1">
+<div class="reporting-sidenav">
+  <p-sidebar [(visible)]="_displaySidebar" dir="rtl" [style]="{width:'35em'}" position="right"
+    expandIcon="pi pi-fw pi-chevron-right">
+    <div class="sidebar-container">
+      <div class="bootstrap-accordion">
+        <div class="row">
+          <!-- expansion #1 -->
+          <div class="col-12">
+            <!-- start report settings global 1 -->
+            <div class="report-accordion-settings mt-5 mb-3">
+              <a class="collabse-btn d-flex justify-content-between align-items-center" data-toggle="collapse"
+                href="#globalSettings" role="button" aria-expanded="false" aria-controls="collapseExample">
+                تخطيط التقرير
+
+                <span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </span>
+              </a>
+              <!-- content collapse 1-->
+              <div class="collapse" id="globalSettings">
+                <div class="collapse-content px-3">
+                  <div class="row">
+                    <!-- header padding -->
+                    <div class="col-6">
+                      <div class="form-group mt-3 mb-2">
+                        <input type="range" class="form-control-range" id="paddingHeaderChanger"
+                          [(ngModel)]="header.padding" min="1" max="100" step="1">
+                        <label for="paddingHeaderChanger">حواف العنوان</label>
+                      </div>
+                    </div>
+                    <!-- content padding -->
+                    <div class="col-6">
+                      <div class="form-group mt-3 mb-2">
+                        <input type="range" class="form-control-range" id="paddingContentChanger"
+                          [(ngModel)]="content.padding" min="5" max="100" step="1">
+                        <label for="paddingContentChanger">حواف المحتوى</label>
+                      </div>
+                    </div>
+                    <!-- header padding -->
+                    <div class="col-6">
+                      <div class="form-group mt-3 mb-1">
+                        <input type="range" class="form-control-range" id="paddingFooterChanger"
+                          [(ngModel)]="footer.padding" min="1" max="100" step="1">
+                        <label for="paddingFooterChanger">حواف النهايه</label>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <!-- border radius -->
+                      <div class="form-group mt-3 mb-1">
+                        <input type="range" class="form-control-range" id="borderRadiusChanger"
+                          [(ngModel)]="border.radius" min="1" max="50" step="1">
+                        <label for="borderRadiusChanger">منحنى الحدود</label>
+                      </div>
+                    </div>
+                    <!-- border color -->
+                    <div class="col-6">
+                      <div class="form-group text-right" style="margin-top: 25px;">
+                        <input type="color" id="borderColorChanger" [(ngModel)]="border.color" style="height: 50px;">
+                        <label for="borderColorChanger">لون الحدود</label>
+                      </div>
+                    </div>
+                    <!-- border width -->
+                    <div class="col-6">
+                      <div class="borderWidth-columns-select mb-3">
+                        <label for="borderWidthChanger" class="text-right w-100"> حجم الحدود</label>
+                        <p-dropdown id="borderWidthChanger" [options]="borderSizeOptions"
+                          [(ngModel)]="border.size"></p-dropdown>
+                      </div>
+                    </div>
+                    <!-- header height -->
+                    <div class="col-6">
+                      <div class="form-group text-right">
+                        <input type="number" id="headerHeightChanger" min="80" [(ngModel)]="header.height">
+                        <label for="headerHeightChanger">طول العنوان</label>
+                      </div>
+                    </div>
+                    <!-- content height -->
+                    <div class="col-6">
+                      <div class="form-group text-right">
+                        <input type="number" id="contentHeightChanger" min="500" [(ngModel)]="content.height">
+                        <label for="contentHeightChanger">طول المحتوى</label>
+                      </div>
+                    </div>
+                    <!-- content height -->
+                    <div class="col-6">
+                      <div class="form-group text-right">
+                        <input type="number" id="footerHeightChanger" min="80" [(ngModel)]="footer.height">
+                        <label for="footerHeightChanger">طول النهايه</label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- border settings -->
-          <div class="border-settings">
-            <div class="row">
-              <div class="col-12">
-                <!-- border radius -->
-                <div class="form-group">
-                  <label for="borderRadiusChanger" class="d-block text-right">منحنى الحدود</label>
-                  <input type="range" class="form-control-range" id="borderRadiusChanger" [(ngModel)]="border.radius"
-                    min="1" max="50" step="1">
+          <!-- expansion #2 -->
+          <div class="col-12">
+            <div class="report-accordion-add-tools">
+              <a class="collabse-btn d-flex justify-content-between align-items-center" data-toggle="collapse"
+                href="#addTools" role="button" aria-expanded="false" aria-controls="collapseExample">
+                اضافه ادوات
+                <span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </span>
+              </a>
+              <!-- content collapse 1-->
+              <div class="collapse" id="addTools">
+                <div class="collapse-content px-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="report-tools p-2 text-right">
+                        <span class="add-text-box mx-2" (click)="showAddTextDialog()">
+                          اضافه نص
+                          <i class="fa-solid fa-plus mr-2"></i>
+                        </span>
+
+                        <span class="add-text-box mx-2" (click)="showDialogAddImage()">
+                          اضافه صورة
+                          <i class="fa-solid fa-plus mr-2"></i>
+                        </span>
+
+                        <span class="add-text-box mx-2" (click)="createTable()">
+                          اضافه جدول
+                          <i class="fa-solid fa-plus mr-2"></i>
+                        </span>
+                        <span class="add-text-box mx-2" (click)="showAddChartDialog()">
+                          اضافه رسم بيان
+                          <i class="fa-solid fa-plus mr-2"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <!-- border color -->
-              <div class="col-6">
-                <div class="form-group text-right">
-                  <label for="borderColorChanger" class="d-block text-right">لون الحدود</label>
-                  <input type="color" id="borderColorChanger" [(ngModel)]="border.color">
-                </div>
-              </div>
-              <!-- border width -->
-              <div class="col-6">
-                <div class="form-group text-right pt-3">
-                  <select class="form-select input-bootstrap-settings" id="borderWidthChanger"
-                    [(ngModel)]="border.size">
-                    <option value="1" selected>1px</option>
-                    <option value="2">2px</option>
-                    <option value="3">3px</option>
-                    <option value="4">4px</option>
-                    <option value="5">5px</option>
-                  </select>
-                </div>
-              </div>
+
             </div>
           </div>
-          <!-- dimensions -->
-          <div class="header-content-dimensions">
+          <!-- generate table settings -->
+          <div class="table-settings col-12 w-100">
             <div class="row">
-              <!-- header height -->
-              <div class="col-6">
-                <div class="form-group text-right">
-                  <label for="headerHeightChanger" class="d-block text-right">طول العنوان</label>
-                  <input type="number" id="headerHeightChanger" class="input-bootstrap-settings" min="80"
-                    [(ngModel)]="header.height">
-                </div>
-              </div>
-              <!-- content height -->
-              <div class="col-6">
-                <div class="form-group text-right">
-                  <label for="headerHeightChanger" class="d-block text-right">طول المحتوى</label>
-                  <input type="number" id="headerHeightChanger" class="input-bootstrap-settings" min="500"
-                    [(ngModel)]="content.height">
+
+              <div class="col-12" *ngFor="let template of headerTemplate; let i = index">
+                <div *ngTemplateOutlet="headerTemplate[i]" class="w-100">
+
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </mat-expansion-panel>
-      <!-- expansion two -->
-      <mat-expansion-panel class="my-3">
-        <mat-expansion-panel-header>
-          <mat-panel-title> اضافه ادوات </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="report-tools text-right p-3">
-          <span class="add-text-box mx-2" (click)="createTextBox()">
-            اضافه نص
-            <i class="fa-solid fa-plus mr-2"></i>
-          </span>
-
-          <span class="add-text-box mx-2" (click)="showDialogAddImage()">
-            اضافه صورة
-            <i class="fa-solid fa-plus mr-2"></i>
-          </span>
-
-          <span class="add-text-box mx-2" (click)="createTable()">
-            اضافه جدول
-            <i class="fa-solid fa-plus mr-2"></i>
-          </span>
-          <span class="add-text-box mx-2" (click)="showAddChartDialog()">
-            اضافه رسم بيان
-            <i class="fa-solid fa-plus mr-2"></i>
-          </span>
-        </div>
-      </mat-expansion-panel>
-      <div class="tables-settings">
-
       </div>
-      <div *ngFor="let template of headerTemplate; let i = index">
-        <div *ngTemplateOutlet="headerTemplate[i]">
+    </div>
 
-        </div>
-      </div>
-    </mat-accordion>
+  </p-sidebar>
+</div>
 
-    <!-- end accordion -->
-  </mat-drawer>
+
+<!-- sidenav expanding icon -->
+<button class="toggle-reporting-drawer mt-1" (click)="displaySidebar()" color="light" title="تعديل الريبور">
+  <i class="fa-solid fa-gear"></i>
+</button>
+
+<!-- start sidenav -->
+<div class="reporting-container">
 
   <!-- content of sidenav -- body container -->
   <div class="sidenav-container w-100">
-    <!-- sidenav expanding icon -->
-    <button mat-mini-fab class="toggle-reporting-drawer" (click)="reportingDrawer.toggle()" color="light"
-      title="تعديل الريبور">
-      <mat-icon>settings</mat-icon>
-    </button>
-
     <!-- report content -->
     <!-- report container -->
     <div class="container-fluid report-container p-3 w-100">
       <div class="">
         <!-- report card -->
-        <mat-card appearance="outlined w-100">
+        <div class="card w-100" style="border: none !important;">
           <!-- card header -->
-          <mat-card-header class="mat-card-header-report ui-rtl w-100" [style.padding]="header.padding+'px'"
+          <div class="card-header-report card-header ui-rtl w-100" [style.padding]="header.padding+'px'"
             [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
             [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
-            <div class="div-header-container d-flex align-items-center justify-content-between w-100 ui-rtl" dir="rtl">
-
-              <!-- egypt icon -->
-              <div class="icon-egypt">
-                <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'"
-                  [imageWidth]="40"></app-image>
-              </div>
-              <div class="header-content-container w-50 d-flex justify-content-between align-items-center">
-                <!-- default header reporting name -->
+            <div class="div-header-container d-flex align-items-center justify-content-start w-100 ui-rtl px-3 py-2"
+              dir="rtl">
+              <!-- default header reporting name -->
+              <div class="title-right d-flex justify-content-center align-center flex-column">
+                <!-- egypt icon -->
+                <div class="icon-egypt text-center">
+                  <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'"
+                    [imageWidth]="30"></app-image>
+                </div>
                 <app-text-area>
-                  <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif"
-                    data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
-                    data-align="right" style="width: 100%;">
-                    عنوان التقرير
-                  </div>
-                </app-text-area>
-                <!-- default header reporting date -->
-                <app-text-area>
-                  <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif"
-                    data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
-                    data-align="right">
-                    تاريخ التقرير
+                  <div contenteditable="true" #textArea class="text-editable">
+                    <h4 class="text-center mb-0" style="font-size: 12px;">جمهوريه مصر العربيه</h4>
+                    <h4 class="text-center mb-0" style="font-size: 12px;">وزارة التخطيط والتنميه الاقتصاديه</h4>
                   </div>
                 </app-text-area>
               </div>
             </div>
+            <div #componentHeader>
 
-          </mat-card-header>
-          <mat-card-content class="mat-card-content-report w-100 my-2 overflow-hidden"
-            [style.padding]="content.padding+'px'" [style.borderRadius]="border.radius+'px'"
-            [style.borderColor]="border.color" [style.borderWidth]="border.size+'px'"
-            [style.minHeight]="content.height+'px'">
+            </div>
+          </div>
+          <div class="card-content-report card-body w-100 my-2 overflow-hidden" [style.padding]="content.padding+'px'"
+            [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+            [style.borderWidth]="border.size+'px'" [style.minHeight]="content.height+'px'">
+            <div class="headers-container-top">
+              <div class="row">
+                <!-- main report title -->
+                <div class="col-12">
+                  <div class="report-main-title d-flex justify-content-center align-items-center">
+                    <app-text-area>
+                      <div #textArea contenteditable="true" class="text-editable">
+                        <h2 class="text-center mb-0" style="text-decoration: underline;">انجازات وزارة التخطيط والتنميه
+                          الاقتصاديه</h2>
+                        <h2 class="text-center mb-0" style="text-decoration: underline;">من مشروعات وبرامج خلال الفترة
+                          من 2018 الى 2024</h2>
+                      </div>
+                    </app-text-area>
+                  </div>
+                </div>
+                <!-- details report table -->
+                <div class="col-12">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <div class="details-table mt-2" #detailsTable
+                      cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag>
+                      <div class="movement-line" cdkDragHandle></div>
+                      <span class="mx-1 left-move-icon" cdkDragHandle>
+                        <i class="fa-solid fa-up-down-left-right"></i>
+                      </span>
+                      <div class="d-flex align-items-center parentNodeText">
+                        <!-- reporting settings -->
+                        <div class="icon-container">
+                          <div class="d-flex align-items-center">
+                            <!-- delete element icon -->
+                            <span class="mx-1 element-remove-icon"
+                              (click)="confirmationDeleteDetailsTable(detailsTable)">
+                              <i class="fa-solid fa-xmark"></i>
+                            </span>
+                            <!-- edit element icon -->
+                            <span class="mx-1 element-move-icon" cdkDragHandle>
+                              <i class="fa-solid fa-up-down-left-right"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <!-- element content text -->
 
-            <div class="headings-content d-flex justify-content-between ui-rtl" dir="rtl">
-              <app-text-area>
-                <div #textArea contenteditable="true" class="text-editable" data-fontFamily="Cairo, sans-serif"
-                  data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
-                  data-align="right" style="width: 350px;">
-                  اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة مهارة
-                  الكلام.
-                  المقابلة هي نوع منها التي يستدعها الدا
+                        <div class="details-report-table d-flex justify-content-end">
+                          <table class="table-bordered table-hover" dir="rtl">
+                            <thead>
+                              <tr>
+                                <th>اسم المؤسسه</th>
+                                <th> الجهه التابع لها </th>
+                                <th> تاريخ اعتماد التقرير </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>مؤسسه حكوميه</td>
+                                <td> مؤسسه حكوميه </td>
+                                <td> {{dateNow|date}} </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </app-text-area>
-              <app-text-area>
-                <div contenteditable="true" #textArea class="text-editable" data-fontFamily="Cairo, sans-serif"
-                  data-fontSize="14" data-color="#000" data-style="false" data-decoration="false" data-weight="false"
-                  data-align="right" style="width: 350px;">
-                  اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة مهارة
-                  الكلام.
-                  المقابلة هي نوع منها التي يستدعها الدا
+                <div class="col-12">
+                  <div class="descriptions d-flex justify-content-between align-items-center px-3 mt-3">
+                    <div class="description-1">
+                      <app-text-area>
+                        <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
+                          اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة
+                          مهارة
+                          الكلام.
+                          المقابلة هي نوع منها التي يستدعها الدا
+                        </div>
+                      </app-text-area>
+                    </div>
+                    <div class="description-2">
+                      <app-text-area>
+                        <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
+                          اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة
+                          مهارة
+                          الكلام.
+                          المقابلة هي نوع منها التي يستدعها الدا
+                        </div>
+                      </app-text-area>
+                    </div>
+                    <div class="description-3">
+                      <app-text-area>
+                        <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
+                          اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة
+                          مهارة
+                          الكلام.
+                          المقابلة هي نوع منها التي يستدعها الدا
+                        </div>
+                      </app-text-area>
+                    </div>
+                  </div>
                 </div>
-              </app-text-area>
-              <div class="charts" style="z-index: 20;">
-                <app-chartComponent [chartsConfig]="chartConfig"></app-chartComponent>
               </div>
             </div>
             <div #componentContainer>
 
             </div>
+
             <app-table [reports]="reports" [cols]="cols"></app-table>
-
-
-
-
-          </mat-card-content>
-          <mat-card-footer class="mat-card-footer-report  ui-rtl w-100 m-0" [style.padding]="header.padding+'px'"
+          </div>
+          <div class="card-footer-report card-footer  ui-rtl w-100 m-0" [style.padding]="footer.padding+'px'"
             [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
-            [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
+            [style.borderWidth]="border.size+'px'" [style.height]="footer.height+'px'" dir="rtl">
             <div class="div-footer-container d-flex align-items-center justify-content-between w-100 h-100 ui-rtl"
               dir="rtl">
               <div class="print-date">
                 تاريخ الطباعه: <span>{{dateNow}}</span>
               </div>
+              <div #componentFooter>
+
+              </div>
             </div>
-          </mat-card-footer>
-        </mat-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-</mat-drawer-container>
+</div>
 
 <!-- confirm dialog (primeng) -->
 <p-confirmDialog #cd dir="rtl" header="تاكيد الحذف" [transitionOptions]="'150ms'">
@@ -235,21 +335,30 @@
 
 
 
-<!-- change image dialog -->
-<p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '500px' , zIndex:999999999999999999999}"
+<!-- add image dialog -->
+<p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '600px' , zIndex:999999999999999999999}"
   (onHide)="dialogAddImageHide()">
   <p-header>
-    تغيير الصورة
+    اختر الصورة
   </p-header>
   <div class="dialog-content">
-    <div class="preiview-container">
-      <img [src]="imageSrc" #priview alt="preview image" width="160px" height="120px">
-    </div>
-    <div class="input-group my-3" dir="rtl">
-      <div class="custom-file">
-        <input type="file" #selectedImageInput class="custom-file-input" id="inputGroupFile03"
-          aria-describedby="inputGroupFileAddon03" (change)="selectedImage($event)">
-        <label class="custom-file-label text-center" for="inputGroupFile03">اختر صورة</label>
+    <div class="row">
+      <div class="col-12">
+        <div class="upload-image">
+          <input type="file" #selectedImageInput class="input-upload d-none" id="uploadImage"
+            (change)="selectedImage($event)">
+          <label class="input-upload-image-label" for="uploadImage">
+            اختر صورة من هنا
+            <span>
+              <i class="fa-solid fa-cloud-arrow-up" style="color: #a2bed7;"></i>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="preiview-container">
+          <img [src]="imageSrc" class="preiview-image" #priview alt="preview image" width="160px" height="120px">
+        </div>
       </div>
     </div>
   </div>
@@ -268,8 +377,8 @@
   <!-- dialog content have shape of charts to select one from it -->
   <div class="dialog-content">
     <div class="charts-container-dialog text-right">
-      <a class="chart-selector mx-2" title="dounout" (click)="selectedCharts('doughnut')"
-        [class.activeChart]="isActiveChart == 'dounout'">
+      <a class="chart-selector mx-2" title="doughnut" (click)="selectedCharts('doughnut')"
+        [class.activeChart]="isActiveChart == 'doughnut'">
         <img src="../../../../../assets/pie-chart.png" style="width: 100%;">
       </a>
       <a class="chart-selector mx-2" title="bar" (click)="selectedCharts('bar')"
@@ -307,7 +416,7 @@
           <!-- column will be displayed based on operation -->
           <div class="filter-columns-select my-2">
             <label for="chartColumn" class="text-right w-100"> اختر العامود المطلوب للعمليه </label>
-            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations"
+            <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperationsNumbers"
               [(ngModel)]="selectedLabelChartColumnForOperation"></p-dropdown>
           </div>
         </div>
@@ -357,7 +466,7 @@
                   <!-- column will be displayed based on operation -->
                   <div class="filter-columns-select my-1">
                     <label for="chartColumn" class="text-right w-100"> اختر العامود المطلوب للعمليه </label>
-                    <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperations"
+                    <p-dropdown id="chartColumn" appendTo="body" [options]="columnsOperationsNumbers"
                       [(ngModel)]="selectedLabelChartColumnForOperation"></p-dropdown>
                   </div>
                 </div>
@@ -378,5 +487,40 @@
   </p-footer>
 </p-dialog>
 
-
 <!-- end sidenav -->
+
+<!-- text box dialog -->
+<p-dialog [(visible)]="displayDialogAddText" [rtl]="true" [style]="{width: '700px' , zIndex:999999999999999999999}"
+  class="dialog-textbox">
+  <p-header>
+    التعديل على الخط
+  </p-header>
+  <div class="dialog-content overflow-hidden">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12">
+            <p class="par-describtion-way" style="width: 350px;">يجب اختيار المكان الذى سيوضع بيه النص ويمكنك التعديل
+              على كل خصائص النص الان وحتى بعد الانشاء</p>
+          </div>
+          <div class="col-4">
+            <div class="borderWidth-columns-select mb-3">
+              <label for="borderWidthChanger" class="text-right w-100">اختر مكان النص</label>
+              <p-dropdown id="borderWidthChanger" [options]="postionOptions" [(ngModel)]="postionSelected"></p-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="editor-container p-2">
+          <angular-editor [placeholder]="'اكتب هنا ماتريد...'" [(ngModel)]="value"
+            [config]="editorConfig"></angular-editor>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" class="btn btn-success btn-sm" [disabled]="value == ''" (click)="createTextBox()">نعم</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeTextBoxDialog()">تجاهل</button>
+  </p-footer>
+</p-dialog>
