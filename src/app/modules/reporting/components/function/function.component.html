@@ -15,11 +15,10 @@
     <div class="filter-dynamic">
         <div class="filter-columns-select">
             <label for="filterColumn" class="text-right w-100">اختر الاعمدة </label>
-            <p-dropdown id="filterColumn" [options]="selectedColumn" [(ngModel)]="filterSelectedColumn"></p-dropdown>
+            <p-dropdown id="filterColumn" appendTo="body" [options]="selectedColumn" [(ngModel)]="filterSelectedColumn"></p-dropdown>
         </div>
-
         <div class="operation-select text-right my-2" *ngIf="filterOperationShow">
-            <p-multiSelect [options]="operations" [(ngModel)]="selectedfunction" >
+            <p-multiSelect [options]="operations" [(ngModel)]="selectedfunction" appendTo="body">
                 <ng-template let-selectedfunction pTemplate="selectedItems">
                     <span class="selected-item-badge" *ngIf="_selectedFunction.length == 0">اختر داله</span>
                     <span class="selected-item-badge" *ngFor="let function of selectedfunction">{{function.name}}</span>

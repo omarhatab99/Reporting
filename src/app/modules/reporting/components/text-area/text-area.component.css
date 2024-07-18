@@ -96,6 +96,7 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     min-width: 100px;
     text-align: right;
     position: relative;
+    width: max-content !important;
 }
 
 

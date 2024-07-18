@@ -12,12 +12,15 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     transition: background 0.3s linear ;
     min-width: 30px;
     min-height: 30px;
+    margin-bottom: 0px !important;
+    max-height: 300px;
+    max-width: 300px;
+
 }
 
 .image-box:hover:not(:focus) {
     background-color: #ebecf0;
 }
-
 
 .icon-container {
     position: absolute;

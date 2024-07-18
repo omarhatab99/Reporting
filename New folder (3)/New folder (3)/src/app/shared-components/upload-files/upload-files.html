@@ -1,0 +1,8 @@
+<div dir="rtl">
+    <input type="file" #file placeholder="اختر الملف" [accept]="FileAccept" (change)="uploadAttachmentFiles(file)" style="display:none;">
+    <button type="button" *ngIf="service?.newMopUserInfo?.PARAMETERS?.CRUD_OPERATION_TYPE != 'VIEW' && !isViewMode" class="btn btn-success" (click)="file.click();"> رفع الملف </button>
+    <div class="my-2">
+        <p-progressBar *ngIf="service?.newMopUserInfo?.PARAMETERS?.CRUD_OPERATION_TYPE != 'VIEW' && !isViewMode && showLoading" [value]="progress"></p-progressBar>
+    </div>
+    <app-dataGrid [dataGriadConfig]="this.grid" (gridAction)="gridAction($event)"></app-dataGrid>
+</div>

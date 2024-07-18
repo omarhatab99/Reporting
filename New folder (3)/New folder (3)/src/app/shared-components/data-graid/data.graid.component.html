@@ -1,0 +1,408 @@
+<div class="FilterByColor col-12 my-2" *ngIf="dataGriadConfig.colorsFilterArray.length>0">
+    <h6 class="mx-1 ">اختر اللون</h6>
+    <button class="PXC_felterColor shadow" (click)="clearFilterByColor()">X</button>
+    <button #btnFilter *ngFor="let item of dataGriadConfig.colorsFilterArray" class="btnFilterColor mx-1 px-1 d-block"
+        [style]="'background-color: '+(item.color==null?'white':item.color)+';'"
+        (click)="filterByColor(item,btnFilter)">{{item.header}} {{SetBtnColors(item,btnFilter)}}
+    </button>
+</div>
+<div #Rescreen class="tableCustom" DataGridEditStyle *ngIf="dataGriadConfig.visible && !maxMize">
+    <p-table dir="rtl" #table [value]="dataGriadConfig.GetItemSource()" [resizableColumns]="true"
+        [style]="{width:'100%'}" [rowExpandMode]="dataGriadConfig.rowExpandMode"
+        (onSort)="editStyleFixedRowWithTimer();"
+        (onRowSelect)="sendGridAction($event, 'selectRow', $event.data, null,0,null)"
+        (onRowUnselect)="sendGridAction($event, 'unSelectRow', $event.data, null,0,null)"
+        currentPageReportTemplate="إظهار {first} الى {last} من {{dataGriadConfig.GetItemSource().length}} مدخلات"
+        [showCurrentPageReport]="true" [paginator]="dataGriadConfig.Paginator" [rows]="dataGriadConfig.Rows_Show"
+        [columns]="dataGriadConfig.columnShowOnly" [dataKey]="dataGriadConfig.dataKey" sortMode="multiple"
+        [globalFilterFields]="dataGriadConfig.globalFilterFields"
+        [rowsPerPageOptions]="dataGriadConfig.rowsPerPageOptions" [rowHover]="true" [responsive]="true"
+        [filterDelay]="0" [scrollable]="dataGriadConfig.scrollable" [scrollHeight]="dataGriadConfig.ScrollHight"
+        [(selection)]="dataGriadConfig.SelectedRows">
+        <!-- Caption -->
+        <ng-template pTemplate="caption">
+            <div #captionElement>
+                <div *ngIf="dataGriadConfig.maxMize">
+                    <i class="e-hover2 pi pi-window-maximize" (click)="doMaxMize()"></i>
+                </div>
+                <div [class]="dataGriadConfig.HeaderStyle.backgroundHeaderClass"
+                    [style]="dataGriadConfig.HeaderStyle.backgroundHeaderStyle">
+                    <div [class]="dataGriadConfig.HeaderStyle.TextHeaderClass"
+                        [style]="dataGriadConfig.HeaderStyle.TextHeaderStyle">{{dataGriadConfig.header}}</div>
+                    <div [class]="dataGriadConfig.HeaderStyle.backgroundHeaderButtonClass"
+                        [style]="dataGriadConfig.HeaderStyle.backgroundHeaderButtonStyle">
+                        <button *ngFor="let btn of dataGriadConfig.dataGridButtonHeaders()" #button
+                            [class]="btn.classText" [style]="btn.styleText">{{btn.Header}}
+                            {{btn.setEvents(button)}}
+                        </button>
+                    </div>
+                </div>
+                <div class="p-2 my-2" style="max-width: 200px;" *ngIf="dataGriadConfig.CanShowSelectorColumns">
+                    <p-multiSelect [options]="itemSourceColumns" [(ngModel)]="itemSourceSelectColumn"
+                        (ngModelChange)="showColumn($event)" filterBy="value.Header" optionLabel="Header"
+                        dataKey="index">
+                        <ng-template let-value pTemplate="selectedItems">
+                            <div style="max-height: 100px; overflow: auto;" dir="rtl" *ngFor="let val of value"
+                                class="ui-multiselected-item-token ui-corner-all">
+                                <span> {{val.Header}}</span>
+                            </div>
+                            <span *ngIf="!value || value.length === 0"
+                                class="ui-multiselected-empty-token ui-corner-all">اختر من القائمة</span>
+                        </ng-template>
+                        <ng-template let-item pTemplate="item">
+                            <div dir="rtl" class="d-flex align-items-center">
+                                <span> {{item.value.Header}}</span>
+                            </div>
+                        </ng-template>
+                    </p-multiSelect>
+                </div>
+                <div>
+                    <Button *ngIf="dataGriadConfig.AllowAddNew" class="btn btn-primary m-2 px-2"
+                        style="font-weight: bold; font-size: 16px;" (click)="AddNew()">اضافة جديد</Button>
+                </div>
+                <div class="p-mb-2 p-mt-2 p-fluid p-col-10 my-2" *ngIf="dataGriadConfig.CanExportExcel">
+                    <button type="button" pButton pRipple icon="pi pi-file-excel"
+                        class="p-button-success p-mr-2 grid-button" pTooltip="XLS" tooltipPosition="bottom"
+                        (click)="dataGriadConfig.exportExcel()"></button>
+                </div>
+
+                <div class="ui-table-globalfilter-container" *ngIf="dataGriadConfig.CanFilterGlobal ">
+                    <input pInputText type="text" #serchGl (input)="dataGriadConfig.SearchControl(serchGl)"
+                        placeholder="بحث" style="width: 100%;" />
+                </div>
+            </div>
+
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup #columnsElement>
+                <col style="width: 80px;" *ngIf="dataGriadConfig.CanReOrder">
+                <col style="width: 70px;" *ngIf="dataGriadConfig.dataGridChildren.length>0">
+                <col style="width: 50px;" *ngIf="dataGriadConfig.CanSelectAllRow">
+                <col *ngFor="let column of columns;" [style]="{width:column.Width+'px'}">
+                <col [style]="{width:dataGriadConfig.CanCurdOperationWidth+10+'px'}"
+                    *ngIf="dataGriadConfig.CanCurdOperation">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+
+            <tr *ngFor="let row of dataGriadConfig.hasColumnWithMarge;let dx=index;">
+                <th #th *ngFor="let header of row.headers;">
+                    <div class="d-flex align-items-center justify-content-center">
+                        {{getLabelName(header,th)}}
+                    </div>
+                </th>
+            </tr>
+
+            <tr #tr (mouseup)="dataGriadConfig.mousUpResizeSelect(Rescreen)"
+                (mousemove)="dataGriadConfig.mousMoveResizeSelect($event,Rescreen)">
+                <th *ngIf="dataGriadConfig.CanReOrder" class="text-center">
+                    <i class="e-hover2 pi pi-refresh" (click)="reOrderFresh()"></i>
+                </th>
+                <th *ngIf="dataGriadConfig.dataGridChildren.length>0">
+                </th>
+                <th *ngIf="dataGriadConfig.CanSelectAllRow">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th *ngFor="let column of columns; let i=index"
+                    [style]="{width:column.Width + 'px',position: 'relative'}">
+                    <div *ngIf="!column.canSort" style="padding: 2px; text-align: center;">
+                        {{column.Header}}
+                    </div>
+                    <div [pSortableColumn]="column.Name" *ngIf="column.Name!='' && column.canSort "
+                        style="padding: 2px; text-align: center;">
+                        {{column.Header}}
+                        <p-sortIcon [field]="column.Name"></p-sortIcon>
+                    </div>
+                    <div *ngIf="column.Type=='checkbox' && column.canSelectAll"
+                        style="padding: 2px; text-align: center; ">
+                        <span>تحديد الجميع</span>
+                        <p-checkbox ngClass="px-2" (onChange)="column.selectAllValue($event)"></p-checkbox>
+                    </div>
+                    <div *ngIf="column.FilterType==3 "
+                        style="width: 100%; height: 100%; text-align: center;padding: 2px;">
+                        <span>تصفية</span>
+                        <p-triStateCheckbox ngClass="p-2" #FCheck
+                            (onChange)="reFilter(table,$event,column,table)"></p-triStateCheckbox>
+                        {{relateFilterElementWithColumn(column,FCheck)}}
+                    </div>
+                    <div *ngIf="column.FilterType==2 " style="text-align: center; width: 100%;  ">
+                        <div dir="rtl" class="d-flex justify-content-center align-items-center w-100">
+                            <app-combo-box [ConfigComboBox]="column.ConfigComboBox" #SelectCombo
+                                (EventSelectChangeEmitter)="sendGridAction($event, 'selectItemFilter', null, column,-1);reFilter(table,$event,column,table)"></app-combo-box>
+                            {{relateFilterElementWithColumn(column,SelectCombo)}}
+                        </div>
+                    </div>
+                    <div *ngIf="column.FilterType==5 " style="text-align: center; width: 100%; ">
+                        <div class="row">
+                            <div class="col-11 py-1 ">
+                                <input #start pInputText type="number" placeholder="من" style="width: 100%;"
+                                    (input)="reFilter(start,column,end,'start')" />
+                            </div>
+                            <div class="col-11 py-1 ">
+                                <input #end pInputText type="number" placeholder="الي"
+                                    (input)="reFilter(table,start,column,end)" style="width: 100%;" />
+                            </div>
+                            {{relateFilterElementWithColumn(column,start,end)}}
+                        </div>
+                    </div>
+                    <div *ngIf="column.FilterType==1" style="width: 100%; height: 100%; text-align: center;">
+                        <input pInputText type="text" #SearchInput placeholder="بحث"
+                            (input)="reFilter(table,$event,column,table)" style="width: 100%;" />
+                        {{relateFilterElementWithColumn(column,SearchInput)}}
+                    </div>
+                    <div *ngIf="column.FilterType==4" style="width: 100%; height: 100%; text-align: center;">
+                        <div class="row m-0 w-100" style="padding: 0px;">
+                            <div class="col-12 row" style="padding: 0px; ">
+                                <div class="col-4" style="padding: 0px; text-align: center;">
+                                    <span>من</span>
+                                </div>
+                                <div class="col-8" style="padding: 0px;">
+                                    <app-DateTime #dateStart [DateConfig]="column.DateConfigFilterStart"
+                                        (SelectedDate)="reFilter(table,dateStart,column,dateStart,'start')"></app-DateTime>
+                                </div>
+                            </div>
+                            <div class="col-12 row" style="padding: 0px;">
+                                <div class="col-4" style="padding: 0px; text-align: center;">
+                                    <span>الي</span>
+                                </div>
+                                <div class="col-8" style="padding: 0px;">
+                                    <app-DateTime #dateEnd [DateConfig]="column.DateConfigFilterEnd"
+                                        (SelectedDate)="reFilter(table,dateEnd,column,dateEnd)"></app-DateTime>
+                                </div>
+
+                            </div>
+                            {{relateFilterElementWithColumn(column,dateStart,dateEnd)}}
+                        </div>
+                    </div>
+                    <div (mousedown)="dataGriadConfig.TargetResize(column)"
+                        (mousedown)="dataGriadConfig.mousDowinResizeSelect($event,Rescreen)" class="ResizeLine">
+                    </div>
+                </th>
+                <th *ngIf="dataGriadConfig.CanCurdOperation">
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #bodyTable pTemplate="body" let-expanded="expanded" let-item let-index="rowIndex">
+            <tr #tr2 *ngIf="item.__row.visible&& item.__header==undefined" style="margin-top: 10px;">
+                {{editStyleAndRelateElementToRow(tr2,index,item)}}
+                <!-- {{dataGriadConfig.renderItemSource(item,index)}} -->
+                <td *ngIf="dataGriadConfig.CanReOrder">
+                    <!-- <i class="pi pi-bars" style="display: flex; justify-content: center;" pReorderableRowHandle></i> -->
+                    <div class="row" style="text-align: center;">
+                        <i class="e-hover2 col-6 pi pi-angle-double-up" (click)="upRowDouble(item.__row)"></i>
+                        <i class="e-hover2 col-6 pi pi-arrow-circle-up" (click)="upRow(item.__row)"></i>
+                        <i class="e-hover2 col-6 my-1 pi pi-angle-double-down" (click)="downRowDouble(item.__row)"></i>
+                        <i class="e-hover2 col-6 my-1 pi pi-arrow-circle-down" (click)="downRow(item.__row)"></i>
+                    </div>
+                </td>
+                <td *ngIf="dataGriadConfig.dataGridChildren.length>0">
+                    <button #OpenChild
+                        (click)="sendGridAction($event,expanded?'close': 'open',item,null,item.__row.rowRank);selectExpend(item,expanded);"
+                        [class]="expanded?'btn btn-primary  pi pi-minus rounded-circle': 'btn btn-primary pi pi-plus rounded-circle' "
+                        [pRowToggler]="item">
+                    </button>
+                </td>
+                <td *ngIf="dataGriadConfig.CanSelectAllRow">
+                    <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                </td>
+                <td *ngFor="let cell of item.__row.cells; let i=index" pEditableColumn class="position-relative">
+                    <div *ngIf="cell.visible" class="d-flex justify-content-center align-items-center"
+                        [style]="{height:dataGriadConfig.hasColumnWithMarge.length==0?item.__row.MaxRowHeight:'100px'}">
+                        <input *ngIf="cell.Type=='text'" [disabled]="cell.disable" class="styleInputText"
+                            (keydown)="sendGridAction($event, 'keydown', item, cell.column,index,cell)"
+                            (input)="sendGridAction($event, 'input', item, cell.column,index,cell)"
+                            (change)="sendGridAction($event, 'change', item, cell.column,index,cell)"
+                            (keyup)="sendGridAction($event, 'keyup', item, cell.column,index,cell)"
+                            (ngModelChange)="sendGridAction($event, 'ngModelChange', item, cell.column,index,cell)"
+                            type="text" [(ngModel)]="cell.Value" />
+
+                        <input *ngIf="cell.Type=='file'" [disabled]="cell.disable" class="styleInputText"
+                            (keydown)="sendGridAction($event, 'keydown', item, cell.column,index,cell)"
+                            (input)="sendGridAction($event, 'input', item, cell.column,index,cell)"
+                            (change)="sendGridAction($event, 'change', item, cell.column,index)"
+                            (keyup)="sendGridAction($event, 'keyup', item, cell.column,index,cell)"
+                            (ngModelChange)="sendGridAction($event, 'ngModelChange', item, cell.column,index,cell)"
+                            type="file" [(ngModel)]="cell.Value" />
+
+                        <!-- <input *ngIf="cell.Type=='number'" [disabled]="cell.disable"
+                            class="styleInputText HideArrowNumber" value="0"
+                            (keydown)="sendGridAction($event, 'keydown', item, cell.column,index,cell)"
+                            (input)="sendGridAction($event, 'input', item, cell.column,index,cell)"
+                            (change)="sendGridAction($event, 'change', item, cell.column,index,cell)"
+                            (keyup)="sendGridAction($event, 'keyup', item, cell.column,index,cell)"
+                            (ngModelChange)="sendGridAction($event, 'ngModelChange', item, cell.column,index,cell)"
+                            type="number" [(ngModel)]="cell.Value" /> -->
+
+                        <p-inputNumber #number *ngIf="cell.Type=='number'" [disabled]="cell.disable"
+                            [(ngModel)]="cell.Value" value="0"
+                            (keydown)="sendGridAction($event, 'keydown', item, cell.column,index,cell)"
+                            (input)="sendGridAction($event, 'input', item, cell.column,index,cell)"
+                            (change)="sendGridAction($event, 'change', item, cell.column,index,cell)"
+                            (ngModelChange)="sendGridAction({event:$event,oldValue:cell.oldValue}, 'keyup', item, cell.column,index,cell);EditShowValue(number,cell.Value,$event)"></p-inputNumber>
+
+                        <input *ngIf="cell.Type=='password'" [disabled]="cell.disable" class="styleInputText"
+                            (keydown)="sendGridAction($event, 'keydown', item, cell.column,index,cell)"
+                            (input)="sendGridAction($event, 'input', item, cell.column,index,cell)"
+                            (change)="sendGridAction($event, 'change', item, cell.column,index,cell)"
+                            (keyup)="sendGridAction($event, 'keyup', item, cell.column,index,cell)"
+                            (ngModelChange)="sendGridAction($event, 'ngModelChange', item, cell.column,index,cell)"
+                            type="password" [(ngModel)]="cell.Value" />
+
+                        <input *ngIf="cell.Type=='tel'" [disabled]="cell.disable" class="styleInputText"
+                            (keydown)="sendGridAction($event, 'keydown', item, cell.column,index,cell)"
+                            (input)="sendGridAction($event, 'input', item, cell.column,index,cell)"
+                            (change)="sendGridAction($event, 'change', item, cell.column,index,cell)"
+                            (keyup)="sendGridAction($event, 'keyup', item, cell.column,index,cell)"
+                            (ngModelChange)="sendGridAction($event, 'ngModelChange', item, cell.column,index,cell)"
+                            type="tel" [(ngModel)]="cell.Value" />
+
+                        <textarea *ngIf="cell.Type=='textarea'" rows="3" class="styleInputText"
+                            [disabled]="cell.disable" style="text-align: start; font-size: 12px;"
+                            [(ngModel)]="cell.Value"></textarea>
+
+                        <button *ngIf="cell.Type=='button'"
+                            (click)="sendGridAction($event, 'click', item, cell.column,index,cell)"
+                            [class]="cell.column.buttonConfig.class"
+                            [style]="cell.column.buttonConfig.style">{{cell.column.Header}}</button>
+
+                        <div *ngIf="cell.Type=='buttons'">
+                            <div *ngFor="let btn of cell.buttons; let dx=index;" class="d-inline-block mx-1">
+                                <button *ngIf="btn.visible"
+                                    (click)="sendGridAction($event, 'click',{item:item,btn:btn,index:dx}, cell.column,index,cell)"
+                                    [class]="btn.class" [style]="btn.style">{{btn.Header}}</button>
+                            </div>
+                        </div>
+
+
+                        <div *ngIf="cell.Type=='lable' && cell.showAsDateWithFormate==''" class="styleInputText"
+                            [style]="{'text-align': 'center',border: '0px', color: 'inherit',height:dataGriadConfig.hasColumnWithMarge.length==0?'100%':'100px',overflow:'auto'}">
+                            {{editShowValue(cell.Value)}}
+                            <table class="table table-dark my-3" *ngIf="result">
+                                <tr *ngFor="let item of cell.Value.split('&');let dx=index;">
+                                    <td>
+                                        {{item}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <label *ngIf="cell.Type=='lable' && cell.showAsDateWithFormate!=''" class="styleInputText"
+                            style="text-align: center; border: 0px; color: inherit;">
+                            {{cell.Value|date:cell.showAsDateWithFormate}}
+                        </label>
+                        <p-inputSwitch *ngIf="cell.Type=='checkbox'" [(ngModel)]="cell.Value"
+                            [disabled]="cell.disable"></p-inputSwitch>
+
+                        <div dir="rtl" *ngIf="cell.Type=='comboBox' "
+                            class="d-flex justify-content-center align-items-center w-100">
+                            <app-combo-box [ConfigComboBox]="cell.ConfigComboBox"
+                                (EventSelectChangeEmitter)="sendGridAction($event, 'selectItem', item, cell.column,index,cell);"></app-combo-box>
+                        </div>
+
+                        <div #Custom *ngIf="cell.Type=='Element'" class="d-flex justify-content-center">
+                            {{dataGriadConfig.GenratCustomObject(Custom,cell.column,item,index)}}
+                        </div>
+
+                        <div class="w-100" *ngIf="cell.Type=='date'">
+                            <app-DateTime [DateConfig]="cell.column.DateConfig" [SelectDate]="cell.Value"
+                                (SelectedDate)="cell.Value=$event"
+                                [disable]="item.__row.cells[i].disable"></app-DateTime>
+                        </div>
+
+                        <div class="w-100 p-2 d-flex justify-content-center"
+                            style="height: 50px !important; width: 50PX I !important;" *ngIf="cell.Type=='image'">
+                            <app-ImagePreview
+                                [images]="[{  alt: '',itemImageSrc: cell.Value,thumbnailImageSrc: cell.Value,titel: ''}]"
+                                ClassStyle="col-12" style="display: contents;"></app-ImagePreview>
+                        </div>
+
+                    </div>
+                    <div *ngIf="cell.loadCell" class="placeCellLoad">
+                        <img src="/assets/img/photos/load.gif" style="width: 100%;height: 100%; text-align: center;"
+                            alt="">
+                        <br />
+                        <span style="width: 100%;text-align: center;">جار التحميل...</span>
+                    </div>
+                </td>
+                <td *ngIf="dataGriadConfig.CanCurdOperation">
+
+                </td>
+            </tr>
+            <tr *ngIf="item.__header!=undefined && item.__total==undefined" style="background-color: white;">
+                <td style="font-weight: bold;" [colSpan]="item.__colSpan_Count">
+                    {{item.__header}}
+                </td>
+            </tr>
+            <tr *ngIf="item.__header!=undefined && item.__total!=undefined" style="background-color: white;">
+                <td [colSpan]="item.__columnNumber-1">
+
+                </td>
+                <td style="text-align: center; font-weight: bold;">
+                    {{item.__header}}
+                </td>
+                <td style="text-align: center; font-weight: bold;">
+                    {{item.__total}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns"
+            *ngIf="dataGriadConfig.dataGridChildren.length>0">
+            <tr>
+                <td [attr.colspan]="columns.length+1">
+                    <div class="p-grid p-fluid" style="font-size: inherit; padding: 20px; ">
+                        <div *ngFor="let item of dataGriadConfig.dataGridChildren let i=index">
+                            <app-dataGrid [dataGriadConfig]="rowData['__DataConfig__'+i]"
+                                (gridAction)="GridChildAction($event,item,rowData)"
+                                (addNew)="ChildAddNew(rowData)"></app-dataGrid>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="px-4 text-center">
+                {{dataGriadConfig.footer}}
+            </div>
+        </ng-template>
+    </p-table>
+    <div #fixColumnHeader class="CanCurdOperationCustomHeader" *ngIf="dataGriadConfig.CanCurdOperation"
+        (mouseup)="dataGriadConfig.mousUpResizeSelect(Rescreen)"
+        (mousemove)="dataGriadConfig.mousMoveResizeSelect($event,Rescreen)"
+        [style]="{width:dataGriadConfig.CanCurdOperationWidth+25+'px'}">
+    </div>
+    <div #fixColumn class="CanCurdOperationCustom" *ngIf="dataGriadConfig.CanCurdOperation"
+        [style]="{width:dataGriadConfig.CanCurdOperationWidth+10+'px'}">
+        <td #cTr *ngFor="let item of dataGriadConfig.GetFixedRows(BaseTable); let index=index;"
+            class="d-flex justify-content-center align-items-center CanCurdOperationCustomRow">
+            <div>
+                <div *ngFor="let btn of item.__row.CanCurdOperationWidth; let dx=index;" class="d-inline-block mx-1">
+                    <button *ngIf="btn.visible"
+                        (click)="sendGridAction($event, 'customCanCurdOperation_Click',{item:item,btn:btn,index:dx}, null,index,null)"
+                        [class]="btn.class" [style]="btn.style">{{btn.Header}}</button>
+                </div>
+                <Button *ngIf="item.__row.AllowView" class="btn btn-lg btn-info m-1 px-3 "
+                    style="font-weight: bold; font-size: 16px;"
+                    (click)="sendGridAction($event, 'view', item, null,index)">عرض</Button>
+                <Button *ngIf="item.__row.AllowAddInherit" class="btn btn-primary m-1 px-3 "
+                    style="font-weight: bold; font-size: 16px;"
+                    (click)="sendGridAction($event, 'add', item, null,index)">جديد</Button>
+                <Button *ngIf="item.__row.AllowEdit" style="font-weight: bold; font-size: 16px;"
+                    (click)="sendGridAction($event, 'update', item, null,index)"
+                    class="btn btn-warning px-3 m-1 ">تعديل</Button>
+                <Button *ngIf="item.__row.AllowDelete" class="btn btn-danger m-1 px-3 "
+                    style="font-weight: bold; font-size: 16px;"
+                    (click)="sendGridAction($event, 'delete', item, null,index)">حذف</Button>
+            </div>
+            {{editStyleRowCurdOperation(cTr,item)}}
+        </td>
+    </div>
+
+    {{LoadStyleTable(table)}}
+    <div *ngIf="dataGriadConfig.isLoading" class="loadingGrid d-flex justify-content-center align-items-center">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+    {{editStyleFixColumn()}}
+</div>
+
+<p-sidebar #sideBare [(visible)]="maxMize" [fullScreen]="true" [showCloseIcon]="false">
+
+</p-sidebar>

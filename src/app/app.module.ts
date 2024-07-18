@@ -29,7 +29,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     PrimengModule,
     ReactiveFormsModule,
     
-    
   ],
   bootstrap: [AppComponent]
 })

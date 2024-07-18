@@ -22,24 +22,26 @@
     [reorderableColumns]="true" [responsive]="true" selectionMode="single" [(selection)]="selectedReport">
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th *ngFor="let col of columns" class="text-center" [pSortableColumn]="col.field" pResizableColumn
-          pReorderableColumn [style.padding]="table.cellPadding+'px'" [style.fontSize]="table.thFontSize+'px'">
-          {{col.header}}
-          <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order"
-            ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+        <th *ngFor="let col of columns" #tableTheading class="text-center" [pSortableColumn]="col.field" pResizableColumn
+          pReorderableColumn [style.padding]="table.cellPadding+'px'" [style.fontSize]="table.thFontSize+'px'"  (contextmenu)="onContextMenu($event , tableTheading , col)">
+          <p class="icon-sorting-fixed">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </p>
         </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
       <tr [pReorderableRow]="index" [pSelectableRow]="rowData">
-        <td *ngFor="let col of columns" class="text-center" pReorderableRowHandle [style.padding]="table.padding+'px'"
+        <td *ngFor="let col of columns" #tableData id="column-{{col.field}}" class="text-center" pReorderableRowHandle [style.padding]="table.padding+'px'"
           [style.fontSize]="table.tdFontSize+'px'">
           <div *ngIf="col.field == 'image'; else colData">
-            <img [src]="rowData[col.field]" alt="img" width="50">
+            <img [src]="rowData[col.field]" alt="img" width="50" style="width: 50px; opacity: 1 !important; display: inline-block;">
           </div>
-          <ng-template #colData>{{rowData[col.field]}}</ng-template>
-
+          <ng-template #colData>{{rowData[col.field]}}
+          </ng-template>
         </td>
       </tr>
     </ng-template>
@@ -127,7 +129,7 @@
           <div class="col-12">
             <div class="table-collabse-determine my-2">
               <label for="showColumns" class="text-right w-100">اختر الاعمدة المراد عرضها</label>
-              <p-multiSelect id="showColumns" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+              <p-multiSelect id="showColumns" [options]="cols" appendTo="body" [(ngModel)]="selectedColumns" optionLabel="header"
                 selectedItemsLabel="{0} عدد الاعمدة" [style]="{minWidth: '200px'}" defaultLabel="اختر الاعمدة">
               </p-multiSelect>
             </div>
@@ -155,6 +157,103 @@
       </div>
     </div>
 
+
   </div>
 
 </ng-template>
+<context-menu #tableContext (close)="afterContextMenuClose()" class="testaa"  >
+  <ng-template contextMenuItem  [subMenu]="saySubMenu">
+    <p class="m-0 p-0">
+      تظليل الخلفيه 
+    </p>
+  </ng-template>
+
+  <div class="sub-menu">
+    <context-menu #saySubMenu (close)="afterContextMenuClose()">
+
+      <ng-template contextMenuItem (execute)="highlightCell($event.item  , 'onlyCell')" [enabled]="enableContextItem">
+  
+        <div class="p-0 m-0 position-relative ">
+          <p class="p-0 m-0" (click)="handleClickedColor()">
+            تظليل الخليه فقط
+          </p>
+          <div class="color-select-span">
+            <p-colorPicker [(ngModel)]="selectedColorOnlyCell"></p-colorPicker> 
+          </div>
+        </div>
+  
+  
+  
+      </ng-template>
+      <ng-template contextMenuItem (execute)="highlightCell($event.item  , 'allRowWithoutHighlight')"  [enabled]="enableContextItem">
+        <div class="p-0 m-0 position-relative">
+          <p class="p-0 m-0" (click)="handleClickedColor()">
+            تظليل الصف بالكامل ماعدا المظلله
+          </p>
+          <div class="color-select-span">
+            <!-- {{test(testc)}} -->
+            <p-colorPicker appendTo="body" [(ngModel)]="selectedColorRowWithoutCell" ></p-colorPicker>
+  
+          </div>
+        </div>
+      </ng-template>
+      <ng-template contextMenuItem (execute)="highlightCell($event.item  , 'allRow')" [enabled]="enableContextItem">
+        <div class="p-0 m-0 position-relative">
+          <p class="p-0 m-0" (click)="handleClickedColor()">
+            تظليل الصف بالكامل
+          </p>
+          <div class="color-select-span">
+            <!-- {{test(testc)}} -->
+            <p-colorPicker [(ngModel)]="selectedColorAllRow"></p-colorPicker>
+  
+          </div>
+        </div>
+      </ng-template>
+      <ng-template contextMenuItem (execute)="highlightCell($event.item  , 'allColumn')" [enabled]="enableContextItem">
+        <div class="p-0 m-0 position-relative">
+          <p class="p-0 m-0" (click)="handleClickedColor()">
+            تظليل العامود بالكامل
+          </p>
+          <div class="color-select-span">
+            <!-- {{test(testc)}} -->
+            <p-colorPicker [(ngModel)]="selectedColorAllColumn"></p-colorPicker>
+  
+          </div>
+        </div>
+      </ng-template>
+  
+      <context-menu #selectedColorSubMenu>
+        <ng-template contextMenuItem (execute)="highlightCell($event.item  , 'onlyCell')">
+          تظليل باللون الاصفر
+      </ng-template>
+        <ng-template contextMenuItem [enabled]="false">
+          اختيار لون التظليل
+        </ng-template>
+      </context-menu>
+    </context-menu>
+  </div>
+
+  <ng-template contextMenuItem>
+    <p class="m-0 p-0">
+      اضافه عمليه
+    </p>
+  </ng-template>
+  <!-- <ng-template contextMenuItem (execute)="makeElementFly($event.item)">
+    <p class="m-0 p-0" [style.color]="isFlyingElement ? '#332ef6' : '#000'">
+      اجعل العنصر طائر
+    </p>
+  </ng-template>
+  <ng-template contextMenuItem (execute)="resetElement($event.item)">
+    <p class="m-0 p-0">
+      الرجوع للحاله الاصليه
+    </p>
+</ng-template>
+  <ng-template contextMenuItem (execute)="showEditTextDialog()">
+    تعديل العنصر
+  </ng-template>
+  <ng-template contextMenuItem (execute)="confirmationDeleteTextBox()">
+    حذف العنصر
+  </ng-template> -->
+</context-menu>
+
+

@@ -1,15 +1,15 @@
 <div class="text-box-container" #textBoxContainer>
-  <div class="text-box" cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag>
+  <div class="text-box" cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag [cdkDragFreeDragPosition]="dragPosition">
     <div class="movement-line" cdkDragHandle></div>
     <span class="mx-1 left-move-icon" cdkDragHandle>
       <i class="fa-solid fa-up-down-left-right"></i>
     </span>
-    <div class="d-flex align-items-center parentNodeText">
+    <div class="d-flex align-items-center parentNodeText" #textBox (contextmenu)="onContextMenu($event, textBox)">
       <!-- reporting settings -->
       <div class="icon-container">
         <div class="d-flex align-items-center">
           <!-- delete element icon -->
-          <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox($event)">
+          <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox()">
             <i class="fa-solid fa-xmark"></i>
           </span>
           <!-- edit element icon -->
@@ -56,3 +56,22 @@
     </p-footer>
   </p-dialog>
 </div>
+
+<context-menu #textAreaMenu>
+  <ng-template contextMenuItem (execute)="makeElementFly($event.item)">
+    <p class="m-0 p-0" [style.color]="isFlyingElement ? '#332ef6' : '#000'">
+      اجعل العنصر طائر
+    </p>
+  </ng-template>
+  <ng-template contextMenuItem (execute)="resetElement($event.item)">
+    <p class="m-0 p-0">
+      الرجوع للحاله الاصليه
+    </p>
+</ng-template>
+  <ng-template contextMenuItem (execute)="showEditTextDialog()">
+    تعديل العنصر
+  </ng-template>
+  <ng-template contextMenuItem (execute)="confirmationDeleteTextBox()">
+    حذف العنصر
+  </ng-template>
+</context-menu>

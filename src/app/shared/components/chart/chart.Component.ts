@@ -3,6 +3,8 @@ import { chartsConfiguration } from "./chartsConfiguration";
 import { AfterContentChecked, AfterViewInit, Component, ComponentFactoryResolver, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { ConfirmationService } from 'primeng-lts/api';
 import { operationsFunction } from 'src/app/modules/reporting/enums/operation-function.enum';
+import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-chartComponent',
@@ -14,6 +16,8 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('container', { static: false }) container: ElementRef;
   @ViewChild("chartContainer") chartContainer: ElementRef;
+  @ViewChild("chartMenu") chartMenu: ContextMenuComponent;
+
   @Input() height: number = 30;
   @Input() width: number = 70;
 
@@ -26,7 +30,14 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
   displayDialogAddCharts: boolean = false;
   @Input() chartSettings: any = {};
   cols: any[];
-  constructor(private _ComponentFactoryResolver: ComponentFactoryResolver, private confirmationService: ConfirmationService) { }
+
+  isFlyingElement: boolean = false;
+  currentChartWidth:any;
+  currentChartHeight:any;
+  currentTransform:any;
+  //to reset drag transform (fixed issue)
+  dragPosition:any= {x: 0, y: 0};
+  constructor(private toasterService: ToastrService , private confirmationService: ConfirmationService , private contextMenuService: ContextMenuService) { }
 
   ngOnInit(): void {
   }
@@ -72,6 +83,10 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
   }
 
   ngAfterViewInit(): void {
+
+    this.currentChartWidth = getComputedStyle(this.chartContainer.nativeElement).getPropertyValue('width');
+    this.currentChartHeight = getComputedStyle(this.chartContainer.nativeElement).getPropertyValue('height');
+
     if (this.canvas != undefined) {
       this.chartsConfig = this.chartsConfig as chartsConfiguration;
       if (Chart.getChart(this.canvas.nativeElement) == undefined) {
@@ -98,6 +113,64 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
     }
   }
 
+
+  public onContextMenu($event: MouseEvent, item: any): void {
+    this.contextMenuService.show.next({
+      // Optional - if unspecified, all context menu components will open
+      contextMenu: this.chartMenu,
+      event: $event,
+      item: item,
+    });
+    console.log("hello");
+    console.log($event, item);
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+
+
+  makeElementFly(element: any) {
+
+    this.isFlyingElement = !this.isFlyingElement;
+    if (this.isFlyingElement) {
+      element.style.position = "absolute";
+      this.chartContainer.nativeElement.style.inset = "unset";
+    }
+    else {
+
+      this.chartContainer.nativeElement.style.margin = "0px 0px 0px 0px";
+      this.chartContainer.nativeElement.style.marginLeft = "0px";
+      this.chartContainer.nativeElement.style.marginBottom = "0px";
+      this.chartContainer.nativeElement.style.marginTop = "0px";
+      this.chartContainer.nativeElement.style.marginRight = "0px";
+      this.chartContainer.nativeElement.style.left = "0px";
+      this.chartContainer.nativeElement.style.bottom = "0px";
+      this.chartContainer.nativeElement.style.top = "0px";
+      this.chartContainer.nativeElement.style.right = "0px";
+      element.style.position = "relative";
+
+    }
+
+  }
+
+  resetElement(element:any){
+
+    //reset drag position
+    this.dragPosition = {x: 0, y: 0};
+    this.isFlyingElement = false;
+    this.chartContainer.nativeElement.style.width = this.currentChartWidth;
+    this.chartContainer.nativeElement.style.height = 'auto';
+    this.chartContainer.nativeElement.style.margin = "0px 0px 0px 0px";
+    this.chartContainer.nativeElement.style.marginLeft = "0px";
+    this.chartContainer.nativeElement.style.marginBottom = "0px";
+    this.chartContainer.nativeElement.style.marginTop = "0px";
+    this.chartContainer.nativeElement.style.marginRight = "0px";
+    element.style.position = "relative";
+
+  }
+
+
+
+
   get selectedLabelChartColumn() {
     return this.chartSettings.selectedLabelChartColumn;
   }
@@ -108,7 +181,7 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
 
 
 
-  confirmationDeleteTextBox() {
+  confirmationDeleteChart() {
     this.confirmationService.confirm({
       message: 'هل انت متاكد من حذف العنصر لن تكون قادر على استعادته',
       accept: () => {
@@ -174,6 +247,14 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
 
           this.displayDialogAddCharts = false;
         }
+        else
+        {
+          this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
+        }
+      }
+      else
+      {
+        this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
       }
     }
 
@@ -223,6 +304,14 @@ export class chartsComponent implements AfterContentChecked, AfterViewInit, OnIn
 
           this.displayDialogAddCharts = false;
         }
+        else
+        {
+          this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
+        }
+      }
+      else
+      {
+        this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
       }
     }
 

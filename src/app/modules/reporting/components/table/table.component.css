@@ -8,6 +8,18 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
   margin: 35px 0px;
 }
 
+::ng-deep .ui-table {
+  overflow: hidden;
+}
+
+::ng-deep .ui-table table {
+  table-layout:auto !important;
+}
+
+::ng-deep .ui-table-wrapper {
+  overflow: hidden;
+}
+
 .icon-container {
   position: absolute;
   opacity: 0;
@@ -197,3 +209,24 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     background-color: #faebd75c;
     padding: 15px;
   }
+
+  .icon-sorting-fixed {
+    margin: 0 0 12px;
+    display: flex;
+    justify-content: space-between;
+    direction: rtl;
+    gap: 5px;
+  }
+
+
+  .color-select-span {
+    background-color: antiquewhite;
+    position: absolute;
+    right: -35px;    
+    display: inline-block;
+    top: -24%;
+    border-radius: 0px 5px 5px 0px;
+    padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  }
+

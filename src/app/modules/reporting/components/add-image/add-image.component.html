@@ -1,15 +1,17 @@
-<div class="image-box" resizable cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag
-    [style.width]="imageWidth+'px'" #imageContainer>
+<div class="image-box" resizable cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag [cdkDragFreeDragPosition]="dragPosition"
+    [style.width]="imageWidth+'px'" #imageContainer (contextmenu)="onContextMenu($event, imageContainer)">
     <div class="movement-line" cdkDragHandle></div>
-    <span class="mx-1 left-move-icon" cdkDragHandle>
-        <i class="fa-solid fa-up-down-left-right"></i>
-    </span>
+    <div class="move-left position-relative">
+        <span class="mx-1 left-move-icon" cdkDragHandle>
+            <i class="fa-solid fa-up-down-left-right"></i>
+        </span>
+    </div>
     <div class="d-flex align-items-center parentNodeText w-100 h-100">
         <!-- reporting settings -->
         <div class="icon-container">
             <div class="d-flex align-items-center">
                 <!-- delete element icon -->
-                <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox()">
+                <span class="mx-1 element-remove-icon" (click)="confirmationDeleteImage()">
                     <i class="fa-solid fa-xmark"></i>
                 </span>
                 <!-- edit element icon -->
@@ -31,7 +33,7 @@
 </div>
 
 <div class="dialog-container" #imageDialog>
-    <p-dialog [(visible)]="displayDialogChangeImage" [style]="{width: '600px' , zIndex:999999999999999999999}"
+    <p-dialog [(visible)]="displayDialogChangeImage" closeIcon="" [style]="{width: '600px' , zIndex:999999999999999999999}"
         (onHide)="dialogAddImageHide()">
         <p-header>
             تغيير الصورة
@@ -52,7 +54,8 @@
                 </div>
                 <div class="col-12">
                     <div class="preiview-container">
-                        <img [src]="previewSrc" #priview class="preiview-image" alt="preview image" width="160px" height="120px">
+                        <img [src]="previewSrc" #priview class="preiview-image" alt="preview image" width="160px"
+                            height="120px">
                     </div>
                 </div>
             </div>
@@ -63,3 +66,23 @@
         </p-footer>
     </p-dialog>
 </div>
+
+<context-menu #imageMenu>
+    <ng-template contextMenuItem (execute)="makeElementFly($event.item)">
+        <p class="m-0 p-0" [style.color]="isFlyingElement ? '#332ef6' : '#000'">
+            اجعل العنصر طائر
+        </p>
+
+    </ng-template>
+    <ng-template contextMenuItem (execute)="resetElement($event.item)">
+        <p class="m-0 p-0">
+          الرجوع للحاله الاصليه
+        </p>
+    </ng-template>
+    <ng-template contextMenuItem (execute)="showAddImageDialog()">
+        تعديل العنصر
+    </ng-template>
+    <ng-template contextMenuItem (execute)="confirmationDeleteImage()">
+        حذف العنصر
+    </ng-template>
+</context-menu>

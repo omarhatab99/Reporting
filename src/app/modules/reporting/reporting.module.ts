@@ -23,12 +23,18 @@ import { GetObsDataPipe } from './pipes/get-obs-data.pipe';
 import {NgxPrinterModule} from 'ngx-printer'
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ToastrModule } from 'ngx-toastr';
+import {NgxPrintModule} from 'ngx-print';
+import { NgxPrintElementModule } from 'ngx-print-element';
+import {ContextMenuModule} from 'ngx-contextmenu';
+import { ExcelReportComponent } from './components/excel-report/excel-report.component';
+import { ColorBoxComponent } from './components/color-box/color-box.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   declarations: [ReportComponent, 
     EditableTextComponent, TextAreaComponent,
      TextEditorDialogComponent, TableComponent, AddFilterComponent,
-      chartsComponent, AddImageComponent, ImageComponent, AggregateComponent, FunctionComponent, GetObsDataPipe
+      chartsComponent, AddImageComponent, ImageComponent, AggregateComponent, FunctionComponent, GetObsDataPipe, ExcelReportComponent, ColorBoxComponent
     ],
   imports: [
     CommonModule,
@@ -41,12 +47,16 @@ import { ToastrModule } from 'ngx-toastr';
     DragDropModule,
     ReactiveFormsModule,
     AngularElementsResizerModule,
+    NgxPrintModule,
+    NgxPrintElementModule,
+    ColorPickerModule,
     ToastrModule.forRoot({
       timeOut: 10000,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),
-    NgxPrinterModule.forRoot({printOpenWindow: true}),
+    ContextMenuModule.forRoot(),
+    NgxPrinterModule,
     
   ]
 })

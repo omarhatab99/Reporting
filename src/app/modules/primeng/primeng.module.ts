@@ -21,6 +21,9 @@ import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {SidebarModule} from 'primeng-lts/sidebar';
 import {AccordionModule} from 'primeng-lts/accordion';
 import {EditorModule} from 'primeng-lts/editor';
+import {InputSwitchModule} from 'primeng-lts/inputswitch';
+import {ColorPickerModule} from 'primeng-lts/colorpicker';
+
 @NgModule({
   exports: [
     TableModule,
@@ -42,7 +45,9 @@ import {EditorModule} from 'primeng-lts/editor';
     RadioButtonModule,
     SidebarModule,
     AccordionModule,
-    EditorModule
+    EditorModule,
+    InputSwitchModule,
+    ColorPickerModule
   ],
   entryComponents: [
     TextEditorDialogComponent

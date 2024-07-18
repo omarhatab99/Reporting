@@ -1,0 +1,112 @@
+.TapeItemAriea {
+    direction: ltr;
+    background: white;
+    margin: 10px 0px;
+    border-left: solid 5px #5bc0de;
+}
+
+.TapeHeaderItem {
+    border: solid 1px #5bc0de;
+    box-shadow: 2px 2px 2px #8e9091;
+    text-align: center;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 10px 0px;
+    transition: all 0.5s;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.TapeHeaderLine {
+    text-align: center;
+}
+
+.scrolEl {
+    /* height: 90vh; */
+    overflow: auto;
+}
+
+.TapeBodyItem {
+    /* height: 90vh; */
+    padding: 20px;
+}
+
+.TapBody {
+    display: none;
+}
+
+.TapBody-select {
+    display: block;
+}
+
+.TapeHeaderItem-select {
+    border: solid 1px #5bc0de;
+    box-shadow: 2px 2px 2px #8e9091;
+    text-align: center;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 10px 0px;
+    background-color: #5bc0de;
+    color: white;
+    transition: all 0.5s;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.text-center {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+@media (min-width:360px) {
+
+    .TapeHeaderItem,
+    .TapeHeaderItem-select {
+        font-size: 8px;
+    }
+}
+
+@media (min-width:576px) {
+    .GlStleyFont {
+        font-size: 10px;
+    }
+
+    .TapeHeaderItem,
+    .TapeHeaderItem-select {
+        font-size: 8px;
+    }
+}
+
+@media (min-width:768px) {
+    .GlStleyFont {
+        font-size: 12px;
+    }
+
+    .TapeHeaderItem,
+    .TapeHeaderItem-select {
+        font-size: 10px;
+    }
+}
+
+@media (min-width:992px) {
+    .GlStleyFont {
+        font-size: 14px;
+    }
+
+    .TapeHeaderItem,
+    .TapeHeaderItem-select {
+        font-size: 12px;
+    }
+}
+
+@media (min-width:1200px) {
+    .GlStleyFont {
+        font-size: 16px;
+    }
+
+    .TapeHeaderItem,
+    .TapeHeaderItem-select {
+        font-size: 14px;
+    }
+}

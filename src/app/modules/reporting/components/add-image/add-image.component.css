@@ -6,17 +6,17 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     background-color: transparent;
     cursor: pointer;
     display: inline-block;
-    position: absolute;
+    position: relative;
     min-width: fit-content;
     z-index: 10;
     transition: background 0.3s linear ;
     min-width: 30px;
     min-height: 30px;
+    margin-bottom: 0px !important;
+    max-height: 300px;
+    max-width: 300px;
     width: 100px;
     height: 100px;
-    left: 45%;
-    top: 45%;
-    z-index: 15;
 }
 
 .image-box:hover:not(:focus) {

@@ -1,4 +1,4 @@
-<div class="charts-container-component" cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDrag #chartContainer>
+<div class="charts-container-component"  #chartContainer cdkDragBoundary=".mat-card-content-report , .mat-card-header-report" cdkDrag [cdkDragFreeDragPosition]="dragPosition" (contextmenu)="onContextMenu($event, chartContainer)">
     <div class="charts-box">
         <div class="movement-line" cdkDragHandle></div>
         <span class="mx-1 left-move-icon" cdkDragHandle>
@@ -9,7 +9,7 @@
             <div class="icon-container">
                 <div class="d-flex align-items-center">
                     <!-- delete element icon -->
-                    <span class="mx-1 element-remove-icon" (click)="confirmationDeleteTextBox()">
+                    <span class="mx-1 element-remove-icon" (click)="confirmationDeleteChart()">
                         <i class="fa-solid fa-xmark"></i>
                     </span>
                     <!-- edit element icon -->
@@ -141,3 +141,25 @@
       <button type="button" class="btn btn-danger btn-sm" (click)="closeChartDialog()">تجاهل</button>
     </p-footer>
   </p-dialog>
+
+  <context-menu #chartMenu>
+    <ng-template contextMenuItem (execute)="makeElementFly($event.item)">
+      <p class="m-0 p-0" [style.color]="isFlyingElement ? '#332ef6' : '#000'">
+        اجعل العنصر طائر
+      </p>
+  
+    </ng-template>
+
+    <ng-template contextMenuItem (execute)="resetElement($event.item)">
+        <p class="m-0 p-0">
+          الرجوع للحاله الاصليه
+        </p>
+    </ng-template>
+
+    <ng-template contextMenuItem (execute)="showDialogAddChart()">
+      تعديل العنصر
+    </ng-template>
+    <ng-template contextMenuItem (execute)="confirmationDeleteChart()">
+      حذف العنصر
+    </ng-template>
+  </context-menu>

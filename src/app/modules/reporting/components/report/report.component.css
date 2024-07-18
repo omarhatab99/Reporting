@@ -1,12 +1,30 @@
-
-
-::ng-deep .ui-sidebar{
+::ng-deep .ui-sidebar {
     overflow: auto !important;
 }
 
-div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , option , ul , li ::ng-deep .ui-dropdown-item ,
- ::ng-deep .ui-dropdown-items , ::ng-deep .ui-dropdown-label , ::ng-deep .ui-multiselect-label , ::ng-deep .ng-star-inserted , ::ng-deep .ui-confirmdialog-message{
-    font-family: "Cairo", sans-serif;
+div,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+small,
+a,
+button,
+select,
+option,
+ul,
+li ::ng-deep .ui-dropdown-item,
+::ng-deep .ui-dropdown-items,
+::ng-deep .ui-dropdown-label,
+::ng-deep .ui-multiselect-label,
+::ng-deep .ng-star-inserted,
+::ng-deep .ui-confirmdialog-message {
+    font-family: "Cairo", sans-serif !important;
+    letter-spacing: 0px !important;
 }
 
 .toggle-reporting-drawer {
@@ -35,14 +53,14 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     cursor: pointer;
     text-decoration: none;
     color: #000;
-  }
+}
 
-  .reporting-sidenav .collapse-content {
+.reporting-sidenav .collapse-content {
     border: 1px solid #e7e7e7;
-  }
+}
 
 
-  .reporting-sidenav .report-tools .add-text-box {
+.reporting-sidenav .report-tools .add-text-box {
     display: inline-block;
     padding: 5px 10px;
     border: 1px dashed #555;
@@ -77,8 +95,13 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     width: 400px;
 }
 
+.reporting-container .card {
+    border: none !important;
+}
 
-.reporting-container .card-header-report , .card-footer-report {
+
+.reporting-container .card-header-report,
+.card-footer-report {
     padding: 10px 15px;
     border: 1px dashed #a0a0a0;
     border-radius: 10px;
@@ -90,7 +113,7 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
 .reporting-container .card-content-report {
     border: 1px dashed #a0a0a0;
     border-radius: 10px;
-    min-height: 500px;
+    /* min-height: 500px; */
     direction: ltr;
     position: relative;
     padding: 20px;
@@ -106,14 +129,13 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     border-color: transparent;
     padding: 5px;
     box-shadow: transparent 0px 0px 0px 1px;
-    transition: background 0.3s linear ;
+    transition: background 0.3s linear;
     resize: none;
     direction: rtl;
     overflow: auto;
-    overflow-y: hidden;  
+    overflow-y: hidden;
     border-radius: 3px;
     min-width: 50px;
-    width: fit-content;
     text-align: right;
     position: relative;
 
@@ -138,7 +160,9 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
 }
 
 
-:host::ng-deep app-text-area {position: relative;}
+:host::ng-deep app-text-area {
+    position: relative;
+}
 
 
 /* end reporting container */
@@ -164,14 +188,16 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     margin-top: 1px;
     padding: 10px;
 }
+
 /*end image box*/
 
 /*dialog*/
-::ng-deep .ui-dialog-footer	 {
+::ng-deep .ui-dialog-footer {
     direction: rtl;
 }
+
 /* start charts dialog */
-.charts-container-dialog{
+.charts-container-dialog {
     background-color: antiquewhite;
     height: auto;
     overflow: auto;
@@ -216,7 +242,7 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
 
 .dialog-content .charts-settings {
     background-color: antiquewhite;
-     padding: 20px; 
+    padding: 20px;
 }
 
 ::ng-deep .ui-dropdown {
@@ -245,7 +271,7 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     width: 150px !important;
 }
 
-::ng-deep .angular-editor-wrapper .angular-editor-textarea{
+::ng-deep .angular-editor-wrapper .angular-editor-textarea {
     min-height: 200px !important;
     resize: none !important;
     outline: none !important;
@@ -253,6 +279,7 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     direction: rtl !important;
     text-align: right !important;
 }
+
 ::ng-deep .angular-editor-toolbar {
     text-align: right !important;
     direction: rtl !important;
@@ -261,16 +288,18 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
 
 /*Dialog styles*/
 ::ng-deep .ui-dialog-titlebar {
-    text-align: right;
+    text-align: right !important;
+    display: flex !important;
+    justify-content: right !important;
 }
 
-::ng-deep .ui-dialog-content{
+::ng-deep .ui-dialog-content {
     background-color: antiquewhite !important;
     overflow: hidden !important;
     text-align: right;
 }
 
-::ng-deep .ui-dialog-footer	 {
+::ng-deep .ui-dialog-footer {
     direction: rtl;
 }
 
@@ -297,7 +326,9 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     text-align: right !important;
 }
 
-.details-report-table table , th , td {
+.details-report-table table,
+th,
+td {
     border: 1px solid #999;
     padding: 15px 20px;
 }
@@ -322,7 +353,9 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     right: 0px;
 }
 
-.element-remove-icon,.element-edit-icon , .element-move-icon {
+.element-remove-icon,
+.element-edit-icon,
+.element-move-icon {
     font-size: 11px;
     width: 18px;
     height: 18px;
@@ -344,12 +377,12 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     background-color: #fe7a7a70;
 }
 
-.element-move-icon:hover{
+.element-move-icon:hover {
     background-color: #dcffd0;
     display: block;
 }
 
-.left-move-icon{
+.left-move-icon {
     width: 25px;
     height: 25px;
     background-color: antiquewhite;
@@ -368,7 +401,7 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
     cursor: pointer;
 }
 
-.details-table:hover .left-move-icon{
+.details-table:hover .left-move-icon {
     opacity: 1;
     transition: all 0.4s ease-in-out;
 }
@@ -376,5 +409,12 @@ div , p , h1 , h2 , h3 , h4 , h5 , h6 , span , small , a , button , select , opt
 .details-table:hover .icon-container {
     opacity: 1;
     transition: all 0.4s ease-in-out;
-    
 }
+
+.report-printing {
+    border: 1px solid #e4e4e4;
+    padding: 0px 10px;
+}
+
+
+  

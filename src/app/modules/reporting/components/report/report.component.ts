@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ComponentFactoryResolver, ElementRef, Input, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { DialogService } from 'primeng-lts/dynamicdialog';
 import { ReportService } from '../../services/report.service';
 import { chartsConfiguration } from 'src/app/shared/components/chart/chartsConfiguration';
@@ -16,9 +16,11 @@ import { TextAreaComponent } from '../text-area/text-area.component';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { IFooter } from '../../iterfaces/ifooter';
 import { ToastrService } from 'ngx-toastr';
-
-
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import {NgxPrintElementService } from 'ngx-print-element';
+import { IPrint } from '../../iterfaces/iprint';
+import { ContextMenuComponent } from 'ngx-contextmenu';
 
 
 @Component({
@@ -27,11 +29,17 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./report.component.css'],
   providers: [DialogService, ToastrService],
 })
-export class ReportComponent implements OnInit {
+export class ReportComponent implements OnInit{
   //containerRef to add dynamic component in report.
   @ViewChild('componentContainer', { read: ViewContainerRef }) elementsContainer!: ViewContainerRef;
   @ViewChild('componentHeader', { read: ViewContainerRef }) componentHeader!: ViewContainerRef;
   @ViewChild('componentFooter', { read: ViewContainerRef }) componentFooter!: ViewContainerRef;
+  @ViewChild('content', { read: ElementRef }) contentReport: ElementRef;
+  @ViewChild('exportPdf', { read: ElementRef }) exportPdf: ElementRef;
+  @ViewChild("cardContentReport") cardContentReport:ElementRef;
+  @ViewChild("cardHeaderReport") cardHeaderReport:ElementRef;
+  @ViewChild("cardFooterReport") cardFooterReport:ElementRef;
+  @ViewChild("basicMenu") basicMenu: ContextMenuComponent;
 
   //selected image preview in dialog
   @ViewChild("priview") priview: ElementRef;
@@ -46,10 +54,10 @@ export class ReportComponent implements OnInit {
   //used for sidenav toggle
   _displaySidebar = false;
   //objects from report content
-  header: IHeader = {} as IHeader;
-  content: IContent = {} as IContent;
+  cardHeader: IHeader = {} as IHeader;
+  cardContent: IContent = {} as IContent;
   border: IBorder = {} as IBorder;
-  footer: IFooter = {} as IFooter;
+  cardFooter: IFooter = {} as IFooter;
   //array of data used for reports
   reports: any[];
   cols: any[];
@@ -78,19 +86,75 @@ export class ReportComponent implements OnInit {
   borderSizeOptions: any;
   postionOptions: any;
   postionSelected: any = "content";
-  //constructor
-  constructor(private _ComponentFactoryResolver: ComponentFactoryResolver, private sanitizer: DomSanitizer, private printerService: NgxPrinterService, private _ReportService: ReportService, private toasterService: ToastrService) { }
 
+  printSettings:IPrint = {} as IPrint;
+  pageTypeOptions:any[] = [];
+  _enableChangeDiminsion:boolean = false;
+  //constructor
+  constructor(private _ComponentFactoryResolver: ComponentFactoryResolver,private NgxPrintElementService: NgxPrintElementService, private sanitizer: DomSanitizer, private printerService: NgxPrinterService, private _ReportService: ReportService, private toasterService: ToastrService, private renderer: Renderer2) { }
+
+  get enableChangeDiminsion(){
+    return this._enableChangeDiminsion;
+  }
+  set enableChangeDiminsion(val:boolean){
+    this._enableChangeDiminsion = val;
+
+    if(val == true) {
+      const contentHeightValue = getComputedStyle(this.cardContentReport.nativeElement).getPropertyValue('height');
+      this.cardContent.height = parseInt(contentHeightValue);
+
+      //--------------------------
+      const headerHeightValue = getComputedStyle(this.cardHeaderReport.nativeElement).getPropertyValue('height');
+      this.cardHeader.height = parseInt(headerHeightValue);
+
+      //--------------------------
+      const footerHeightValue = getComputedStyle(this.cardFooterReport.nativeElement).getPropertyValue('height');
+      this.cardFooter.height = parseInt(footerHeightValue);
+    }
+  }
+
+  onPrint1(el: ElementRef<HTMLTableElement>) {
+    const styleLayout = document.getElementById("styleCustom");
+    if(styleLayout != null){
+      document.getElementById("styleCustom").remove();
+    }
+    const printStyle = document.createElement('style');
+    printStyle.id = "styleCustom";
+    printStyle.type = 'text/css';
+    printStyle.media = 'print';
+
+    // Define the print styles
+    printStyle.textContent = `
+            @page {
+                size: A4 ${this.printSettings.layout} !important;  
+                border:1px solid #555;
+            }
+              body {
+                    zoom:${this.printSettings.zoom}% !important;
+                  }
+      `;
+
+    // Append the style element to the document head
+    document.head.appendChild(printStyle);
+
+    this.NgxPrintElementService.print(el).subscribe(() => {});
+
+
+  }
 
 
   //onInit
   ngOnInit(): void {
 
+
+    this.printSettings.layout = "portrait";
+    this.printSettings.zoom = 100;
+    
     //defaults value 
-    this.content.padding = 20;
-    this.header.height = 130;
-    this.footer.height = 80;
-    this.content.height = 500;
+    this.cardContent.padding = 20;
+    this.cardHeader.height = 0;
+    this.cardFooter.height = 0;
+    this.cardContent.height = 0;
     this.border.size = "1";
     //dateNow -- default date for report
     this.dateNow = new Date();
@@ -149,7 +213,13 @@ export class ReportComponent implements OnInit {
       { label: "العنوان", value: "header" },
       { label: "المحتوى", value: "content" },
       { label: "النهايه", value: "footer" },
-    ]
+    ];
+
+    this.pageTypeOptions = [
+      { label: "A4", value: "A4" },
+      { label: "A3", value: "A3" },
+      { label: "A5", value: "A5" },
+    ];
 
   }
 
@@ -190,6 +260,11 @@ export class ReportComponent implements OnInit {
       this.value = "";
       this.closeTextBoxDialog();
       this.toasterService.success('تم انشاء النص بنجاح', 'نجح');
+    }
+    else
+    {
+      this.toasterService.warning('حقل الكتابه لايمكن ان يكون فارغا', 'تحذير');
+
     }
 
   }
@@ -247,11 +322,28 @@ export class ReportComponent implements OnInit {
 
     if (this.selectedImageInput.nativeElement.value) {
       const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(AddImageComponent);
-      const addImageComponent = this.elementsContainer.createComponent(componentFactory);
+
+      let addImageComponent: any;
+      switch (this.postionSelected) {
+        case "header":
+          addImageComponent = this.componentHeader.createComponent(componentFactory);
+          break;
+        case "content":
+          addImageComponent = this.elementsContainer.createComponent(componentFactory);
+          break;
+        default:
+          addImageComponent = this.componentFooter.createComponent(componentFactory);
+          break;
+      }
+
       addImageComponent.instance.imageSrc = this.imageSrc;
       this.displayDialogAddImage = false;
       this.toasterService.success('تم انشاء الصورة بنجاح', 'نجح');
 
+    }
+    else
+    {
+      this.toasterService.warning('يجب اختيار صورة اولا', 'تحذير');
     }
 
 
@@ -360,6 +452,13 @@ export class ReportComponent implements OnInit {
         this.displayDialogAddCharts = false;
         this.toasterService.success('تم انشاء الرسم بنجاح', 'نجح');
       }
+      else
+      {
+        this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
+      }
+    }
+    else {
+      this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
     }
   }
 
@@ -429,9 +528,14 @@ export class ReportComponent implements OnInit {
         this.toasterService.success('تم انشاء الرسم بنجاح', 'نجح');
 
       }
+      else{
 
-
-
+        this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
+      
+      }
+    }
+    else {
+      this.toasterService.warning('يجب تحديد المدخلات اولا', 'تحذير');
     }
   }
 
@@ -528,7 +632,41 @@ export class ReportComponent implements OnInit {
   };
 
 
-  confirmationDeleteDetailsTable(detailsTable:ElementRef) {
+  confirmationDeleteDetailsTable(detailsTable: ElementRef) {
     detailsTable.nativeElement.remove();
   }
+
+
+  //export as pdf
+  async makePdf() {
+    html2canvas(this.exportPdf.nativeElement).then((imageCanvas) => {
+
+      const imgData = imageCanvas.toDataURL("image/png");
+      console.log(imgData);
+      var imgWidth = 210;
+      var pageHeight = 295;
+      var imgHeight = imageCanvas.height * imgWidth / imageCanvas.width;
+      var heightLeft = imgHeight;
+
+      var doc = new jsPDF('p', 'mm', 'a4');
+      var position = 0;
+
+      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = (heightLeft - imgHeight)
+        doc.addPage();
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      doc.save('reporting' + '.pdf')
+
+    })
+  }
+
+
+
 }
+
+

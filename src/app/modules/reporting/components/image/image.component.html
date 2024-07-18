@@ -1,10 +1,12 @@
-<div class="image-box" resizable cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag
-    [style.width]="imageWidth+'px'" #imageContainer>
+<div class="image-box" resizable cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag [cdkDragFreeDragPosition]="dragPosition"
+    [style.width]="imageWidth+'px'" #imageContainer (contextmenu)="onContextMenu($event, imageContainer)">
     <div class="movement-line" cdkDragHandle></div>
-    <span class="mx-1 left-move-icon" cdkDragHandle>
-        <i class="fa-solid fa-up-down-left-right"></i>
-    </span>
-    <div class="d-flex align-items-center parentNodeText w-100 h-100">
+    <div class="move-left position-relative">
+        <span class="mx-1 left-move-icon" cdkDragHandle>
+            <i class="fa-solid fa-up-down-left-right"></i>
+        </span>
+    </div>
+    <div class="d-flex align-items-center parentNodeText w-100 h-100" >
         <!-- reporting settings -->
         <div class="icon-container">
             <div class="d-flex align-items-center">
@@ -17,14 +19,14 @@
                     <i class="fa-solid fa-pencil"></i>
                 </span>
                 <!-- edit element icon -->
-                <span class="mx-1 element-move-icon" cdkDragHandle>
+                <span class="mx-1 element-move-icon" cdkDragHandle >
                     <i class="fa-solid fa-up-down-left-right"></i>
                 </span>
             </div>
         </div>
         <!-- element content text -->
         <div class="image-container">
-            <img class="dynamic-image" [src]="imageSrc" alt="dynamic-image">
+            <img class="dynamic-image" #image [src]="imageSrc" alt="dynamic-image">
         </div>
 
     </div>
@@ -32,7 +34,7 @@
 
 <div class="dialog-container" #imageDialog>
 
-    <p-dialog [(visible)]="displayDialogChangeImage" [style]="{width: '600px' , zIndex:999999999999999999999}"
+    <p-dialog [(visible)]="displayDialogChangeImage" closeIcon="" [style]="{width: '600px' , zIndex:999999999999999999999}"
         (onHide)="dialogAddImageHide()">
         <p-header>
             تغيير الصورة
@@ -64,3 +66,25 @@
         </p-footer>
     </p-dialog>
 </div>
+
+<context-menu #imageMenu>
+    <ng-template contextMenuItem (execute)="makeElementFly($event.item)">
+      <p class="m-0 p-0" [style.color]="isFlyingElement ? '#332ef6' : '#000'">
+        اجعل العنصر طائر
+      </p>
+  
+    </ng-template>
+
+    <ng-template contextMenuItem (execute)="resetElement($event.item)">
+        <p class="m-0 p-0">
+          الرجوع للحاله الاصليه
+        </p>
+    </ng-template>
+
+    <ng-template contextMenuItem (execute)="showImageDialog()">
+      تعديل العنصر
+    </ng-template>
+    <ng-template contextMenuItem (execute)="confirmationDeleteImage()">
+      حذف العنصر
+    </ng-template>
+  </context-menu>

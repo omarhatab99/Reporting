@@ -25,7 +25,7 @@
                     <div class="col-6">
                       <div class="form-group mt-3 mb-2">
                         <input type="range" class="form-control-range" id="paddingHeaderChanger"
-                          [(ngModel)]="header.padding" min="1" max="100" step="1">
+                          [(ngModel)]="cardHeader.padding" min="1" max="100" step="1">
                         <label for="paddingHeaderChanger">حواف العنوان</label>
                       </div>
                     </div>
@@ -33,7 +33,7 @@
                     <div class="col-6">
                       <div class="form-group mt-3 mb-2">
                         <input type="range" class="form-control-range" id="paddingContentChanger"
-                          [(ngModel)]="content.padding" min="5" max="100" step="1">
+                          [(ngModel)]="cardContent.padding" min="5" max="100" step="1">
                         <label for="paddingContentChanger">حواف المحتوى</label>
                       </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="col-6">
                       <div class="form-group mt-3 mb-1">
                         <input type="range" class="form-control-range" id="paddingFooterChanger"
-                          [(ngModel)]="footer.padding" min="1" max="100" step="1">
+                          [(ngModel)]="cardFooter.padding" min="1" max="100" step="1">
                         <label for="paddingFooterChanger">حواف النهايه</label>
                       </div>
                     </div>
@@ -68,24 +68,31 @@
                           [(ngModel)]="border.size"></p-dropdown>
                       </div>
                     </div>
+                    <!-- enable change diminsion -->
+                    <div class="col-12">
+                      <div class="enable-change text-right d-flex align-items-center py-1 mb-2">
+                        <p-inputSwitch [(ngModel)]="enableChangeDiminsion"></p-inputSwitch>
+                        <label class="mx-2">تفعيل التعديل على الابعاد</label>
+                      </div>
+                    </div>
                     <!-- header height -->
                     <div class="col-6">
                       <div class="form-group text-right">
-                        <input type="number" id="headerHeightChanger" min="80" [(ngModel)]="header.height">
+                        <input type="number" id="headerHeightChanger" min="80" [(ngModel)]="cardHeader.height" [disabled]="!enableChangeDiminsion">
                         <label for="headerHeightChanger">طول العنوان</label>
                       </div>
                     </div>
                     <!-- content height -->
                     <div class="col-6">
                       <div class="form-group text-right">
-                        <input type="number" id="contentHeightChanger" min="500" [(ngModel)]="content.height">
+                        <input type="number" id="contentHeightChanger" min="80" [(ngModel)]="cardContent.height" [disabled]="!enableChangeDiminsion">
                         <label for="contentHeightChanger">طول المحتوى</label>
                       </div>
                     </div>
                     <!-- content height -->
                     <div class="col-6">
                       <div class="form-group text-right">
-                        <input type="number" id="footerHeightChanger" min="80" [(ngModel)]="footer.height">
+                        <input type="number" id="footerHeightChanger" min="80" [(ngModel)]="cardFooter.height" [disabled]="!enableChangeDiminsion">
                         <label for="footerHeightChanger">طول النهايه</label>
                       </div>
                     </div>
@@ -147,6 +154,63 @@
               </div>
             </div>
           </div>
+          <!-- expansion #3 -->
+          <div class="col-12">
+            <hr>
+            <div class="report-printing">
+              <div class="row">
+                <div class="col-12">
+                  <div class="printing-container">
+                    <div class="row">
+                      <div class="col-12 text-right pt-3 pb-2">
+                        <p class="my-2 px-2">استخراج التقرير</p>
+                        <button class="btn btn-info  btn-sm" (click)="makePdf()">Export PDF</button>
+                      </div>
+                      <div class="col-12 text-right">
+                        <p class="my-2 px-2">اعدادات طباعه التقرير</p>
+                        <div class="row">
+                          <!-- page type -->
+                          <div class="col-6">
+                            <!-- table header font size -->
+                            <div class="form-group">
+                              <input type="number" class="form-control-range" id="pageZoomChanger"
+                                [(ngModel)]="printSettings.zoom" min="0" max="100" step="1">
+                              <label for="pageZoomChanger"> بعد الصفحه </label>
+                            </div>
+                          </div>
+                          <!-- layout selector -->
+                          <div class="col-12">
+                            <div class="layout-group d-flex mb-3">
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="portrait"
+                                  value="notScapped" checked [(ngModel)]="printSettings.layout">
+                                <label class="form-check-label mr-3" for="portrait">
+                                  طول الصفحه
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="landscape"
+                                  value="landscape" [(ngModel)]="printSettings.layout">
+                                <label class="form-check-label mr-3" for="landscape">
+                                  عرض الصفحه
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- print button -->
+                          <div class="col-12">
+                            <div class="print-action py-3">
+                              <button class="btn btn-secondary btn-sm" (click)="onPrint1(contentReport)">طباعه التقرير</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -160,170 +224,188 @@
   <i class="fa-solid fa-gear"></i>
 </button>
 
-<!-- start sidenav -->
-<div class="reporting-container">
+<div id="print-section position-relative test" #content ngxPrintElement>
+  <div id="pageFooter"></div>
 
-  <!-- content of sidenav -- body container -->
-  <div class="sidenav-container w-100">
-    <!-- report content -->
-    <!-- report container -->
-    <div class="container-fluid report-container p-3 w-100">
-      <div class="">
-        <!-- report card -->
-        <div class="card w-100" style="border: none !important;">
-          <!-- card header -->
-          <div class="card-header-report card-header ui-rtl w-100" [style.padding]="header.padding+'px'"
-            [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
-            [style.borderWidth]="border.size+'px'" [style.height]="header.height+'px'" dir="rtl">
-            <div class="div-header-container d-flex align-items-center justify-content-start w-100 ui-rtl px-3 py-2"
-              dir="rtl">
-              <!-- default header reporting name -->
-              <div class="title-right d-flex justify-content-center align-center flex-column">
-                <!-- egypt icon -->
-                <div class="icon-egypt text-center">
-                  <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'"
-                    [imageWidth]="30"></app-image>
-                </div>
-                <app-text-area>
-                  <div contenteditable="true" #textArea class="text-editable">
-                    <h4 class="text-center mb-0" style="font-size: 12px;">جمهوريه مصر العربيه</h4>
-                    <h4 class="text-center mb-0" style="font-size: 12px;">وزارة التخطيط والتنميه الاقتصاديه</h4>
+
+  <!-- start sidenav -->
+  <div class="reporting-container">
+
+    <!-- content of sidenav -- body container -->
+    <div class="sidenav-container w-100">
+      <!-- report content -->
+      <!-- report container -->
+      <div class="container-fluid report-container p-3 w-100">
+
+        <div class="printable" #exportPdf>
+
+          <!-- <div id="header">Top div content</div>
+
+        <div id="footer">Bottom div content</div> -->
+          <!-- report card -->
+          <div class="card w-100" style="border: none !important;"
+            style="font-family: Balsamiq-Sans, serif; letter-spacing: 0.01px;">
+            <!-- card header -->
+            <div class="card-header-report my-parent card-header w-100" #cardHeaderReport [style.padding]="cardHeader.padding+'px'"
+              [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+              [style.borderWidth]="border.size+'px'" [style.height]="enableChangeDiminsion ? cardHeader.height + 'px' : 'auto'" >
+              <div class="div-header-container d-flex align-items-center justify-content-start w-100 ui-rtl px-3 py-2"
+                dir="rtl">
+                <!-- default header reporting name -->
+                <div class="title-right d-flex justify-content-center align-center flex-column" dir="ltr">
+                  <!-- egypt icon -->
+                  <div class="icon-egypt text-center position-relative">
+                    <app-image [imageSrc]="'/assets/150px-Coat_of_arms_of_Egypt_(on_flag).svg.png'"
+                      [imageWidth]="30"></app-image>
                   </div>
-                </app-text-area>
+                  <app-text-area>
+                    <div contenteditable="true" #textArea class="text-editable">
+                      <h4 class="mb-0" style="font-size: 12px; text-align: center;">جمهوريه مصر العربيه</h4>
+                      <h4 class="mb-0" style="font-size: 12px; text-align: center;">وزارة التخطيط والتنميه الاقتصاديه
+                      </h4>
+                    </div>
+                  </app-text-area>
+                </div>
+              </div>
+              <div #componentHeader>
+
               </div>
             </div>
-            <div #componentHeader>
-
-            </div>
-          </div>
-          <div class="card-content-report card-body w-100 my-2 overflow-hidden" [style.padding]="content.padding+'px'"
-            [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
-            [style.borderWidth]="border.size+'px'" [style.minHeight]="content.height+'px'">
-            <div class="headers-container-top">
-              <div class="row">
-                <!-- main report title -->
-                <div class="col-12">
-                  <div class="report-main-title d-flex justify-content-center align-items-center">
-                    <app-text-area>
-                      <div #textArea contenteditable="true" class="text-editable">
-                        <h2 class="text-center mb-0" style="text-decoration: underline;">انجازات وزارة التخطيط والتنميه
-                          الاقتصاديه</h2>
-                        <h2 class="text-center mb-0" style="text-decoration: underline;">من مشروعات وبرامج خلال الفترة
-                          من 2018 الى 2024</h2>
-                      </div>
-                    </app-text-area>
+            <div class="card-content-report card-body w-100 my-2 overflow-hidden" #cardContentReport [style.padding]="cardContent.padding+'px'"
+              [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+              [style.borderWidth]="border.size+'px'" [style.height]="enableChangeDiminsion ? cardContent.height + 'px' : 'auto'">
+              <div class="headers-container-top">
+                <div class="row">
+                  <!-- main report title -->
+                  <div class="col-12">
+                    <div class="report-main-title d-flex justify-content-center align-items-center">
+                      <app-text-area>
+                        <div #textArea contenteditable="true" class="text-editable">
+                          <h2 class="mb-0" style="text-decoration: underline; text-align: center;">انجازات وزارة التخطيط
+                            والتنميه
+                            الاقتصاديه</h2>
+                          <h2 class="mb-0" style="text-decoration: underline; text-align: center;">من مشروعات وبرامج
+                            خلال
+                            الفترة
+                            من 2018 الى 2024</h2>
+                        </div>
+                      </app-text-area>
+                    </div>
                   </div>
-                </div>
-                <!-- details report table -->
-                <div class="col-12">
-                  <div class="d-flex justify-content-center align-items-center">
-                    <div class="details-table mt-2" #detailsTable
-                      cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag>
-                      <div class="movement-line" cdkDragHandle></div>
-                      <span class="mx-1 left-move-icon" cdkDragHandle>
-                        <i class="fa-solid fa-up-down-left-right"></i>
-                      </span>
-                      <div class="d-flex align-items-center parentNodeText">
-                        <!-- reporting settings -->
-                        <div class="icon-container">
-                          <div class="d-flex align-items-center">
-                            <!-- delete element icon -->
-                            <span class="mx-1 element-remove-icon"
-                              (click)="confirmationDeleteDetailsTable(detailsTable)">
-                              <i class="fa-solid fa-xmark"></i>
-                            </span>
-                            <!-- edit element icon -->
-                            <span class="mx-1 element-move-icon" cdkDragHandle>
-                              <i class="fa-solid fa-up-down-left-right"></i>
-                            </span>
+                  <!-- details report table -->
+                  <div class="col-12">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <div class="details-table mt-2" #detailsTable
+                        cdkDragBoundary=".card-content-report , .card-header-report" cdkDrag>
+                        <div class="movement-line" cdkDragHandle></div>
+                        <span class="mx-1 left-move-icon" cdkDragHandle>
+                          <i class="fa-solid fa-up-down-left-right"></i>
+                        </span>
+                        <div class="d-flex align-items-center parentNodeText">
+                          <!-- reporting settings -->
+                          <div class="icon-container">
+                            <div class="d-flex align-items-center">
+                              <!-- delete element icon -->
+                              <span class="mx-1 element-remove-icon"
+                                (click)="confirmationDeleteDetailsTable(detailsTable)">
+                                <i class="fa-solid fa-xmark"></i>
+                              </span>
+                              <!-- edit element icon -->
+                              <span class="mx-1 element-move-icon" cdkDragHandle>
+                                <i class="fa-solid fa-up-down-left-right"></i>
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                        <!-- element content text -->
+                          <!-- element content text -->
 
-                        <div class="details-report-table d-flex justify-content-end">
-                          <table class="table-bordered table-hover" dir="rtl">
-                            <thead>
-                              <tr>
-                                <th>اسم المؤسسه</th>
-                                <th> الجهه التابع لها </th>
-                                <th> تاريخ اعتماد التقرير </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>مؤسسه حكوميه</td>
-                                <td> مؤسسه حكوميه </td>
-                                <td> {{dateNow|date}} </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                          <div class="details-report-table d-flex justify-content-end">
+                            <table class="table-bordered table-hover" dir="rtl"
+                              style="direction: rtl; text-align: right;">
+                              <thead>
+                                <tr>
+                                  <th class="text-center mb-0">اسم المؤسسه</th>
+                                  <th> الجهه التابع لها </th>
+                                  <th> تاريخ اعتماد التقرير </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>مؤسسه حكوميه</td>
+                                  <td> مؤسسه حكوميه </td>
+                                  <td> {{dateNow|date}} </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="descriptions d-flex justify-content-between align-items-center px-3 mt-3">
+                      <div class="description-1">
+                        <app-text-area>
+                          <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
+                            اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة <br>
+                            ستبرز عن اختبارت اللغة العربية خاصة مهارة <br>
+                            الكلام.
+                            المقابلة هي نوع منها التي يستدعها الدا
+                          </div>
+                        </app-text-area>
+                      </div>
+                      <div class="description-2">
+                        <app-text-area>
+                          <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
+                            اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة <br>
+                            ستبرز عن اختبارت اللغة العربية خاصة مهارة <br>
+                            الكلام.
+                            المقابلة هي نوع منها التي يستدعها الدا
+                          </div>
+                        </app-text-area>
+                      </div>
+                      <div class="description-3">
+                        <app-text-area>
+                          <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
+                            اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة <br>
+                            ستبرز عن اختبارت اللغة العربية خاصة مهارة <br>
+                            الكلام.
+                            المقابلة هي نوع منها التي يستدعها الدا
+                          </div>
+                        </app-text-area>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-12">
-                  <div class="descriptions d-flex justify-content-between align-items-center px-3 mt-3">
-                    <div class="description-1">
-                      <app-text-area>
-                        <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
-                          اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة
-                          مهارة
-                          الكلام.
-                          المقابلة هي نوع منها التي يستدعها الدا
-                        </div>
-                      </app-text-area>
-                    </div>
-                    <div class="description-2">
-                      <app-text-area>
-                        <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
-                          اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة
-                          مهارة
-                          الكلام.
-                          المقابلة هي نوع منها التي يستدعها الدا
-                        </div>
-                      </app-text-area>
-                    </div>
-                    <div class="description-3">
-                      <app-text-area>
-                        <div #textArea contenteditable="true" class="text-editable text-center" style="width: 350px;">
-                          اختبار الكلام يصير مواقف اتصالية من الطلاب. هذه الكتابة ستبرز عن اختبارت اللغة العربية خاصة
-                          مهارة
-                          الكلام.
-                          المقابلة هي نوع منها التي يستدعها الدا
-                        </div>
-                      </app-text-area>
-                    </div>
-                  </div>
+              </div>
+              <div #componentContainer>
+
+              </div>
+              <app-table [reports]="reports" [cols]="cols"></app-table>
+            </div>
+            <div class="card-footer-report card-footer w-100 m-0 d-flex align-items-center" #cardFooterReport [style.padding]="cardFooter.padding+'px'"
+              [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
+              [style.borderWidth]="border.size+'px'" [style.height]="enableChangeDiminsion ? cardFooter.height + 'px' : 'auto'" dir="rtl">
+              <div class="div-footer-container d-flex align-items-center justify-content-between w-100 h-100 ui-rtl"
+                dir="rtl">
+                <div class="print-date">
+                  تاريخ الطباعه: <span>{{dateNow}}</span>
                 </div>
-              </div>
-            </div>
-            <div #componentContainer>
+                <div #componentFooter>
 
-            </div>
-
-            <app-table [reports]="reports" [cols]="cols"></app-table>
-          </div>
-          <div class="card-footer-report card-footer  ui-rtl w-100 m-0" [style.padding]="footer.padding+'px'"
-            [style.borderRadius]="border.radius+'px'" [style.borderColor]="border.color"
-            [style.borderWidth]="border.size+'px'" [style.height]="footer.height+'px'" dir="rtl">
-            <div class="div-footer-container d-flex align-items-center justify-content-between w-100 h-100 ui-rtl"
-              dir="rtl">
-              <div class="print-date">
-                تاريخ الطباعه: <span>{{dateNow}}</span>
-              </div>
-              <div #componentFooter>
-
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
+
 </div>
+
 
 <!-- confirm dialog (primeng) -->
 <p-confirmDialog #cd dir="rtl" header="تاكيد الحذف" [transitionOptions]="'150ms'">
@@ -336,13 +418,23 @@
 
 
 <!-- add image dialog -->
-<p-dialog [(visible)]="displayDialogAddImage" [style]="{width: '600px' , zIndex:999999999999999999999}"
+<p-dialog [(visible)]="displayDialogAddImage"  closeIcon="" [style]="{width: '600px' , zIndex:999999999999999999999}"
   (onHide)="dialogAddImageHide()">
-  <p-header>
+  <p-header closeIcon="">
     اختر الصورة
   </p-header>
   <div class="dialog-content">
     <div class="row">
+      <div class="col-8">
+        <p class="par-describtion-way" style="width: 350px;">يجب اختيار المكان الذى سيوضع بيه الصورة ويمكنك التعديل
+          على كل خصائص الصورة الان وحتى بعد الانشاء</p>
+      </div>
+      <div class="col-4">
+        <div class="borderWidth-columns-select mb-3">
+          <label for="borderWidthChanger" class="text-right w-100">اختر مكان النص</label>
+          <p-dropdown id="borderWidthChanger" [options]="postionOptions" [(ngModel)]="postionSelected"></p-dropdown>
+        </div>
+      </div>
       <div class="col-12">
         <div class="upload-image">
           <input type="file" #selectedImageInput class="input-upload d-none" id="uploadImage"
@@ -370,7 +462,7 @@
 
 
 <!-- add new charts dialog -->
-<p-dialog [(visible)]="displayDialogAddCharts" [style]="{width: '600px' , zIndex:999999999999999999999}">
+<p-dialog [(visible)]="displayDialogAddCharts" closeIcon="" [style]="{width: '600px' , zIndex:999999999999999999999}">
   <p-header>
     اضافه رسم ريانات
   </p-header>
@@ -490,16 +582,16 @@
 <!-- end sidenav -->
 
 <!-- text box dialog -->
-<p-dialog [(visible)]="displayDialogAddText" [rtl]="true" [style]="{width: '700px' , zIndex:999999999999999999999}"
+<p-dialog [(visible)]="displayDialogAddText" closeIcon="" [style]="{width: '700px' , zIndex:999999999999999999999}"
   class="dialog-textbox">
   <p-header>
-    التعديل على الخط
+    اضافه نص
   </p-header>
   <div class="dialog-content overflow-hidden">
     <div class="row">
       <div class="col-12">
         <div class="row">
-          <div class="col-12">
+          <div class="col-8">
             <p class="par-describtion-way" style="width: 350px;">يجب اختيار المكان الذى سيوضع بيه النص ويمكنك التعديل
               على كل خصائص النص الان وحتى بعد الانشاء</p>
           </div>
@@ -520,7 +612,9 @@
     </div>
   </div>
   <p-footer>
-    <button type="button" class="btn btn-success btn-sm" [disabled]="value == ''" (click)="createTextBox()">نعم</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="createTextBox()">نعم</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="closeTextBoxDialog()">تجاهل</button>
   </p-footer>
 </p-dialog>
+
+
