@@ -23,7 +23,7 @@ import {AccordionModule} from 'primeng-lts/accordion';
 import {EditorModule} from 'primeng-lts/editor';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import {ColorPickerModule} from 'primeng-lts/colorpicker';
-
+import {CheckboxModule} from 'primeng-lts/checkbox';
 @NgModule({
   exports: [
     TableModule,
@@ -47,7 +47,8 @@ import {ColorPickerModule} from 'primeng-lts/colorpicker';
     AccordionModule,
     EditorModule,
     InputSwitchModule,
-    ColorPickerModule
+    ColorPickerModule,
+    CheckboxModule
   ],
   entryComponents: [
     TextEditorDialogComponent

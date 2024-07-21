@@ -1,4 +1,4 @@
-import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ComponentFactoryResolver, ElementRef, Input, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef , OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { DialogService } from 'primeng-lts/dynamicdialog';
 import { ReportService } from '../../services/report.service';
 import { chartsConfiguration } from 'src/app/shared/components/chart/chartsConfiguration';

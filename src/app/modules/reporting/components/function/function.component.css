@@ -7,6 +7,10 @@
     padding: 5px !important;
 }
 
+::ng-deep .ui-dropdown-item {
+    text-align: right;
+}
+
 .collabse-anchor  {
     border: 1px dashed #0f0f0f;
     outline: none;
@@ -36,3 +40,4 @@
     border-radius: 7px;
     margin: 2px;
 }
+
