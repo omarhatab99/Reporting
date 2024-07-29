@@ -58,6 +58,7 @@
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^2.0.0",
     "ng-apexcharts": "^1.11.0",
+    "ng-calculator": "^1.0.2",
     "ng-color-picker": "^2.0.5-mp.1",
     "ng2-charts": "^1.4.4",
     "ngx-bootstrap": "^12.0.0",

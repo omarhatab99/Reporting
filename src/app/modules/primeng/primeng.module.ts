@@ -13,7 +13,6 @@ import {InputTextModule} from 'primeng-lts/inputtext';
 import {DragDropModule} from 'primeng-lts/dragdrop';
 import {TooltipModule} from 'primeng-lts/tooltip';
 import { DynamicDialogModule} from 'primeng-lts/dynamicdialog';
-import { TextEditorDialogComponent } from 'src/app/dialogs/text-editor-dialog/text-editor-dialog.component';
 import {ChartModule} from 'primeng-lts/chart';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api'
@@ -24,6 +23,10 @@ import {EditorModule} from 'primeng-lts/editor';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import {ColorPickerModule} from 'primeng-lts/colorpicker';
 import {CheckboxModule} from 'primeng-lts/checkbox';
+import {ListboxModule} from 'primeng-lts/listbox';
+import {GalleriaModule} from 'primeng-lts/galleria';
+import {ProgressSpinnerModule} from 'primeng-lts/progressspinner';
+
 @NgModule({
   exports: [
     TableModule,
@@ -48,10 +51,12 @@ import {CheckboxModule} from 'primeng-lts/checkbox';
     EditorModule,
     InputSwitchModule,
     ColorPickerModule,
-    CheckboxModule
+    CheckboxModule,
+    ListboxModule,
+    GalleriaModule,
+    ProgressSpinnerModule
   ],
   entryComponents: [
-    TextEditorDialogComponent
 ],
 providers: [ConfirmationService]
 })

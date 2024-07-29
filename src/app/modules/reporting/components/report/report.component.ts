@@ -1,12 +1,10 @@
 import { Component, ComponentFactoryResolver, ElementRef , OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { DialogService } from 'primeng-lts/dynamicdialog';
 import { ReportService } from '../../services/report.service';
-import { chartsConfiguration } from 'src/app/shared/components/chart/chartsConfiguration';
 import { AddImageComponent } from '../add-image/add-image.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TableComponent } from '../table/table.component';
 import { NgxPrinterService } from 'ngx-printer';
-import { chartsComponent } from 'src/app/shared/components/chart/chart.Component';
 import { IHeader } from '../../iterfaces/iheader';
 import { IContent } from '../../iterfaces/icontent';
 import { IBorder } from '../../iterfaces/iborder';
@@ -21,6 +19,8 @@ import html2canvas from 'html2canvas';
 import {NgxPrintElementService } from 'ngx-print-element';
 import { IPrint } from '../../iterfaces/iprint';
 import { ContextMenuComponent } from 'ngx-contextmenu';
+import { chartsConfiguration } from '../add-chart/chartsConfiguration';
+import { addChartComponent } from '../add-chart/add-chart.Component';
 
 
 @Component({
@@ -183,8 +183,7 @@ export class ReportComponent implements OnInit{
       }).map((column) => {
         return { label: column.field, value: column.field }
       });
-      this.columnsOperationsNumbers.unshift({ label: 'اختر عامود', value: null }); 2
-      console.log(this.columnsOperationsNumbers);
+      this.columnsOperationsNumbers.unshift({ label: 'اختر عامود', value: null }); 
     });
 
     this.borderSizeOptions = [
@@ -279,10 +278,10 @@ export class ReportComponent implements OnInit{
 
     console.log(this.cols);
     const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(TableComponent);
-    const table = this.elementsContainer.createComponent(componentFactory);
-    table.instance.reports = this.reports;
-    table.instance.cols = this.cols;
-    table.instance._selectedColumns = this.cols;
+    const tableComponent = this.elementsContainer.createComponent(componentFactory).instance;
+    // tableComponent.reports = this.reports;
+    // tableComponent.cols = this.cols;
+    // tableComponent._selectedColumns = this.cols;
     this.toasterService.success('تم انشاء الجدول بنجاح', 'نجح');
   }
 
@@ -419,7 +418,7 @@ export class ReportComponent implements OnInit{
         //create chart
 
         //create component of chartsComponent
-        const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(chartsComponent);
+        const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(addChartComponent);
         const chartComponent = this.elementsContainer.createComponent(componentFactory);
 
         //pass chartConfig
@@ -493,7 +492,7 @@ export class ReportComponent implements OnInit{
         //create chart
 
         //create component of chartsComponent
-        const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(chartsComponent);
+        const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(addChartComponent);
         const chartComponent = this.elementsContainer.createComponent(componentFactory);
 
         //pass chartConfig

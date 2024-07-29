@@ -19,7 +19,7 @@
     </div>
   </div>
   <p-table #dt class="h-100" [columns]="selectedColumns" [value]="reports" [resizableColumns]="true"
-    [reorderableColumns]="true" [responsive]="true" selectionMode="single" [(selection)]="selectedReport">
+    [reorderableColumns]="true" [responsive]="true">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns" #tableTheading class="text-center" [pSortableColumn]="col.field"
@@ -38,7 +38,7 @@
       <tr [pReorderableRow]="index" [pSelectableRow]="rowData">
         <td *ngFor="let col of columns" #tableData id="column-{{col.field}}" class="text-center" pReorderableRowHandle
           [style.padding]="table.padding+'px'" [style.fontSize]="table.tdFontSize+'px'"
-          (contextmenu)="onContextMenu($event , tableData , col , 'td')">
+          (contextmenu)="onContextMenu($event , tableData , col , 'td')" dir="rtl">
           <div *ngIf="col.field == 'image'; else colData">
             <img [src]="rowData[col.field]" alt="img" width="50"
               style="width: 50px; opacity: 1 !important; display: inline-block;">
@@ -81,8 +81,8 @@
         <div class="row">
           <div class="col-12">
             <div class="form-group text-right">
-              <input type="text" id="tableWidthChanger" placeholder=" " [(ngModel)]="table.title">
-              <label for="tableWidthChanger">عنوان الجدول</label>
+              <input type="text" id="tableTitleChanger" placeholder=" " [(ngModel)]="table.title">
+              <label for="tableTitleChanger">عنوان الجدول</label>
             </div>
           </div>
           <!-- table width -->
@@ -145,13 +145,19 @@
             <div class=" animate__animated animate__headShake table-collabse-filter my-2 ui-rtl text-right" dir="rtl">
               <button class="btn btn-primary btn-sm mx-1" (click)="createNewFilter()">اضافه تنقيه</button>
               <button class="btn btn-primary btn-sm mx-1" (click)="createNewFunction()">اضافه داله</button>
+              <button class="btn btn-primary btn-sm mx-1" (click)="createNewOperation()">اضافه عمليه</button>
               <div class="filter-container-template">
                 <ng-template #filterContainer class="filter-container">-
 
                 </ng-template>
               </div>
-              <div class="filter-container-template">
+              <div class="function-container-template">
                 <ng-template #functionContainer class="function-container">
+
+                </ng-template>
+              </div>
+              <div class="operation-container-template">
+                <ng-template #operationContainer class="operation-container">
 
                 </ng-template>
               </div>
@@ -274,7 +280,7 @@
   </context-menu>
 
   <ng-template contextMenuItem (execute)="doOperation($event.item)">
-    <p class="m-0 p-0" (click)="showOperationDialog()">
+    <p class="m-0 p-0">
       اضافه عمليه
     </p>
   </ng-template>
@@ -309,7 +315,7 @@
                       <p-dropdown id="filterColumn" appendTo="body" [options]="highlightOptions"
                         [(ngModel)]="selectedHighlighOption" dir="rtl"></p-dropdown>
                     </div>
-                  </div>ss
+                  </div>
                   <div class="col-4 d-flex justify-center align-items-center">
                     <div class="span-circle-color mt-3" [style.backgroundColor]="pickColor"></div>
                   </div>
@@ -355,9 +361,9 @@
 
 
 <!-- colors specifications -->
-<p-dialog header="اضافه عمليه" [(visible)]="operationTableDialog" closeIcon="" [style]="{width: '40vw'}" dir="rtl">
+<p-dialog header="اضافه عمليه" [(visible)]="operationOnCellDialog" closeIcon="" [style]="{width: '40vw'}" dir="rtl">
 
-  <div class="dialog-content overflow-hidden">
+  <div class="dialog-content pb-5">
     <div class="row">
       <div class="col-12">
         <div class="row">
@@ -370,28 +376,46 @@
             </p>
           </div>
           <div class="col-8">
-            <div class="filter-columns-select px-2" style="width: 200px;">
-              <label for="filterColumn" class="text-right w-100">تحديد العمليه </label>
-              <p-dropdown id="filterColumn" appendTo="body" [options]="operationOptions"
-                [(ngModel)]="selectedOperationOption" dir="rtl"></p-dropdown>
+            <div class="row">
+              <div class="col-12">
+                <div class="select-operation-option px-2" style="width: 60%">
+                  <label for="operationOption" class="text-right w-100">تحديد العمليه </label>
+                  <p-dropdown id="operationOption" [options]="operationOptions" [(ngModel)]="selectedOperationOption"
+                    dir="rtl"></p-dropdown>
+                </div>
+              </div>
+              <div class="col-12" *ngIf="selectedoperationLimitOptions == 'allColumn'">
+                <p class="par-describtion-color px-3" style="width: 350px;"> سيتم تظبيق هذة العمليه على قيم العمود
+                  بلكامل </p>
+              </div>
             </div>
-            <div class="arthmaticOperation d-flex align-items-center mx-2 mt-2" *ngIf="selectedOperationOption == 'automatic'">
-              <span class="arthmaticOperation-item mx-1">+</span>
-              <span class="arthmaticOperation-item mx-1">-</span>
-              <span class="arthmaticOperation-item mx-1">/</span>
-              <span class="arthmaticOperation-item mx-1">*</span>
+
+
+            <div class="actions my-2 px-2">
+              <button class="btn btn-secondary btn-sm add-input" (click)="addInputNumber()"
+                *ngIf="selectedOperationOption != 'automatic'">
+                اضافه رقم
+              </button>
+              <div class="signOperations d-flex align-items-center" *ngIf="selectedOperationOption == 'automatic'">
+                <span class="arthmaticOperation-item" (click)="addSignInputNumber('sum')">+</span>
+                <span class="arthmaticOperation-item" (click)="addSignInputNumber('minus')">-</span>
+                <span class="arthmaticOperation-item" (click)="addSignInputNumber('divide')">/</span>
+                <span class="arthmaticOperation-item" (click)="addSignInputNumber('multiply')">*</span>
+              </div>
             </div>
             <hr>
             <div class="operation-container position-relative">
-              <!-- fixed input number -->
-              <app-add-input></app-add-input>
-              <!-- dynamic input number -->
-              <div class="position-relative">
-                <app-add-input *ngIf="selectedOperationOption != 'automatic'"></app-add-input>
-                <ng-container #inputNumberContainer>
-
-                </ng-container>
-                <button class="btn btn-primary btn-sm position-absolute add-input" style="bottom: 6px; right: 257px;" (click)="addInputNumber()" *ngIf="selectedOperationOption != 'automatic'">اضافه رقم</button>
+              <!-- normal arthmaic inputs -->
+              <div class="noramal-arthmatic" [hidden]="selectedOperationOption == 'automatic'">
+                <!-- fixed input number -->
+                <app-add-input [disabled]="true"></app-add-input>
+                <app-add-input #staticAddInputComponent [value]="0"></app-add-input>
+                <ng-container #inputNumberContainer></ng-container>
+              </div>
+              <!-- dynamic arthamatic or automatic arthamitic -->
+              <div class="automatic-operation" [hidden]="selectedOperationOption != 'automatic'">
+                <app-add-sign-input [disabled]="true" [value]="cellValue"></app-add-sign-input>
+                <ng-container #signInputNumberContainer></ng-container>
               </div>
             </div>
           </div>
@@ -414,9 +438,149 @@
 
 
   <p-footer>
-    <button type="button" class="btn btn-success btn-sm" (click)="saveOperationTableDialog()">نعم</button>
-    <button type="button" class="btn btn-danger btn-sm" (click)="closeOperationTableDialog()">تجاهل</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="saveOperationOnCellDialog()">اضافه</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeOperationOnCellDialog()">تجاهل</button>
   </p-footer>
 
 
 </p-dialog>
+
+
+<!-- opeartion on table level -->
+<p-dialog header="اضافه عمليه" [(visible)]="operationOnTableDialog" closeIcon="" [style]="{width: '40vw'}" dir="rtl">
+
+  <div class="dialog-content pb-5">
+    <div class="row p-2">
+      <div class="col-12">
+        <p class="par-describtion-color" style="width: 450px;">
+          يتم تحديد اسم العمليه وهذا الاسم يمثل عنوان العمود
+        </p>
+        <div class="row">
+          <div class="col-4">
+            <div class="form-group text-right">
+              <input type="text" id="columnTitleChanger" placeholder="" [(ngModel)]="columnTitle">
+              <label for="columnTitleChanger">اسم العمليه</label>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="col-12">
+        <p class="par-describtion-color" style="width: 450px;">
+
+          يمكن اضافه عمليه حسابيه حسب اختيارك سواء عمليه تتم بين الاعمدة المختلفه او عمليه عشوائيه وتحديد اختيار متقدم
+          يسمح لك بعمل عمليه متعددة بدل من تطبيق عمليه واحدة على كل الاعمدة
+
+        </p>
+        <div class="row">
+          <div class="col-6">
+            <div class="filter-columns-select">
+              <label for="operationTypes" class="text-right w-100">اختر نوع العمليه </label>
+              <p-dropdown id="operationTypes" [options]="operationTypes"
+                [(ngModel)]="selectedOperationType"></p-dropdown>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="filter-columns-select">
+              <label for="operationOptions" class="text-right w-100">اختر العمليه </label>
+              <p-dropdown id="operationOptions" [options]="operationOptionsOnTable"
+                [(ngModel)]="selectedOperationOptionOnTable"></p-dropdown>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="row">
+              <div class="col-12" *ngIf="selectedOperationType == 'onColumns'">
+                <div class="operation-on-column">
+                  <label for="operationTypes" class="text-right w-100">اختر الاعمدة </label>
+                  <p-multiSelect id="operationTypes" [options]="selectedNumberColumns" [(ngModel)]="selectedColumn"
+                    ></p-multiSelect>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12" *ngIf="selectedOperationType == 'onColumns' && selectedColumn.length > 0">
+        <div class="details-operation">
+          <div class="row" style="padding: 0px 20px;">
+            <!-- <div class="col-12 d-flex align-items-center justify-content-between" style="background-color: beige">
+              <span class="column-name" *ngIf="columnTitle != undefined">{{columnTitle}}</span>
+              
+            </div> -->
+            <div class="col-8">
+              <ul class="selected-cols-options mt-2 p-0">
+                <li *ngFor="let col of selectedColumn; let i = index">
+                  <span class="operation-sign mx-2">
+                    {{
+                    selectedOperationOptionOnTable == 'sum'
+                    ? '+'
+                    : selectedOperationOptionOnTable == 'minus'
+                    ? '-'
+                    : selectedOperationOptionOnTable == "divide"
+                    ? '/' : '*'
+                    }}
+                  </span>
+                  {{col}}
+                </li>
+              </ul>
+            </div>
+            <div class="col-4 text-left" style="margin-top: 7px;">
+              <span class="operation-name">
+                {{
+                selectedOperationOptionOnTable == 'sum'
+                ? 'عمليه جمع'
+                : selectedOperationOptionOnTable == 'minus'
+                ? 'عمليه طرح'
+                : selectedOperationOptionOnTable == "divide"
+                ? 'عمليه قسمه' : 'عمليه ضرب'
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="details-operation-options">
+              <div class="form-check py-3">
+                <!-- <input type="checkbox" class="form-check-input" id="addTermToOperation" [(ngModel)]="addTermToOperation"> -->
+                <p-inputSwitch [(ngModel)]="addTermToOperation" id="addTermToOperation"></p-inputSwitch>
+                <label class="form-check-label mr-3" for="addTermToOperation">هل تريد اضافه ترميز</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4" *ngIf="addTermToOperation">
+                <div class="form-group text-right">
+                  <input type="text" id="termChanger" placeholder="" [(ngModel)]="termWord">
+                  <label for="termChanger">ادخل الترمز</label>
+                </div>
+              </div>
+              <div class="col-4" *ngIf="addTermToOperation">
+                <div class="form-check">
+                  <p-radioButton name="groupname" id="termWordPositionRight" value="right" [(ngModel)]="termWordPosition"></p-radioButton>
+                  <label class="form-check-label mr-2" for="termWordPositionRight">
+                    على اليمين
+                  </label>
+                </div>
+                <div class="form-check">
+                  <p-radioButton name="groupname" id="termWordPositionLeft" value="left" [(ngModel)]="termWordPosition"></p-radioButton>
+                  <label class="form-check-label mr-2" for="termWordPositionLeft">
+                    على الشمال
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <p-footer>
+    <button type="button" class="btn btn-success btn-sm" (click)="saveOperationOnTableDialog()">اضافه</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeOperationOnTableDialog()">تجاهل</button>
+  </p-footer>
+
+
+</p-dialog>
+

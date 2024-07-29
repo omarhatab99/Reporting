@@ -1,0 +1,232 @@
+.loadingCell {}
+
+.placeCellLoad {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: transparent;
+}
+
+.ResizeLine {
+    z-index: 800;
+    display: block;
+    width: 2px;
+    background-color: #c8c8c8;
+    top: 0px;
+
+    left: 0px;
+    position: absolute;
+    cursor: col-resize;
+    height: 100%;
+}
+
+.HeaderTableCell {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+
+}
+
+.styleInputText {
+    padding: 5px;
+    width: 100%;
+    margin: 0px;
+    font-size: inherit;
+    font-weight: bold;
+    color: black;
+    outline: none;
+    border: solid 1PX black;
+    border-radius: 3PX;
+    text-wrap: balance;
+    text-align: center;
+}
+
+.btnClear {
+    padding: 0px 8px;
+    margin: 0px 5px;
+    background-color: rgb(16, 123, 205);
+    font-size: 16px;
+    outline: none;
+    border-radius: 5px;
+    border-width: 0px;
+    color: white;
+    z-index: 200;
+}
+
+:host ::ng-deep .ui-multiselect {
+    display: block;
+}
+
+:host ::ng-deep .ui-multiselect-panel .ui-multiselect-header .ui-multiselect-filter-container .ui-inputtext {
+    width: 97%;
+}
+
+:host ::ng-deep .ui-multiselect-panel .ui-multiselect-header .ui-multiselect-filter-container {
+    width: 75%;
+    direction: ltr;
+}
+
+:host ::ng-deep .ui-multiselect .ui-multiselect-label-container {
+    max-height: 60px;
+    overflow: auto;
+    display: block;
+}
+
+:host ::ng-deep .ui-multiselect .ui-multiselect-label {
+    direction: rtl;
+}
+
+:host ::ng-deep .ui-multiselect-panel .ui-multiselect-header {
+    direction: ltr;
+}
+
+:host ::ng-deep body .ui-multiselect-panel .ui-multiselect-header .ui-multiselect-filter-container {
+    display: block;
+    width: 97%;
+}
+
+:host ::ng-deep .ui-table .ui-table-caption,
+.ui-table .ui-table-summary {
+    border: none;
+    background-color: transparent;
+}
+
+:host ::ng-deep .ui-table .ui-table-caption {
+    border: none;
+    background-color: transparent;
+}
+
+:host ::ng-deep .ui-table .ui-table-summary {
+    border: none;
+    background-color: transparent;
+}
+
+:host ::ng-deep .ui-paginator {
+    border: none;
+    background-color: transparent;
+}
+
+.CanCurdOperationCustom {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 30px;
+    overflow: hidden;
+    z-index: 900;
+
+}
+
+.CanCurdOperationCustomRow {
+    border-bottom: 1px solid #c8c8c8;
+}
+
+.loadingGrid {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: 10px;
+    background-color: white;
+    z-index: 1000;
+}
+
+.CanCurdOperationCustomHeader {
+    background-color: #f4f4f4;
+    border-bottom: 2px solid #c8c8c8;
+    border-top: 1px solid #c8c8c8;
+    border-left: 1px solid #c8c8c8;
+
+    position: absolute;
+    z-index: 900;
+    top: 0px;
+    bottom: 0px;
+    left: 15px;
+}
+
+.btnFilterColorSelect {
+    box-shadow: 2px 2px 10px red;
+    border: 2px solid red;
+}
+
+.btnFilterColor {
+    height: 40px;
+    border-radius: 5px;
+    outline: none;
+    display: inline-block !important;
+    transition: all 0.5s;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.PXC_felterColor {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.PXC_felterColor:hover {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+.FilterByColor {
+
+    background-color: white;
+    margin: 5px;
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid gray;
+    box-shadow: 2px 2px 2px black;
+    overflow: auto;
+    width: 100%;
+    height: 90px;
+    position: relative;
+}
+
+/* :host ::ng-deep .ui-table .ui-table-thead > tr > th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    box-shadow: 1px 3px 6px 0 rgba(32, 33, 36, 0.10);
+} */
+
+.tableCustom {
+    position: relative;
+    width: auto;
+    padding: 15px;
+    border: 1px solid #c8c8c8;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
+
+.e-hover2:hover {
+    color: rgb(7, 180, 203);
+}
+
+.HideArrowNumber::-webkit-outer-spin-button,
+.HideArrowNumber::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+:host ::ng-deep .ui-table .ui-editable-column input {
+    font-size: 14px;
+    font-family: "Open Sans", "Helvetica Neue", sans-serif;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}

@@ -1,0 +1,54 @@
+<a class="collabse-anchor animate__animated animate__fadeInRight my-2" #operationElement data-toggle="collapse"
+    [href]="'#'+operationId" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <div class="d-flex justify-content-between align-items-center">
+        <span>
+            عمليه حسابيه
+            <i class="fa-solid fa-percent"></i>
+        </span>
+        <span class="mr-2" (click)="confirmationDeleteOperation($event)">
+            <i class="fa-regular fa-square-minus text-danger" style="font-size: 15px;"></i>
+        </span>
+    </div>
+</a>
+
+<div class="collapse mt-2" [id]="operationId" #operationCollabse>
+    <div class="row">
+        <div class="col-12">
+            <p class="operation-name">اسم العمليه</p>
+            <span class="operation-type-span" style="background-color: antiquewhite;">{{columnTitle}}</span>
+        </div>
+        <div class="col-6">
+            <p class="operation-type">نوع العمليه</p>
+            <span class="operation-type-span" style="background-color: antiquewhite;"> 
+                {{
+                    selectedOperationOptionOnTable == 'onColumns'
+                    ? 'عمليه على الاعمدة': 'عمليه عشوائيه'
+                }}    
+            </span>
+        </div>
+        <div class="col-6">
+            <p class="operation-type">العمليه</p>
+            <span class="operation-span" style="background-color: #8dcdff4f;">
+                {{
+                    selectedOperationOptionOnTable == 'sum'
+                    ? 'عمليه جمع'
+                    : selectedOperationOptionOnTable == 'minus'
+                    ? 'عمليه طرح'
+                    : selectedOperationOptionOnTable == "divide"
+                    ? 'عمليه قسمه' : 'عمليه ضرب'
+                }}
+            </span>
+        </div>
+        <div class="col-12">
+            <p class="operation-column-par mt-1 mb-2">الاعمدة المطلوبه فى العمليه</p>
+            <div class="operation-columns">
+                <span class="operation-column-span" *ngFor="let col of selectedColumn">{{col}}</span>
+            </div>
+        </div>
+        <hr>
+        <div class="col-12 d-flex justify-content-start align-items-center pt-2 mt-2" style="border-top: 1px solid #CCC;">
+            <button class="btn btn-sm btn-warning ml-2">تعديل</button>
+            <button class="btn btn-sm btn-danger ml-2">حذف</button>
+        </div>
+    </div>
+</div>

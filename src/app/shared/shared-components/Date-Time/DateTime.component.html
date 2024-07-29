@@ -1,0 +1,15 @@
+<div class="w-100">
+  {{editStyle(SelData)}}
+  <p-calendar ngClass="w-100 select d-block" appendTo="body" #SelData dir="ltr" [(ngModel)]="DateConfig.SelectedDate" [showIcon]="DateConfig.ShowIcon" (ngModelChange)="OutValue($event)"
+    [showButtonBar]="DateConfig.ShowButtonBar" [selectionMode]="DateConfig.SelectionMode"
+    [disabled]="disable"
+    [dateFormat]="DateConfig.DateFormat" [monthNavigator]="DateConfig.MonthNavigator"
+    [yearNavigator]="DateConfig.YearNavigator" [yearRange]="DateConfig.YearRange" [showTime]="DateConfig.ShowTime"
+    [timeOnly]="DateConfig.TimeOnly">
+    <ng-template pTemplate="date" let-date [ngStyle]="{'width':'300px'}">
+      <span
+        [ngStyle]="{ backgroundColor: (date.day < DateConfig.DateStart && date.day > DateConfig.DateEnd) ? DateConfig.DateStart : DateConfig.ColorOutDuration}"
+        [style]="DateConfig.StyleSelect">{{date.day}}</span>
+    </ng-template>
+  </p-calendar>
+</div>

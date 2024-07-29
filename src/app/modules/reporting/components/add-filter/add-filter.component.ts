@@ -145,7 +145,7 @@ export class AddFilterComponent implements OnInit {
       default:
         allFilterArray = this.reports.filter((row) => {
           const isDate = new Date(row[this.filterSelectedColumn].toString()).toString();
-          console.log(isDate);
+
           if (isDate != "Invalid Date") {
             return this.datePipe.transform(new Date(isDate), 'yyyy-MM-dd') == value;
           };

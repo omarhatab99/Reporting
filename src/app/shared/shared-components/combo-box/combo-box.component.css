@@ -1,0 +1,28 @@
+img {
+    width: 20px;
+}
+
+.btnClear {
+    padding: 0px 8px;
+    margin: 0px 5px;
+    background-color: rgb(16, 123, 205);
+    font-size: 16px;
+    outline: none;
+    border-radius: 5px;
+    border-width: 0px;
+    color: white;
+    z-index: 200;
+
+}
+
+:host ::ng-deep .ui-dropdown {
+    width: 100%;
+}
+
+:host ::ng-deep .ui-dropdown-panel .ui-dropdown-filter-container .ui-dropdown-filter {
+    padding-right: 2.5rem;
+}
+
+:host ::ng-deep .ui-dropdown .ui-dropdown-label {
+    text-wrap: balance;
+}

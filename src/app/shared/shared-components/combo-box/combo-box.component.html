@@ -1,0 +1,68 @@
+<p-toast></p-toast>
+<div *ngIf="!ConfigComboBox.ModelActive ">
+    <div dir="rtl" class="d-flex justify-content-center align-items-center w-100">
+        <p-dropdown class="Select" ngClass="w-100" #SelectCombo [options]="ItemSource" [disabled]="disabled" [appendTo]="ConfigComboBox.appendTo"
+            [(ngModel)]="ConfigComboBox.SelectedValue" [editable]="ConfigComboBox.editable"
+            [optionLabel]="ConfigComboBox.optionLabel" [filter]="ConfigComboBox.filter"
+            [placeholder]="ConfigComboBox.placeholder" [filterBy]="ConfigComboBox.filterBy" [showClear]="false"
+            (ngModelChange)="this.ConfigComboBox.changeSelect($event,this.ConfigComboBox.oldSelectedValue);
+            changeSelect2($event,ConfigComboBox,SelectCombo)">
+            <ng-template let-item pTemplate="item">
+                <img *ngIf="ConfigComboBox.logo" [src]="item.value[ConfigComboBox.pathLogoName.name]">
+                <div class="d-flex justify-content-start" dir="rtl">
+                    <span class="flex align-items-center"
+                        *ngFor="let PropertyName of this.ConfigComboBox.Properties;let start=first;let last=last">
+                        <span>
+
+                            {{item.value[PropertyName.name]}}
+                        </span>
+                        <Span *ngIf="!PropertyName.isHide && !last" style="margin-left:8px;margin-right: 5px;">
+                            -
+                        </Span>
+                    </span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <div dir="rtl" class="d-flex align-items-center justify-content-center">
+            <input [disabled]="disabled" type="button" value="X" id="btn" class="btnClear"
+                *ngIf="ConfigComboBox.showClear==true && ConfigComboBox.ClearActive==true"
+                (click)="clear(ConfigComboBox);ConfigComboBox.ClearValue();" />
+        </div>
+    </div>
+</div>
+<div dir="rtl" *ngIf="ConfigComboBox.ModelActive" class="d-flex justify-content-center">
+    <p-dialog header="تحديد" [(visible)]="modelView" [modal]="true" [closable]="false"
+        [style]="{ width: '70vw' , height:'70vh' }" [draggable]="false" [resizable]="true">
+        <div dir="rtl" class="d-flex justify-content-center align-items-center w-100">
+            <p-dropdown class="Select" ngClass="w-100" #SelectCombo [options]="ItemSource" [disabled]="disabled" [appendTo]="ConfigComboBox.appendTo"
+            [(ngModel)]="ConfigComboBox.SelectedValue" [editable]="ConfigComboBox.editable"
+            [optionLabel]="ConfigComboBox.optionLabel" [filter]="ConfigComboBox.filter"
+            [placeholder]="ConfigComboBox.placeholder" [filterBy]="ConfigComboBox.filterBy" [showClear]="false"
+            (ngModelChange)="this.ConfigComboBox.changeSelect($event,this.ConfigComboBox.oldSelectedValue);
+            changeSelect2($event,ConfigComboBox,SelectCombo)">
+            <ng-template let-item pTemplate="item">
+                <img *ngIf="ConfigComboBox.logo" [src]="item.value[ConfigComboBox.pathLogoName.name]">
+                <div class="d-flex justify-content-start" dir="rtl">
+                    <span class="flex align-items-center"
+                        *ngFor="let PropertyName of this.ConfigComboBox.Properties;let start=first;let last=last">
+                        <span>
+                            {{item.value[PropertyName.name]}}
+                        </span>
+                        <Span *ngIf="!PropertyName.isHide && !last" style="margin-left:8px;margin-right: 5px;">
+                            -
+                        </Span>
+                    </span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <div dir="rtl" class="d-flex align-items-center justify-content-center">
+            <input [disabled]="disabled" type="button" value="X" id="btn" class="btnClear"
+                *ngIf="ConfigComboBox.showClear==true && ConfigComboBox.ClearActive==true"
+                (click)="clear(ConfigComboBox);ConfigComboBox.ClearValue();" />
+        </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary px-5 my-5 fs-5" dir="ltr" (click)="okSave()">تم</button>
+        </div>
+    </p-dialog>
+</div>

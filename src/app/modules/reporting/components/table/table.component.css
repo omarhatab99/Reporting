@@ -143,6 +143,9 @@ li ::ng-deep .ui-dropdown-item,
 
 }
 
+::ng-deep .ui-dialog-content {
+  overflow-y: auto !important;
+}
 
 ::ng-deep .ui-dialog-titlebar {
   direction: rtl !important;
@@ -317,7 +320,7 @@ li ::ng-deep .ui-dropdown-item,
 .operation-container {
   padding: 10px;
   overflow: auto;
-  max-height: 300px;
+  max-height: 350px;
 }
 
 .operation-number-preview .operation-span-preview {
@@ -344,8 +347,65 @@ li ::ng-deep .ui-dropdown-item,
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   cursor: pointer;
   transition: all 0.2s;
+  margin-left: 5px;
 }
 
 .arthmaticOperation-item:active {
   box-shadow: none;
 }
+
+.add-input {
+    bottom: 6px;
+    right: 257px;
+}
+
+.details-operation {
+  border: 1px solid #CCC;
+  margin-top: 25px;
+  overflow: hidden;
+}
+
+.details-operation .operation-item{
+  padding: 10px;
+  border: 1px dashed #0065d1;
+  border-radius: 10px;
+}
+
+.details-operation .operation-preview-col {
+  padding: 10px;
+  background-color: #f0f8ffc7;
+  margin: 0px 10px;
+  border-radius: 5px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.details-operation .operation-preview-sign {
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 0px 5px;
+  background-color: #e5e7ed;
+  font-size: 18px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.details-operation .operation-name{
+  background-color: #c5ffe0a1;
+  padding: 5px 10px;
+  width: fit-content;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-top: 7px;
+  display: inline-block;
+}
+
+.selected-cols-options {
+  list-style: none;
+}
+
+.selected-cols-options li {
+  background-color: #f0f8ffa1;
+  padding: 5px 10px;
+  width: fit-content;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 5px;
+}
+

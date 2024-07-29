@@ -1,0 +1,21 @@
+<div class="row" dir="rtl">
+    <div class="col-12">
+        <div class="scrolEl">
+            <div class="TapeItemAriea">
+                <div *ngFor="let item of TapeViewConfig.TapesHeader ; let idx=index;" [class]="item.GetStylesCalss()" 
+                    (click)="item.clickNative();" (click)="TapeViewConfig.onClick(item);TapeViewConfig.clickHeaderOn(item,idx);clickHeaderOnR(item,idx)">
+                    <div *ngIf="item.visable">
+                        <div dir="ltr" class="TapeHeaderLine" *ngFor="let txt of item.LineView">
+                            <div *ngIf="txt.visable && !TapeViewConfig.OnlyHeader">
+                                {{txt.Value}} -: {{txt.Label}}
+                            </div>
+                            <div *ngIf="txt.visable && TapeViewConfig.OnlyHeader">
+                                {{txt.Value}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

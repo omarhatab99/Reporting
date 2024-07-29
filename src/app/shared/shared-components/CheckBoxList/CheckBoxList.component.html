@@ -1,0 +1,10 @@
+<p-listbox dir="rtl" CheckBoxListStyle #listBox [optionLabel]="CheckBoxListConfig.OptionLabel" [(ngModel)]="CheckBoxListConfig.Selected"
+    [(options)]="CheckBoxListConfig.ItemSource" [multiple]="CheckBoxListConfig.Multiple"  (ngModelChange)="onChangeValue($event)" 
+    [checkbox]="CheckBoxListConfig.Checkbox" [filter]="CheckBoxListConfig.Filter">
+    <p-header>
+        {{CheckBoxListConfig.Header}}
+    </p-header>
+    <ng-template let-item pTemplate="Item">
+        {{item.label}}
+    </ng-template>
+</p-listbox>
