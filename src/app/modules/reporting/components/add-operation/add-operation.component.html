@@ -15,13 +15,13 @@
     <div class="row">
         <div class="col-12">
             <p class="operation-name">اسم العمليه</p>
-            <span class="operation-type-span" style="background-color: antiquewhite;">{{columnTitle}}</span>
+            <span class="operation-type-span" style="background-color: antiquewhite;">{{this.advancedOperationObjectDynamic.columnTitle}}</span>
         </div>
         <div class="col-6">
             <p class="operation-type">نوع العمليه</p>
             <span class="operation-type-span" style="background-color: antiquewhite;"> 
                 {{
-                    selectedOperationOptionOnTable == 'onColumns'
+                    this.advancedOperationObjectDynamic.selectedOperationType == 'onColumns'
                     ? 'عمليه على الاعمدة': 'عمليه عشوائيه'
                 }}    
             </span>
@@ -30,25 +30,27 @@
             <p class="operation-type">العمليه</p>
             <span class="operation-span" style="background-color: #8dcdff4f;">
                 {{
-                    selectedOperationOptionOnTable == 'sum'
+                    this.advancedOperationObjectDynamic.selectedOperationOptionOnTable == 'sum'
                     ? 'عمليه جمع'
-                    : selectedOperationOptionOnTable == 'minus'
+                    : this.advancedOperationObjectDynamic.selectedOperationOptionOnTable == 'minus'
                     ? 'عمليه طرح'
-                    : selectedOperationOptionOnTable == "divide"
-                    ? 'عمليه قسمه' : 'عمليه ضرب'
+                    : this.advancedOperationObjectDynamic.selectedOperationOptionOnTable == "divide"
+                    ? 'عمليه قسمه' 
+                    : this.advancedOperationObjectDynamic.selectedOperationOptionOnTable == "advanced"
+                    ? 'عمليه متقدمه' : 'عمليه ضرب'
                 }}
             </span>
         </div>
         <div class="col-12">
             <p class="operation-column-par mt-1 mb-2">الاعمدة المطلوبه فى العمليه</p>
             <div class="operation-columns">
-                <span class="operation-column-span" *ngFor="let col of selectedColumn">{{col}}</span>
+                <span class="operation-column-span mb-2" *ngFor="let col of this.advancedOperationObjectDynamic.selectedColumnsForAdvancedOperation">{{col}}</span>
             </div>
         </div>
         <hr>
         <div class="col-12 d-flex justify-content-start align-items-center pt-2 mt-2" style="border-top: 1px solid #CCC;">
-            <button class="btn btn-sm btn-warning ml-2">تعديل</button>
-            <button class="btn btn-sm btn-danger ml-2">حذف</button>
+            <button class="btn btn-sm btn-warning ml-2" (click)="updateOperationOnTable()">تعديل</button>
+            <button class="btn btn-sm btn-danger ml-2" (click)="confirmationDeleteOperation($event)">حذف</button>
         </div>
     </div>
 </div>

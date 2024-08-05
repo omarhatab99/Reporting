@@ -1,0 +1,27 @@
+<div class="advanced-operation-container">
+    <p class="advanced-operation-label my-2">اكتب العمليه الحسابيه هنا</p>
+    <div class="advanced-operation-textarea-container">
+        <!-- input text for operation -->
+        <input inputmode="true" type="text" appOnlynumber appHandleAdvancedKeydown appHandleAdvancedKeyup (keyup)="evaluateOperationCalc(arthmaticOperationContainer)"
+            class="advanced-operation-textarea px-3" #arthmaticOperationContainer
+            (selectionchange)="afterSelectionChange(arthmaticOperationContainer)" [(ngModel)]="arthmaticOperatorValue">
+        <!-- dropdown to select some column name for operation -->
+        <div class="advanced-operation-column-container" [hidden]="!advancedOperationColumnShow"
+            #advancedDpContainer>
+            <div class="btn-group">
+                <span class="advanced-operation-dp dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-expanded="false">
+                    اضافه عمود
+                </span>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" *ngFor="let col of selectedNumberColumns"
+                        (click)="writeFx(col.label , arthmaticOperationContainer)">{{col.label}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="advanced-operation-messages mt-2">
+        <li *ngFor="let itemMessage of advancedOperationMsgErrors" class="text-danger">
+            {{itemMessage}}</li>
+    </ul>
+</div>

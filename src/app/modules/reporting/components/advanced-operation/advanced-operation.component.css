@@ -1,0 +1,48 @@
+.advanced-operation-textarea {
+    width: 100%;
+    outline: none;
+    border: 1px dashed #007542;
+    overflow: auto;
+    resize: none;
+    height: 50px;
+    background-color: #FFF;
+    direction: ltr;
+    text-align: start;
+    padding: 15px;
+  }
+  
+  
+  .advanced-operation-column-container {
+    position: absolute;
+    border-radius: 3px;
+    right: 1%;
+    top: 5px;
+    font-size: 11px !important;
+  }
+  
+  .advanced-operation-column-container .advanced-operation-dp {
+    background-color: #b6dfff8c;
+    display: inline-block;
+    padding: 0px 10px;
+    cursor: pointer;
+  }
+  
+  .advanced-operation-column-container .dropdown-menu .dropdown-item {
+    font-size: 11px !important;
+    text-align: right;
+    overflow: hidden;
+  }
+  
+  .advanced-operation-textarea-container {
+    height: 75px !important;
+    position: relative;
+  }
+  
+  .advanced-operation-textarea-container .advanced-operation-textarea {
+    height: 100%;
+  }
+  
+  .advanced-operation-sign {
+    padding: 0px 5px;
+    background-color: #bababa;
+  }

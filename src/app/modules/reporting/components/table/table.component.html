@@ -447,140 +447,193 @@
 
 
 <!-- opeartion on table level -->
-<p-dialog header="اضافه عمليه" [(visible)]="operationOnTableDialog" closeIcon="" [style]="{width: '40vw'}" dir="rtl">
+<p-dialog [(visible)]="operationOnTableDialog" closeIcon="" [style]="{width: '40vw'}" dir="rtl">
 
+  <p-header>
+    <span *ngIf="advancedOperationObject.isOperationUpdated">تعديل العمليه</span>
+    <span *ngIf="!advancedOperationObject.isOperationUpdated">اضافه العمليه</span>
+  </p-header>
+  
   <div class="dialog-content pb-5">
     <div class="row p-2">
       <div class="col-12">
-        <p class="par-describtion-color" style="width: 450px;">
-          يتم تحديد اسم العمليه وهذا الاسم يمثل عنوان العمود
-        </p>
-        <div class="row">
-          <div class="col-4">
-            <div class="form-group text-right">
-              <input type="text" id="columnTitleChanger" placeholder="" [(ngModel)]="columnTitle">
-              <label for="columnTitleChanger">اسم العمليه</label>
-            </div>
-          </div>
+        <!-- column name -->
+        <p class="par-describtion-color" style="width: 450px;"> يتم تحديد اسم العمليه وهذا الاسم يمثل عنوان العمود </p>
+        <div class="form-group text-right">
+          <input type="text" id="columnTitleChanger" style="width: 180px;" placeholder="" [(ngModel)]="advancedOperationObject.columnTitle">
+          <label for="columnTitleChanger">اسم العمليه</label>
         </div>
         <hr>
       </div>
       <div class="col-12">
-        <p class="par-describtion-color" style="width: 450px;">
-
+        <p class="par-describtion-color" style="width: 550px;">
           يمكن اضافه عمليه حسابيه حسب اختيارك سواء عمليه تتم بين الاعمدة المختلفه او عمليه عشوائيه وتحديد اختيار متقدم
           يسمح لك بعمل عمليه متعددة بدل من تطبيق عمليه واحدة على كل الاعمدة
-
         </p>
-        <div class="row">
-          <div class="col-6">
-            <div class="filter-columns-select">
-              <label for="operationTypes" class="text-right w-100">اختر نوع العمليه </label>
-              <p-dropdown id="operationTypes" [options]="operationTypes"
-                [(ngModel)]="selectedOperationType"></p-dropdown>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="filter-columns-select">
-              <label for="operationOptions" class="text-right w-100">اختر العمليه </label>
-              <p-dropdown id="operationOptions" [options]="operationOptionsOnTable"
-                [(ngModel)]="selectedOperationOptionOnTable"></p-dropdown>
-            </div>
-          </div>
-          <div class="col-12 mt-3">
-            <div class="row">
-              <div class="col-12" *ngIf="selectedOperationType == 'onColumns'">
-                <div class="operation-on-column">
-                  <label for="operationTypes" class="text-right w-100">اختر الاعمدة </label>
-                  <p-multiSelect id="operationTypes" [options]="selectedNumberColumns" [(ngModel)]="selectedColumn"
-                    ></p-multiSelect>
-                </div>
-              </div>
-            </div>
-          </div>
+      </div>
+      <!-- operation type onColumns || random -->
+      <div class="col-6">
+        <div class="filter-columns-select">
+          <label for="operationTypes" class="text-right w-100">اختر نوع العمليه </label>
+          <p-dropdown id="operationTypes" [options]="operationTypes"
+            [(ngModel)]="advancedOperationObject.selectedOperationType"></p-dropdown>
         </div>
       </div>
-      <div class="col-12" *ngIf="selectedOperationType == 'onColumns' && selectedColumn.length > 0">
-        <div class="details-operation">
-          <div class="row" style="padding: 0px 20px;">
-            <!-- <div class="col-12 d-flex align-items-center justify-content-between" style="background-color: beige">
-              <span class="column-name" *ngIf="columnTitle != undefined">{{columnTitle}}</span>
-              
-            </div> -->
-            <div class="col-8">
-              <ul class="selected-cols-options mt-2 p-0">
-                <li *ngFor="let col of selectedColumn; let i = index">
-                  <span class="operation-sign mx-2">
+      <!-- opertion options -->
+      <div class="col-6">
+        <div class="filter-columns-select">
+          <label for="operationOptions" class="text-right w-100">اختر العمليه </label>
+          <p-dropdown id="operationOptions" [options]="operationOptionsOnTable"
+            [(ngModel)]="advancedOperationObject.selectedOperationOptionOnTable"></p-dropdown>
+        </div>
+      </div>
+
+      <!--------------------------------------- not advanced ----------------------------------->
+      <!-- operation option not equal advanced -->
+      <div class="col-12 mt-3 mb-3" *ngIf="advancedOperationObject.selectedOperationOptionOnTable != 'advanced'">
+        <div class="row">
+          <!-- operation type is onColumns and operation option not equal advanced -->
+          <div class="col-12" *ngIf="advancedOperationObject.selectedOperationType == 'onColumns'">
+            <!-- column selector option multiselect -->
+            <div class="operation-on-columns">
+              <label for="operationTypes" class="text-right w-100">اختر الاعمدة </label>
+              <p-multiSelect id="operationTypes" [options]="selectedNumberColumns"
+                [(ngModel)]="this.advancedOperationObject.selectedColumnsForAdvancedOperation"></p-multiSelect>
+            </div>
+          </div>
+          <!-- details of operation include columns names and operation option -->
+          <div class="col-12"
+            *ngIf="advancedOperationObject.selectedOperationType == 'onColumns' && this.advancedOperationObject.selectedColumnsForAdvancedOperation.length > 0 && advancedOperationObject.selectedOperationOptionOnTable != 'advanced'">
+            <div class="details-operation">
+              <div class="row" style="padding: 0px 20px;">
+                <div class="col-8">
+                  <ul class="selected-cols-options mt-2 p-0">
+                    <li *ngFor="let col of this.advancedOperationObject.selectedColumnsForAdvancedOperation; let i = index">
+                      <span class="operation-sign mx-2">
+                        {{
+                        advancedOperationObject.selectedOperationOptionOnTable == 'sum'
+                        ? '+'
+                        : advancedOperationObject.selectedOperationOptionOnTable == 'minus'
+                        ? '-'
+                        : advancedOperationObject.selectedOperationOptionOnTable == "divide"
+                        ? '/' : '*'
+                        }}
+                      </span>
+                      {{col}}
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-4 text-left" style="margin-top: 7px;">
+                  <span class="operation-name">
                     {{
-                    selectedOperationOptionOnTable == 'sum'
-                    ? '+'
-                    : selectedOperationOptionOnTable == 'minus'
-                    ? '-'
-                    : selectedOperationOptionOnTable == "divide"
-                    ? '/' : '*'
+                    advancedOperationObject.selectedOperationOptionOnTable == 'sum'
+                    ? 'عمليه جمع'
+                    : advancedOperationObject.selectedOperationOptionOnTable == 'minus'
+                    ? 'عمليه طرح'
+                    : advancedOperationObject.selectedOperationOptionOnTable == "divide"
+                    ? 'عمليه قسمه' : 'عمليه ضرب'
                     }}
                   </span>
-                  {{col}}
-                </li>
-              </ul>
-            </div>
-            <div class="col-4 text-left" style="margin-top: 7px;">
-              <span class="operation-name">
-                {{
-                selectedOperationOptionOnTable == 'sum'
-                ? 'عمليه جمع'
-                : selectedOperationOptionOnTable == 'minus'
-                ? 'عمليه طرح'
-                : selectedOperationOptionOnTable == "divide"
-                ? 'عمليه قسمه' : 'عمليه ضرب'
-                }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="details-operation-options">
-              <div class="form-check py-3">
-                <!-- <input type="checkbox" class="form-check-input" id="addTermToOperation" [(ngModel)]="addTermToOperation"> -->
-                <p-inputSwitch [(ngModel)]="addTermToOperation" id="addTermToOperation"></p-inputSwitch>
-                <label class="form-check-label mr-3" for="addTermToOperation">هل تريد اضافه ترميز</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4" *ngIf="addTermToOperation">
-                <div class="form-group text-right">
-                  <input type="text" id="termChanger" placeholder="" [(ngModel)]="termWord">
-                  <label for="termChanger">ادخل الترمز</label>
-                </div>
-              </div>
-              <div class="col-4" *ngIf="addTermToOperation">
-                <div class="form-check">
-                  <p-radioButton name="groupname" id="termWordPositionRight" value="right" [(ngModel)]="termWordPosition"></p-radioButton>
-                  <label class="form-check-label mr-2" for="termWordPositionRight">
-                    على اليمين
-                  </label>
-                </div>
-                <div class="form-check">
-                  <p-radioButton name="groupname" id="termWordPositionLeft" value="left" [(ngModel)]="termWordPosition"></p-radioButton>
-                  <label class="form-check-label mr-2" for="termWordPositionLeft">
-                    على الشمال
-                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!--------------------------------------- advanced ----------------------------------->
+      <!-- operation equal advanced and operation type is onCells -->
+      <div class="col-12 mt-3" *ngIf="advancedOperationObject.selectedOperationOptionOnTable == 'advanced' && advancedOperationObject.selectedOperationType == 'onColumns'">
+        <app-advanced-operation #appAdvancedOperationComponent [itemSource]="reports" [selectedColumns]="selectedColumns" (evaluationOperationDataArray)="evaluationOperationDataArray($event)"></app-advanced-operation>
+      </div>
+
+      <!-- ---------------------------- options for operation -------------------------------- -->
+      <div class="col-12">
+        <div class="switch-add-term form-check py-1 d-flex">
+          <p-inputSwitch [(ngModel)]="advancedOperationObject.addTermToOperation" id="addTermToOperation"></p-inputSwitch>
+          <label class="form-check-label mr-3" for="addTermToOperation">هل تريد اضافه ترميز</label>
+        </div>
+        <div class="term-selected-operation check-inner" *ngIf="advancedOperationObject.addTermToOperation">
+          <div class="row">
+            <div class="col-4">
+              <div class="form-group text-right mb-1">
+                <input type="text" id="termChanger" placeholder="" [(ngModel)]="advancedOperationObject.termWord">
+                <label for="termChanger">ادخل الترمز</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="selected-term-position d-flex align-items-center mb-2">
+                <div class="form-check py-1 d-flex ml-2">
+                  <p-checkbox name="groupname" id="addTermOnRightPosition" [(ngModel)]="advancedOperationObject.termWordPositionRight"
+                    [binary]="true" (onChange)="addTermOnRight($event)"></p-checkbox>
+                  <label class="form-check-label mr-2" for="addTermOnRightPosition"> على اليمين </label>
+                </div>
+                <div class="form-check py-1 d-flex">
+                  <p-checkbox name="groupname" id="addTermOnLeftPosition" [(ngModel)]="advancedOperationObject.termWordPositionLeft"
+                    [binary]="true" (onChange)="addTermOnLeft($event)"></p-checkbox>
+                  <label class="form-check-label mr-2" for="addTermOnLeftPosition"> على اليسار </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="switch-selected-color form-check py-1 d-flex">
+          <p-inputSwitch [(ngModel)]="advancedOperationObject.addLightOnOpertionOnTable" id="addLightForOperation"></p-inputSwitch>
+          <label class="form-check-label mr-3" for="addLightForOperation">هل تريد اضافه تظليل</label>
+        </div>
+        <div class="color-selected-operation check-inner" *ngIf="advancedOperationObject.addLightOnOpertionOnTable">
+          <div class="selected-light-heading d-flex align-items-center justify-content-between pl-3">
+            <div class="form-check py-1 d-flex">
+              <p-checkbox name="groupname" id="addLightForOperationHeadingOnly" [(ngModel)]="advancedOperationObject.lightHeading"
+                [binary]="true" (onChange)="addLightForOperationHeadingOnly($event)"></p-checkbox>
+              <label class="form-check-label mr-2" for="addLightForOperationHeadingOnly">تظليل عنوان العمود
+              </label>
+            </div>
+
+            <div class="selected-colors-circle d-inline-block" *ngIf="advancedOperationObject.lightHeading">
+              <ngx-colors ngx-colors-trigger [(ngModel)]="advancedOperationObject.selectedOperationOnTableColorLightHeading"></ngx-colors>
+            </div>
+          </div>
+          <div class="selected-light-heading d-flex align-items-center justify-content-between pl-3">
+            <div class="form-check py-1 d-flex">
+              <p-checkbox name="groupname" id="addLightForOperationAllCells" [(ngModel)]="advancedOperationObject.lightAllCells"
+                [binary]="true" (onChange)="addLightForOperationAllCells($event)"></p-checkbox>
+              <label class="form-check-label mr-2" for="addLightForOperationAllCells">تظليل خلايا العمود</label>
+            </div>
+            <div class="selected-colors-circle d-inline-block" *ngIf="advancedOperationObject.lightAllCells">
+              <ngx-colors ngx-colors-trigger [(ngModel)]="advancedOperationObject.selectedOperationOnTableColorLightAllCell"></ngx-colors>
+            </div>
+          </div>
+          <div class="selected-light-heading d-flex align-items-center justify-content-between pl-3">
+            <div class="form-check py-1 d-flex">
+              <p-checkbox name="groupname" id="addLightForOperationAllColumn" [(ngModel)]="advancedOperationObject.lightAllColumn"
+                [binary]="true" (onChange)="addLightForOperationAllColumn($event)"></p-checkbox>
+              <label class="form-check-label mr-2" for="addLightForOperationAllColumn">تظليل العمود
+                بالكامل</label>
+            </div>
+            <div class="selected-colors-circle d-inline-block" *ngIf="advancedOperationObject.lightAllColumn">
+              <ngx-colors ngx-colors-trigger
+                [(ngModel)]="advancedOperationObject.selectedOperationOnTableColorLightAllColumn"></ngx-colors>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
     </div>
+
   </div>
 
 
+
   <p-footer>
-    <button type="button" class="btn btn-success btn-sm" (click)="saveOperationOnTableDialog()">اضافه</button>
+    <button type="button" class="btn btn-{{advancedOperationObject.isOperationUpdated ? 'warning' : 'primary'}} btn-sm"
+      (click)="saveOperationOnTableDialog()">
+      {{advancedOperationObject.isOperationUpdated ? 'حفظ' : 'اضافه'}}
+    </button>
     <button type="button" class="btn btn-danger btn-sm" (click)="closeOperationOnTableDialog()">تجاهل</button>
   </p-footer>
 
 
 </p-dialog>
-

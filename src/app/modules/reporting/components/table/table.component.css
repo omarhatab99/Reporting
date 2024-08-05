@@ -355,8 +355,8 @@ li ::ng-deep .ui-dropdown-item,
 }
 
 .add-input {
-    bottom: 6px;
-    right: 257px;
+  bottom: 6px;
+  right: 257px;
 }
 
 .details-operation {
@@ -365,7 +365,7 @@ li ::ng-deep .ui-dropdown-item,
   overflow: hidden;
 }
 
-.details-operation .operation-item{
+.details-operation .operation-item {
   padding: 10px;
   border: 1px dashed #0065d1;
   border-radius: 10px;
@@ -388,7 +388,7 @@ li ::ng-deep .ui-dropdown-item,
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.details-operation .operation-name{
+.details-operation .operation-name {
   background-color: #c5ffe0a1;
   padding: 5px 10px;
   width: fit-content;
@@ -409,3 +409,21 @@ li ::ng-deep .ui-dropdown-item,
   margin-bottom: 5px;
 }
 
+
+
+::ng-deep .ui-chkbox-box {
+  width: 20px !important;
+  height: 20px !important;
+ display: flex !important;
+ justify-content: center !important;
+ align-items: center !important;
+}
+
+::ng-deep .ui-chkbox-box span {
+  font-size: 10px !important;
+}
+
+.check-inner ::ng-deep .ui-chkbox-box {
+  width: 15px !important;
+  height: 15px !important;
+}

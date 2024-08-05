@@ -26,6 +26,7 @@ import {CheckboxModule} from 'primeng-lts/checkbox';
 import {ListboxModule} from 'primeng-lts/listbox';
 import {GalleriaModule} from 'primeng-lts/galleria';
 import {ProgressSpinnerModule} from 'primeng-lts/progressspinner';
+import {ToolbarModule} from 'primeng-lts/toolbar';
 
 @NgModule({
   exports: [
@@ -54,7 +55,8 @@ import {ProgressSpinnerModule} from 'primeng-lts/progressspinner';
     CheckboxModule,
     ListboxModule,
     GalleriaModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ToolbarModule
   ],
   entryComponents: [
 ],

@@ -39,14 +39,18 @@ import { CheckBoxListDirective } from 'src/app/shared/shared-components/CheckBox
 import { TestComponent } from './components/test/test.component';
 import { AddSignInputComponent } from './components/add-sign-input/add-sign-input.component';
 import { AddOperationComponent } from './components/add-operation/add-operation.component';
-
+import { OnlynumberDirective } from './directives/advanced-operation/only-number.directive';
+import { AppHandleAdvancedKeydown } from './directives/advanced-operation/handle-advanced-keydown.directive';
+import { HandleAdvancedKeyupDirective } from './directives/advanced-operation/handle-advanced-keyup.directive';
+import { NgxColorsModule } from 'ngx-colors';
+import { AdvancedOperationComponent } from './components/advanced-operation/advanced-operation.component';
 @NgModule({
   declarations: [ReportComponent, addChartComponent,
     TextAreaComponent,
     TableComponent, AddFilterComponent,
     AddImageComponent, ImageComponent, AggregateComponent, AddFunctionComponent, AddInputComponent
     , CheckBoxListDirective, CheckBoxListComponent, dataGraidComponent, ComboBoxComponent, DateTimeComponent, ImagePreviewComponent, TapeHeaderComponent, EditStylePanelDirective, TestComponent
-  , AddSignInputComponent, AddOperationComponent],
+  , AddSignInputComponent, AddOperationComponent, OnlynumberDirective, AppHandleAdvancedKeydown, HandleAdvancedKeyupDirective, AdvancedOperationComponent],
   imports: [
     CommonModule,
     ReportingRoutingModule,
@@ -64,6 +68,7 @@ import { AddOperationComponent } from './components/add-operation/add-operation.
     ColorHueModule,
     ColorAlphaModule,
     ColorCompactModule,
+    NgxColorsModule,
     ToastrModule.forRoot({
       timeOut: 10000,
       positionClass: 'toast-bottom-right',

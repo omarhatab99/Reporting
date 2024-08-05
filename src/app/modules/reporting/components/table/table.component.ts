@@ -3,7 +3,7 @@ import { ReportComponent } from '../report/report.component';
 import { AddFilterComponent } from '../add-filter/add-filter.component';
 import { ConfirmationService } from 'primeng-lts/api';
 import { AddFunctionComponent } from '../add-function/add-function.component';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ITable } from '../../iterfaces/itable';
 import { ToastrService } from 'ngx-toastr';
 import jsPDF from 'jspdf';
@@ -12,6 +12,7 @@ import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { AddInputComponent } from '../add-input/add-input.component';
 import { AddSignInputComponent } from '../add-sign-input/add-sign-input.component';
 import { AddOperationComponent } from '../add-operation/add-operation.component';
+import { AdvancedOperationComponent } from '../advanced-operation/advanced-operation.component';
 
 
 @Component({
@@ -26,13 +27,15 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
   @ViewChild("dataSourceTable") dataSourceTable: ElementRef;
   @ViewChild('operationSpanPreview') operationSpanPreview: ElementRef;
   @ViewChild('staticAddInputComponent') staticAddInputComponent: AddInputComponent;
+  @ViewChild("arthmaticOperationContainer") arthmaticOperationContainer: ElementRef;
+  @ViewChild("advancedDpContainer") advancedDpContainer: ElementRef;
+  @ViewChild("appAdvancedOperationComponent") appAdvancedOperationComponent: AdvancedOperationComponent;
   //container ref
   @ViewChild('filterContainer', { read: ViewContainerRef }) filterContainer!: ViewContainerRef;
   @ViewChild('functionContainer', { read: ViewContainerRef }) functionContainer!: ViewContainerRef;
   @ViewChild('operationContainer', { read: ViewContainerRef }) operationContainer!: ViewContainerRef;
   @ViewChild('inputNumberContainer', { read: ViewContainerRef }) inputNumberContainer!: ViewContainerRef;
   @ViewChild('signInputNumberContainer', { read: ViewContainerRef }) signInputNumberContainer!: ViewContainerRef;
-
   //template ref
   @ViewChild("settings") settingsTmpl: TemplateRef<any>;
   //contextMenus
@@ -43,6 +46,11 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
   @ViewChildren('tableTheading') tableTheadings: ElementRef[];
   @ViewChildren('tableData') tableData: ElementRef[];
+
+
+
+  isFixedTable: boolean = false;
+
   //get object from table
   table: ITable = {} as ITable;
   //used for selected
@@ -88,34 +96,62 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
   _finalAutomaticValue: number = 0;
   cellValue: number = 0;
   operationTypes: any[] = [];
-  selectedOperationType: any = "random";
-  columnTitle: string = "";
+  //selectedOperationType: any = "onColumns";
+  //columnTitle: string = "";
   selectedNumberColumns: any[] = [];
-  selectedColumn: any[] = [];
+
   operationOptionsOnTable: any[] = [];
-  selectedOperationOptionOnTable: string = "sum";
-  addTermToOperation: boolean = false;
-  termWord: string = "";
-  termWordPosition: string = "left";
-  // test:ConfigComboBox = new ConfigComboBox("اختر العمدة"  , "field,header");
-  // thBackgroundColor:string = "#f4f4f4";
+
+  updatedOperationComponent: AddOperationComponent;
+
+
+  advancedOperationObject = {
+    advancedDataArray: [],
+    columnTitle: "",
+    selectedOperationType: "onColumns",
+    selectedOperationOptionOnTable: "advanced",
+    advancedOperationMsgErrors: [],
+    addTermToOperation: false,
+    termWord: "",
+    termWordPosition: "left",
+    termWordPositionRight: true,
+    termWordPositionLeft: false,
+    addLightOnOpertionOnTable: false,
+    lightHeading: true,
+    lightAllCells: true,
+    lightAllColumn: false,
+    selectedOperationOnTableColorLightHeading: "",
+    selectedOperationOnTableColorLightAllCell: "",
+    selectedOperationOnTableColorLightAllColumn: "",
+    isOperationUpdated: false,
+    selectedColumnsForAdvancedOperation: [],
+    updatedColumnTitle: "",
+    arthmaticOperationValue: ""
+  }
+
   constructor(private reportComponent: ReportComponent, private _ComponentFactoryResolver: ComponentFactoryResolver, private confirmationService: ConfirmationService, private toasterService: ToastrService, private contextMenuService: ContextMenuService) { }
 
 
   //fire when inputs is changed
   ngOnChanges(changes: SimpleChanges): void {
-    this._selectedColumns = this.cols;
 
-    // if (this._selectedColumns != undefined) {
-    //   this.selectedNumberColumns = this._selectedColumns.filter((col) => {
-    //     if (!Number.isNaN(parseFloat(this.reports[0][col.field]))) {
-    //       return col;
-    //     }
-    //   });
-    // }
+    //check if cols has bean initialized and table is fixed not dynamic.
+    if (this.cols != undefined && this.isFixedTable == false) {
+      this.selectedColumns = this.cols;
 
+      //check if selectedColumns has been initialized
+      if (this.selectedColumns != undefined) {
+        this.selectedNumberColumns = this._selectedColumns.filter((col) => {
+          if (!Number.isNaN(parseFloat(this.reports[0][col.field]))) {
+            return col;
+          }
+        });
+      }
 
-    //this.selectedNumberColumns = this.selectedNumberColumns.map((col) => { return { label: col.field, value: col.field } });
+      //handle selectedNumber columns for multiselect
+      this.selectedNumberColumns = this.selectedNumberColumns.map((col) => { return { label: col.field, value: col.field } });
+
+    }
 
   }
 
@@ -238,22 +274,30 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.reports = this.reportComponent.reports;
-    this.cols = this.reportComponent.cols;
+
     //this.selectedColumns = this.cols;
+    if (this.isFixedTable == true) { //dynamic table
+
+      this.reports = this.reportComponent.reports;
+      this.cols = this.reportComponent.cols;
+      this.selectedColumns = this.cols;
 
 
-    //handle selectedNumberColumns
-    if (this.selectedColumns != undefined) {
-      this.selectedNumberColumns = this.selectedColumns.filter((col) => {
-        if (!Number.isNaN(parseFloat(this.reports[0][col.field]))) {
-          return col;
-        }
-      });
+      //handle selectedNumberColumns
+      if (this.selectedColumns != undefined) {
+        this.selectedNumberColumns = this.selectedColumns.filter((col) => {
+          if (!Number.isNaN(parseFloat(this.reports[0][col.field]))) {
+            return col;
+          }
+        });
+      }
+
+      //handle selectedNumberColumns for multiselect
+      this.selectedNumberColumns = this.selectedNumberColumns.map((col) => { return { label: col.field, value: col.field } });
+
     }
 
-    //handle selectedNumberColumns for multiselect
-    this.selectedNumberColumns = this.selectedNumberColumns.map((col) => { return { label: col.field, value: col.field } });
+
 
 
 
@@ -299,6 +343,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
       { label: 'طرح', value: 'minus' },
       { label: 'ضرب', value: 'multiply' },
       { label: 'قسمه', value: 'divide' },
+      { label: 'متقدم', value: 'advanced' },
     ];
 
 
@@ -331,7 +376,6 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
     this.selectedCellCol = col;
 
     this.currentColorElement = getComputedStyle(item).backgroundColor;
-    console.log(this.currentColorElement);
 
     $event.preventDefault();
     $event.stopPropagation();
@@ -368,6 +412,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
     const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(AddFunctionComponent);
     this.functionContainer.createComponent(componentFactory).instance;
   }
+
   //create new operation
   createNewOperation() {
 
@@ -663,7 +708,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
   addSignInputNumber(sign: string) {
 
     const hasEmptyValue = AddSignInputComponent.inputsArray.some((comp) => comp.value == 0 || comp.value == undefined || comp.value == null);
-    console.log(AddSignInputComponent.inputsArray);
+
     if (!hasEmptyValue) {
       const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(AddSignInputComponent);
       const inputAddInputComp = this.signInputNumberContainer.createComponent(componentFactory);
@@ -683,91 +728,387 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
   saveOperationOnTableDialog() {
 
+    if (this.advancedOperationObject.isOperationUpdated) //update operation
+    {
+      //get index of updated column
+      const operationColumnUpdatedIndex = this.selectedColumns.findIndex((column) => column.field == this.advancedOperationObject.updatedColumnTitle);
 
-    //check if columntitle is not empty
-    if (this.columnTitle != null && this.columnTitle != '' && this.columnTitle != undefined) {
+      //check if columntitle is not empty
+      if (this.advancedOperationObject.columnTitle != null && this.advancedOperationObject.columnTitle != '' && this.advancedOperationObject.columnTitle != undefined) {
 
-      let dataArray: any[] = [];
+        const hasDublicateColumn = this.selectedColumns
+          .some((column, index) => column.field == this.advancedOperationObject.columnTitle && index != operationColumnUpdatedIndex);
 
-      //chec; selected operation type onColumns or random
-      if (this.selectedOperationType == "onColumns") {
-        //in case operation will done on columns
-        if (this.selectedColumn.length > 0) {
+        //check that column is not duplicate
+        if (!hasDublicateColumn) {
 
-          //add column to selected columns
-          this.selectedColumns.unshift({ field: this.columnTitle, header: this.columnTitle });
+          //chec; selected operation type onColumns or random
+          if (this.advancedOperationObject.selectedOperationType == "onColumns") {
 
-          //switch of operations
-          switch (this.selectedOperationOptionOnTable) {
+            //update column to selected columns
+            this.selectedColumns[operationColumnUpdatedIndex] = { field: this.advancedOperationObject.columnTitle, header: this.advancedOperationObject.columnTitle };
 
-            case "sum":
-              dataArray = this.sumOperationOnTable();
-              break;
-            case "minus":
-              dataArray = this.minusOperationOnTable();
-              break;
-            case "divide":
-              dataArray = this.divideOperationOnTable();
-              break;
-            default:
-              dataArray = this.multiplyOperationOnTable();
-              break;
 
-          };
+            //check operation option is advanced or other option
+            if (this.advancedOperationObject.selectedOperationOptionOnTable == "advanced") { //advanced operation
 
-          //add value of dataArray to report array
-          this.reports.forEach((item, index) => {
-            item[this.columnTitle] = dataArray[index];
-          });
+              let advancedDataArrayHandle = [];
+              //check if has term
+              if (this.advancedOperationObject.addTermToOperation) {
+                advancedDataArrayHandle = this.advancedOperationObject.advancedDataArray;
+                advancedDataArrayHandle = advancedDataArrayHandle.map(element => {
+                  return (this.advancedOperationObject.termWordPositionLeft)
+                    ? `${this.advancedOperationObject.termWord} ${element}`
+                    : `${element} ${this.advancedOperationObject.termWord}`;
+                });
 
-          //create operation component
-          const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(AddOperationComponent);
-          const operationComponent = this.operationContainer.createComponent(componentFactory).instance;
-          operationComponent.columnTitle = this.columnTitle;
-          operationComponent.selectedOperationType = this.selectedOperationType;
-          operationComponent.selectedOperationOptionOnTable = this.selectedOperationOptionOnTable;
-          operationComponent.addTermToOperation = this.addTermToOperation;
-          operationComponent.termWord = this.termWord;
-          operationComponent.termWordPosition = this.termWordPosition;
-          operationComponent.selectedColumn = this.selectedColumn;
-          //close dialog
-          this.closeOperationOnTableDialog();
+              }
+
+              //delete old values columns from reports
+              this.reports.map((column) => {
+                delete column[this.advancedOperationObject.updatedColumnTitle];
+                return column;
+              });
+
+              //add data to main array
+              this.reports.forEach((element, index) => {
+                element[this.advancedOperationObject.columnTitle] = advancedDataArrayHandle[index];
+              });
+
+              //chcek if user selected highlight
+              setTimeout(() => {
+                const headingElement = this.tableTheadings.find((th) => th.nativeElement.innerText == this.advancedOperationObject.columnTitle);
+                if (this.advancedOperationObject.addLightOnOpertionOnTable) {
+                  if (this.advancedOperationObject.lightHeading) {
+                    headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightHeading;
+                  }
+
+                  if (this.advancedOperationObject.lightAllCells) {
+                    this.tableData.forEach((tableDataItem) => {
+                      if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                        tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllCell;
+                      }
+                    });
+                  }
+
+                  if (this.advancedOperationObject.lightAllColumn) {
+                    headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                    this.tableData.forEach((tableDataItem) => {
+                      if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                        tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                      }
+                    });
+                  }
+                }
+
+
+                //set value of arthmatic operation due to used it in case update
+                this.advancedOperationObject.arthmaticOperationValue = this.appAdvancedOperationComponent.arthmaticOperationContainer.nativeElement.value;
+
+                //set column using in this operation
+                this.advancedOperationObject.selectedColumnsForAdvancedOperation = this.appAdvancedOperationComponent.allElementsWithoutFxAndBracket;
+
+
+                for (const key in this.updatedOperationComponent.advancedOperationObjectDynamic) {
+                  this.updatedOperationComponent.advancedOperationObjectDynamic[key] = this.advancedOperationObject[key];
+                }
+
+
+                //close dialog
+                this.closeOperationOnTableDialog();
+
+              }, 0);
+
+
+            }
+            else {
+              let dataArray = [];
+              //in case operation will done on columns
+              if (this.advancedOperationObject.selectedColumnsForAdvancedOperation.length > 0) { //not advanced operation
+
+                //switch of operations
+                switch (this.advancedOperationObject.selectedOperationOptionOnTable) {
+                  case "sum":
+                    dataArray = this.sumOperationOnTable();
+                    break;
+                  case "minus":
+                    dataArray = this.minusOperationOnTable();
+                    break;
+                  case "divide":
+                    dataArray = this.divideOperationOnTable();
+                    break;
+                  default:
+                    dataArray = this.multiplyOperationOnTable();
+                    break;
+                };
+
+
+                let advancedDataArrayHandle = [];
+                //check if has term
+                if (this.advancedOperationObject.addTermToOperation) {
+                  advancedDataArrayHandle = dataArray;
+                  advancedDataArrayHandle = advancedDataArrayHandle.map(element => {
+                    return (this.advancedOperationObject.termWordPositionLeft)
+                      ? `${this.advancedOperationObject.termWord} ${element}`
+                      : `${element} ${this.advancedOperationObject.termWord}`;
+                  });
+
+                }
+
+                //delete old values columns from reports
+                this.reports.map((column) => {
+                  delete column[this.advancedOperationObject.updatedColumnTitle];
+                  return column;
+                });
+
+                //add value of dataArray to report array
+                this.reports.forEach((item, index) => {
+                  item[this.advancedOperationObject.columnTitle] = advancedDataArrayHandle[index];
+                });
+
+                setTimeout(() => {
+                  const headingElement = this.tableTheadings.find((th) => th.nativeElement.innerText == this.advancedOperationObject.columnTitle);
+                  //chcek if user selected highlight
+                  if (this.advancedOperationObject.addLightOnOpertionOnTable) {
+                    if (this.advancedOperationObject.lightHeading) {
+                      headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightHeading;
+                    }
+
+                    if (this.advancedOperationObject.lightAllCells) {
+                      this.tableData.forEach((tableDataItem) => {
+                        if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                          tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllCell;
+                        }
+                      });
+                    }
+
+                    if (this.advancedOperationObject.lightAllColumn) {
+                      headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                      this.tableData.forEach((tableDataItem) => {
+                        if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                          tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                        }
+                      });
+                    }
+
+                  }
+
+
+                  for (const key in this.updatedOperationComponent.advancedOperationObjectDynamic) {
+                    this.updatedOperationComponent.advancedOperationObjectDynamic[key] = this.advancedOperationObject[key];
+                  }
+
+
+                  //close dialog
+                  this.closeOperationOnTableDialog();
+
+                }, 0);
+
+              }
+              else {
+                this.toasterService.warning('يجب تحديد الاعمدة المطلوبه فى العمليه', 'عذرا');
+              }
+            }
+          }
+
+        }
+
+
+      }
+      else //columnTitle equal null
+      {
+        this.toasterService.warning('اسم العمليه لايمكن ان يكون فارغا', 'عذرا');
+      }
+
+    }
+    else //create operation
+    {
+
+      //check if columntitle is not empty
+      if (this.advancedOperationObject.columnTitle != null && this.advancedOperationObject.columnTitle != '' && this.advancedOperationObject.columnTitle != undefined) {
+
+        const hasDublicateColumn = this.selectedColumns.some((column) => column.field == this.advancedOperationObject.columnTitle);
+
+        //check if columnTitle is unique name
+        if (!hasDublicateColumn) { //column title is valid
+
+          //check selected operation type onColumns or random
+          if (this.advancedOperationObject.selectedOperationType == "onColumns") {
+
+            //add column to selected columns
+            this.selectedColumns.unshift({ field: this.advancedOperationObject.columnTitle, header: this.advancedOperationObject.columnTitle });
+
+            //check operation option is advanced or other option
+            if (this.advancedOperationObject.selectedOperationOptionOnTable == "advanced") { //advanced operation
+
+              let advancedDataArrayHandle = [];
+              //check if has term
+              if (this.advancedOperationObject.addTermToOperation) {
+                advancedDataArrayHandle = this.advancedOperationObject.advancedDataArray;
+                advancedDataArrayHandle = advancedDataArrayHandle.map(element => {
+                  return (this.advancedOperationObject.termWordPositionLeft)
+                    ? `${this.advancedOperationObject.termWord} ${element}`
+                    : `${element} ${this.advancedOperationObject.termWord}`;
+                });
+
+              }
+
+              //add data to main array
+              this.reports.forEach((element, index) => {
+                element[this.advancedOperationObject.columnTitle] = advancedDataArrayHandle[index];
+              });
+
+
+              //chcek if user selected highlight
+              setTimeout(() => {
+                const headingElement = this.tableTheadings['first'];
+                if (this.advancedOperationObject.addLightOnOpertionOnTable) {
+                  if (this.advancedOperationObject.lightHeading) {
+                    headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightHeading;
+                  }
+
+                  if (this.advancedOperationObject.lightAllCells) {
+                    this.tableData.forEach((tableDataItem) => {
+                      if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                        tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllCell;
+                      }
+                    });
+                  }
+
+                  if (this.advancedOperationObject.lightAllColumn) {
+                    headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                    this.tableData.forEach((tableDataItem) => {
+                      if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                        tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                      }
+                    });
+                  }
+                }
+
+                //create operation component
+                const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(AddOperationComponent);
+                const operationComponent = this.operationContainer.createComponent(componentFactory).instance;
+
+                //set value of arthmatic operation due to used it in case update
+                this.advancedOperationObject.arthmaticOperationValue = this.appAdvancedOperationComponent.arthmaticOperationContainer.nativeElement.value;
+                //set column using in this operation
+                this.advancedOperationObject.selectedColumnsForAdvancedOperation = this.appAdvancedOperationComponent.allElementsWithoutFxAndBracket;
+
+                for (const key in operationComponent.advancedOperationObjectDynamic) {
+                  operationComponent.advancedOperationObjectDynamic[key] = this.advancedOperationObject[key];
+                }
+
+                //close dialog
+                this.closeOperationOnTableDialog();
+
+              }, 0);
+
+            }
+            else {
+
+              let dataArray = [];
+              //in case operation will done on columns
+              if (this.advancedOperationObject.selectedColumnsForAdvancedOperation.length > 0) { //not advanced operation
+
+                //switch of operations
+                switch (this.advancedOperationObject.selectedOperationOptionOnTable) {
+                  case "sum":
+                    dataArray = this.sumOperationOnTable();
+                    break;
+                  case "minus":
+                    dataArray = this.minusOperationOnTable();
+                    break;
+                  case "divide":
+                    dataArray = this.divideOperationOnTable();
+                    break;
+                  default:
+                    dataArray = this.multiplyOperationOnTable();
+                    break;
+                };
+
+
+                let advancedDataArrayHandle = [];
+                //check if has term
+                if (this.advancedOperationObject.addTermToOperation) {
+                  advancedDataArrayHandle = dataArray;
+                  advancedDataArrayHandle = advancedDataArrayHandle.map(element => {
+                    return (this.advancedOperationObject.termWordPositionLeft)
+                      ? `${this.advancedOperationObject.termWord} ${element}`
+                      : `${element} ${this.advancedOperationObject.termWord}`;
+                  });
+
+                }
+
+                //add value of dataArray to report array
+                this.reports.forEach((element, index) => {
+                  element[this.advancedOperationObject.columnTitle] = advancedDataArrayHandle[index];
+                });
+
+                setTimeout(() => {
+                  const headingElement = this.tableTheadings['first'];
+                  //chcek if user selected highlight
+                  if (this.advancedOperationObject.addLightOnOpertionOnTable) {
+                    if (this.advancedOperationObject.lightHeading) {
+                      headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightHeading;
+                    }
+
+                    if (this.advancedOperationObject.lightAllCells) {
+                      this.tableData.forEach((tableDataItem) => {
+                        if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                          tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllCell;
+                        }
+                      });
+                    }
+
+                    if (this.advancedOperationObject.lightAllColumn) {
+                      headingElement.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                      this.tableData.forEach((tableDataItem) => {
+                        if (tableDataItem.nativeElement.id == `column-${headingElement.nativeElement.innerText}`) {
+                          tableDataItem.nativeElement.style.backgroundColor = this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn;
+                        }
+                      });
+                    }
+
+                  }
+
+                  //create operation component
+                  const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(AddOperationComponent);
+                  const operationComponent = this.operationContainer.createComponent(componentFactory).instance;
+
+                  for (const key in operationComponent.advancedOperationObjectDynamic) {
+                    operationComponent.advancedOperationObjectDynamic[key] = this.advancedOperationObject[key];
+                  }
+
+                  //close dialog
+                  this.closeOperationOnTableDialog();
+
+                }, 0);
+
+              }
+              else {
+                this.toasterService.warning('يجب تحديد الاعمدة المطلوبه فى العمليه', 'عذرا');
+              }
+            }
+          }
 
         }
         else {
-          this.toasterService.warning('يجب تحديد الاعمدة المطلوبه فى العمليه', 'عذرا');
+          this.toasterService.warning(' اسم العمليه موجود من قبل ', 'عذرا');
         }
 
       }
-      else //in case operation will be random
+      else //columnTitle equal null
       {
-
-
-
+        this.toasterService.warning('اسم العمليه لايمكن ان يكون فارغا', 'عذرا');
       }
-
-
-
     }
-    else //columnTitle equal null
-    {
-      this.toasterService.warning('اسم العمليه لايمكن ان يكون فارغا', 'عذرا');
-    }
-    // switch(this.selectedOperationOptionOnTable) {
+  }
 
-    //   case "sum" :
-    //     this.sumOperationOnTable();
-    //     break;
 
-    // }
 
-    // this._selectedColumns.unshift({field:"الاجمالى" , header:"الاجمالى"});
-    // this.reports.forEach((obj) => {
-    //   obj['الاجمالى'] = 20000
-    // });
 
-    // console.log(this._selectedColumns);
-    // console.log(this.reports);
+  evaluationOperationDataArray(dataArray) {
+    this.advancedOperationObject.advancedDataArray = dataArray;
   }
 
 
@@ -779,19 +1120,19 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
     this.reports.forEach((item) => {
 
-      this.selectedColumn.forEach((col) => {
+      this.advancedOperationObject.selectedColumnsForAdvancedOperation.forEach((col) => {
         operationResult += parseFloat(item[col]);
       });
 
-      //check if user selected addTermToOperation
-      if (this.addTermToOperation) { //user selected to addTermToOperation
+      // //check if user selected addTermToOperation
+      // if (this.advancedOperationObject.addTermToOperation) { //user selected to addTermToOperation
 
-        //check postion of term of operation
-        if (this.termWordPosition == "left")
-          operationResult = this.termWord + ' ' + operationResult;
-        else
-          operationResult = operationResult + ' ' + this.termWord;
-      }
+      //   //check postion of term of operation
+      //   if (this.advancedOperationObject.termWordPosition == "left")
+      //     operationResult = this.advancedOperationObject.termWord + ' ' + operationResult;
+      //   else
+      //     operationResult = operationResult + ' ' + this.advancedOperationObject.termWord;
+      // }
 
       //add result to dataArray
       dataArray.push(operationResult);
@@ -807,7 +1148,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
     this.reports.forEach((item) => {
 
-      this.selectedColumn.forEach((col, index) => {
+      this.advancedOperationObject.selectedColumnsForAdvancedOperation.forEach((col, index) => {
         //add first value of column to operationResult in case substraction
         if (index == 0)
           operationResult = parseFloat(item[col]);
@@ -816,15 +1157,15 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
       });
 
       //check if user selected addTermToOperation
-      if (this.addTermToOperation) { //user selected to addTermToOperation
+      // if (this.advancedOperationObject.addTermToOperation) { //user selected to addTermToOperation
 
-        //check postion of term of operation
-        if (this.termWordPosition == "left")
-          operationResult = this.termWord + ' ' + operationResult;
-        else
-          operationResult = operationResult + ' ' + this.termWord;
+      //   //check postion of term of operation
+      //   // if (this.advancedOperationObject.termWordPosition == "left")
+      //   //   operationResult = this.advancedOperationObject.termWord + ' ' + operationResult;
+      //   // else
+      //   //   operationResult = operationResult + ' ' + this.advancedOperationObject.termWord;
 
-      }
+      // }
       //add result to dataArray
       dataArray.push(operationResult);
       operationResult = 0;
@@ -832,13 +1173,14 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
     return dataArray;
   }
+
   divideOperationOnTable(): any[] {
     let operationResult: any = 0;
     let dataArray: any[] = [];
 
     this.reports.forEach((item) => {
 
-      this.selectedColumn.forEach((col, index) => {
+      this.advancedOperationObject.selectedColumnsForAdvancedOperation.forEach((col, index) => {
         //add first value of column to operationResult in case substraction
         if (index == 0)
           operationResult = parseFloat(item[col]);
@@ -847,15 +1189,15 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
       });
 
       //check if user selected addTermToOperation
-      if (this.addTermToOperation) { //user selected to addTermToOperation
+      // if (this.advancedOperationObject.addTermToOperation) { //user selected to addTermToOperation
 
-        //check postion of term of operation
-        if (this.termWordPosition == "left")
-          operationResult = this.termWord + ' ' + operationResult;
-        else
-          operationResult = operationResult + ' ' + this.termWord;
+      //   //check postion of term of operation
+      //   if (this.advancedOperationObject.termWordPosition == "left")
+      //     operationResult = this.advancedOperationObject.termWord + ' ' + operationResult;
+      //   else
+      //     operationResult = operationResult + ' ' + this.advancedOperationObject.termWord;
 
-      }
+      // }
       //add result to dataArray
       dataArray.push(operationResult);
       operationResult = 0;
@@ -869,7 +1211,7 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
 
     this.reports.forEach((item) => {
 
-      this.selectedColumn.forEach((col, index) => {
+      this.advancedOperationObject.selectedColumnsForAdvancedOperation.forEach((col, index) => {
         //add first value of column to operationResult in case substraction
         if (index == 0)
           operationResult = parseFloat(item[col]);
@@ -878,15 +1220,15 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
       });
 
       //check if user selected addTermToOperation
-      if (this.addTermToOperation) { //user selected to addTermToOperation
+      // if (this.advancedOperationObject.addTermToOperation) { //user selected to addTermToOperation
 
-        //check postion of term of operation
-        if (this.termWordPosition == "left")
-          operationResult = this.termWord + ' ' + operationResult;
-        else
-          operationResult = operationResult + ' ' + this.termWord;
+      //   //check postion of term of operation
+      //   if (this.advancedOperationObject.termWordPosition == "left")
+      //     operationResult = this.advancedOperationObject.termWord + ' ' + operationResult;
+      //   else
+      //     operationResult = operationResult + ' ' + this.advancedOperationObject.termWord;
 
-      }
+      // }
       //add result to dataArray
       dataArray.push(operationResult);
       operationResult = 0;
@@ -896,13 +1238,97 @@ export class TableComponent implements OnInit, DoCheck, AfterViewInit {
   }
 
   closeOperationOnTableDialog() {
+    //if advanced reset arthmaticOperation
+    if (this.advancedOperationObject.selectedOperationOptionOnTable == "advanced")
+      this.appAdvancedOperationComponent.arthmaticOperatorValue = "";
+
+    //reset configuration----------------------------------------------------
+    this.advancedOperationObject.columnTitle = "";
+    this.advancedOperationObject.selectedOperationType = "onColumns";
+    this.advancedOperationObject.selectedOperationOptionOnTable = "advanced";
+    this.advancedOperationObject.advancedOperationMsgErrors = [];
+    this.advancedOperationObject.addTermToOperation = false;
+    this.advancedOperationObject.termWord = "";
+    this.advancedOperationObject.termWordPositionRight = true;
+    this.advancedOperationObject.termWordPositionLeft = false;
+    this.advancedOperationObject.isOperationUpdated = false;
+    this.advancedOperationObject.arthmaticOperationValue = "";
+    //reset colors
+    this.advancedOperationObject.addLightOnOpertionOnTable = false;
+    this.advancedOperationObject.selectedOperationOnTableColorLightHeading = "";
+    this.advancedOperationObject.selectedOperationOnTableColorLightAllCell = "";
+    this.advancedOperationObject.selectedOperationOnTableColorLightAllColumn = "";
+    this.advancedOperationObject.lightHeading = true;
+    this.advancedOperationObject.lightAllCells = true;
+    this.advancedOperationObject.lightAllColumn = false;
+    this.advancedOperationObject.selectedColumnsForAdvancedOperation = [];
+    this.advancedOperationObject.updatedColumnTitle = "";
     this.operationOnTableDialog = false;
+
   }
 
+
+
+
+
+  addTermOnRight(event: any) {
+    if (event.checked) {
+      this.advancedOperationObject.termWordPositionRight = true;
+      this.advancedOperationObject.termWordPositionLeft = false;
+    }
+    else {
+      this.advancedOperationObject.termWordPositionRight = false;
+      this.advancedOperationObject.termWordPositionLeft = true;
+    }
+  }
+
+  addTermOnLeft(event: any) {
+    if (event.checked) {
+      this.advancedOperationObject.termWordPositionRight = false;
+      this.advancedOperationObject.termWordPositionLeft = true;
+    }
+    else {
+      this.advancedOperationObject.termWordPositionRight = true;
+      this.advancedOperationObject.termWordPositionLeft = false;
+    }
+  }
+  addLightForOperationHeadingOnly(event: any) {
+    if (event.checked) {
+      this.advancedOperationObject.lightHeading = true;
+      this.advancedOperationObject.lightAllColumn = false;
+    }
+    else {
+      this.advancedOperationObject.lightHeading = false;
+    }
+  }
+
+  addLightForOperationAllCells(event: any) {
+    if (event.checked) {
+      this.advancedOperationObject.lightAllCells = true;
+      this.advancedOperationObject.lightAllColumn = false;
+    }
+    else {
+      this.advancedOperationObject.lightAllCells = false;
+    }
+  }
+
+  addLightForOperationAllColumn(event: any) {
+    if (event.checked) {
+      this.advancedOperationObject.lightHeading = false;
+      this.advancedOperationObject.lightAllCells = false;
+      this.advancedOperationObject.lightAllColumn = true;
+    }
+    else {
+      this.advancedOperationObject.lightHeading = true;
+      this.advancedOperationObject.lightAllCells = true;
+      this.advancedOperationObject.lightAllColumn = false;
+    }
+  }
 
   afterContextMenuClose() {
     this.enableContextItem = false;
   }
+
 
 
 

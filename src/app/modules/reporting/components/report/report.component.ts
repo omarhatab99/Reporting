@@ -146,7 +146,6 @@ export class ReportComponent implements OnInit{
   //onInit
   ngOnInit(): void {
 
-
     this.printSettings.layout = "portrait";
     this.printSettings.zoom = 100;
     
@@ -279,6 +278,7 @@ export class ReportComponent implements OnInit{
     console.log(this.cols);
     const componentFactory = this._ComponentFactoryResolver.resolveComponentFactory(TableComponent);
     const tableComponent = this.elementsContainer.createComponent(componentFactory).instance;
+    tableComponent.isFixedTable = true;
     // tableComponent.reports = this.reports;
     // tableComponent.cols = this.cols;
     // tableComponent._selectedColumns = this.cols;
