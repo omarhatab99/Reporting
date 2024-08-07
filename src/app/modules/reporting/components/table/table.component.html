@@ -1,5 +1,9 @@
-<div class="data-source-table" #dataSourceTable cdkDragBoundary=".card-content-report" cdkDrag
-  [style.width]="table.width+'%'">
+<div class="table-container" style="overflow-x: auto;">
+  <div class="data-source-table position-relative mx-auto" #dataSourceTable cdkDragBoundary=".card-content-report" cdkDrag
+  [style.width]="table.width+'%'" >
+  <div class="inline-table-operation" [hidden]="!inlineOperationObject.showInlineOperationContainer">
+
+  </div>
   <div class="movement-line" cdkDragHandle></div>
   <span class="mx-1 left-move-icon" cdkDragHandle>
     <i class="fa-solid fa-up-down-left-right"></i>
@@ -18,7 +22,7 @@
       </span>
     </div>
   </div>
-  <p-table #dt class="h-100" [columns]="selectedColumns" [value]="reports" [resizableColumns]="true"
+  <p-table #dt class="h-100" [columns]="selectedColumns"  [value]="reports" [resizableColumns]="true"
     [reorderableColumns]="true" [responsive]="true">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -35,10 +39,10 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
-      <tr [pReorderableRow]="index" [pSelectableRow]="rowData">
+      <tr [pReorderableRow]="index" [pSelectableRow]="rowData" class="position-relative">
         <td *ngFor="let col of columns" #tableData id="column-{{col.field}}" class="text-center" pReorderableRowHandle
           [style.padding]="table.padding+'px'" [style.fontSize]="table.tdFontSize+'px'"
-          (contextmenu)="onContextMenu($event , tableData , col , 'td')" dir="rtl">
+          (contextmenu)="onContextMenu($event , tableData , col , 'td')" dir="rtl" (dblclick)="selectedTdForOperation(tableData , rowData[col.field])">
           <div *ngIf="col.field == 'image'; else colData">
             <img [src]="rowData[col.field]" alt="img" width="50"
               style="width: 50px; opacity: 1 !important; display: inline-block;">
@@ -46,6 +50,8 @@
           <ng-template #colData>{{rowData[col.field]}}
           </ng-template>
         </td>
+        <span class="add-new-column add-column-right" (click)="addColumnToTable('column_right')">+</span>
+        <span class="add-new-column add-column-left" (click)="addColumnToTable('column_left')">+</span>
       </tr>
     </ng-template>
 
@@ -56,6 +62,7 @@
   <div class="aggregate-container" *ngIf="functionSelected.length != 0">
     <app-aggregate [functions]="functionSelected" [reports]="reports"></app-aggregate>
   </div>
+</div>
 </div>
 
 <!-- this template will be rendered at report component in spicific place -->
@@ -475,7 +482,7 @@
       <div class="col-6">
         <div class="filter-columns-select">
           <label for="operationTypes" class="text-right w-100">اختر نوع العمليه </label>
-          <p-dropdown id="operationTypes" [options]="operationTypes"
+          <p-dropdown id="operationTypes"  [options]="operationTypes"
             [(ngModel)]="advancedOperationObject.selectedOperationType"></p-dropdown>
         </div>
       </div>
@@ -561,7 +568,7 @@
                 <label for="termChanger">ادخل الترمز</label>
               </div>
             </div>
-            <div class="col-12">
+            <!-- <div class="col-12">
               <div class="selected-term-position d-flex align-items-center mb-2">
                 <div class="form-check py-1 d-flex ml-2">
                   <p-checkbox name="groupname" id="addTermOnRightPosition" [(ngModel)]="advancedOperationObject.termWordPositionRight"
@@ -574,7 +581,7 @@
                   <label class="form-check-label mr-2" for="addTermOnLeftPosition"> على اليسار </label>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="switch-selected-color form-check py-1 d-flex">
@@ -585,7 +592,7 @@
           <div class="selected-light-heading d-flex align-items-center justify-content-between pl-3">
             <div class="form-check py-1 d-flex">
               <p-checkbox name="groupname" id="addLightForOperationHeadingOnly" [(ngModel)]="advancedOperationObject.lightHeading"
-                [binary]="true" (onChange)="addLightForOperationHeadingOnly($event)"></p-checkbox>
+                [binary]="true" (onChange)="switchLightOperation($event , 'column_heading')"></p-checkbox>
               <label class="form-check-label mr-2" for="addLightForOperationHeadingOnly">تظليل عنوان العمود
               </label>
             </div>
@@ -597,7 +604,7 @@
           <div class="selected-light-heading d-flex align-items-center justify-content-between pl-3">
             <div class="form-check py-1 d-flex">
               <p-checkbox name="groupname" id="addLightForOperationAllCells" [(ngModel)]="advancedOperationObject.lightAllCells"
-                [binary]="true" (onChange)="addLightForOperationAllCells($event)"></p-checkbox>
+                [binary]="true" (onChange)="switchLightOperation($event , 'column_cells')"></p-checkbox>
               <label class="form-check-label mr-2" for="addLightForOperationAllCells">تظليل خلايا العمود</label>
             </div>
             <div class="selected-colors-circle d-inline-block" *ngIf="advancedOperationObject.lightAllCells">
@@ -607,9 +614,9 @@
           <div class="selected-light-heading d-flex align-items-center justify-content-between pl-3">
             <div class="form-check py-1 d-flex">
               <p-checkbox name="groupname" id="addLightForOperationAllColumn" [(ngModel)]="advancedOperationObject.lightAllColumn"
-                [binary]="true" (onChange)="addLightForOperationAllColumn($event)"></p-checkbox>
+                [binary]="true" (onChange)="switchLightOperation($event , 'all_column')"></p-checkbox>
               <label class="form-check-label mr-2" for="addLightForOperationAllColumn">تظليل العمود
-                بالكامل</label>
+                بالكامل</label>  
             </div>
             <div class="selected-colors-circle d-inline-block" *ngIf="advancedOperationObject.lightAllColumn">
               <ngx-colors ngx-colors-trigger
